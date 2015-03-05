@@ -1,0 +1,10 @@
+name: "Matt's ramblings"
+description: "See above"
+
+url: "http://matthewearl.com/blog"
+
+paginate: 10
+
+markdown: kramdown
+permalink: pretty
+highlighter: pygments
