@@ -8,7 +8,7 @@ title: Bresenham and Efficient Pulse-Width Modulation
 ## Introduction
 
 I've recently been working on a telescope clock-drive project. The idea is that
-I attach a motor to a telescope to make it turn at the same rate as the earth,
+I attach a motor to a telescope to make it turn at the same rate as the earth
 so that long exposure photographs don't come out blurred. I'll (hopefully)
 post more on this soon, but in this post I'll discuss an algorithm I stumbled
 across while designing a DAC as part of the clock-drive project.
@@ -17,15 +17,12 @@ across while designing a DAC as part of the clock-drive project.
 
 My problem was to generate an output voltage to use as a reference for driving
 the DC motor attached to the telescope. The voltage would be determined by some
-logic in an AVR on the control board.
-
-My plan was to attach a low-pass RC filter to one of the digital output pins,
-and set up one of the AVR's timers to regularly fire. The timer ISR would set
-the state of the output pin either high or low in order to attain the required
-output voltage after the filter stage. This post discusses the algorithm to use
-in the ISR.
-
-Note there is no feedback from the filtered output back into the MCU.
+logic in an AVR on the control board, and a low-pass RC filter would be
+attached to one of the digital output pins. A timer would be running on the AVR
+triggering an interrupt service routine (ISR) at regular intervals. The timer
+ISR would set the state of the output pin either high or low in order to attain
+the required output voltage after the filter stage. This post discusses the
+algorithm to use in the ISR.
 
 ## The Naive Solution
 
@@ -239,7 +236,7 @@ correspondence between variables:
 
 This isn't too surprising when you notice the formula the algorithm was derived
 from seeks to approximate the gradient of the line running through the origin
-to \\( \sum o_i, N \\) as \\( \frac{T}{P} \\).
+to \\( (\sum o_i, N) \\) as \\( \frac{T}{P} \\).
 
 Just for fun let's plot the output of the algorithm (incrementing `x` at each
 step, and incrementing `y` at each positive output) against the line running
