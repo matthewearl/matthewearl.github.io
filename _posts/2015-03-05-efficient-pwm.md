@@ -249,7 +249,7 @@ though \\( \frac{T}{P} \\):
 
 ## Conclusion
 
-The new PWM algorithm is useful if both of the following are true:
+The Bresenham PWM algorithm is useful if both of the following are true:
 
 * Your timer interrupt is constrained to run at a fixed interval. For example,
   if your timer is also used within the MCU for other periodic tasks.
@@ -262,7 +262,7 @@ period. In the case where the timer period can be changed, it would be changed
 to fire at alternating periods of `P` and `T - P`, flipping the output state
 each time.
 
-The main benefit of the new PWM algorithm is it can be coupled with an
+The main benefit of the Bresenham PWM algorithm is it can be coupled with an
 RC-filter operating at a lower time constant to acheive a given voltage
 stability. The knock-on benefits of this are:
 
