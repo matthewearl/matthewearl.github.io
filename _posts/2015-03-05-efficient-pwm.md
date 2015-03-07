@@ -5,6 +5,8 @@ title: Bresenham and Efficient Pulse-Width Modulation
 
 # Bresenham and Efficient Pulse-Width Modulation
 
+*Update*: I just noticed that [this](http://www.simplicate.info/2013/05/21/using-bresenham-line-algorithm-for-better-pwm-2/) [technique](http://trolsoft.ru/en/articles/bresenham-algo) is [known](https://github.com/prwhite/bham). I'm leaving this up here in case anyone finds my particular derivation interesting. :-)
+
 ## Introduction
 
 I've recently been working on a telescope clock-drive project. The idea is that
@@ -26,7 +28,8 @@ algorithm to use in the ISR.
 
 ## The Naive Solution
 
-Before I discuss my algorithm, let's look at the naive scheme for generating a
+Before I discuss the improved algorithm, let's look at the naive scheme for
+generating a
 PWM signal:
 
 {% highlight python %}
