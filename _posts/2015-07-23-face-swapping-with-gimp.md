@@ -89,3 +89,10 @@ Apply a gaussian blur to the layer mask, *et voila*:
 
 ![Camerband](/assets/face-swap/camerband.jpg)
 
+## Addendum
+
+By swapping layers and re-doing the *Copy Visible* layer from step 3 one can
+easily get the reverse image:
+
+![Milliron](/assets/face-swap/milliron.jpg)
+
