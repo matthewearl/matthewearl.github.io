@@ -20,7 +20,7 @@ The process breaks down into four steps:
 * Adjusting the colour balance in the second image to match that of the first.
 * Blending features from the second image on top of the first.
 
-## 1. Using dlib to extract facial landmarks.
+## 1. Using dlib to extract facial landmarks
 
 The script uses [dlib](http://dlib.net/)'s Python bindings to extract facial
 landmarks:
@@ -63,7 +63,7 @@ To make the predictor a pre-trained model is required. Such a model can be
 [downloaded from the dlib sourceforge repository](http://sourceforge.net/
 projects/dclib/files/dlib/v18.10/shape_predictor_68_face_landmarks.dat.bz2).
 
-##2. Aligning faces with a procrustes analysis.
+##2. Aligning faces with a procrustes analysis
 
 So at this point we have our two landmark matrices, each row having coordinates
 to a particular facial feature (eg. the 30th row gives the coordinates of the
@@ -144,3 +144,59 @@ Which produces the following alignment:
 
 ![Aligned faces](/assets/switching-eds/aligned-faces.jpg)
 
+## 3. Colour correcting the second image
+
+If we tried to overlay facial features at this point, we'd soon see we have a
+problem:
+
+![Non colour-corrected
+overlay](/assets/switching-eds/non-colour-corrected-overlay.jpg)
+
+The issue is that differences in skin-tone and lighting between the two images
+is causing a discontinuity around the edges of the overlaid region. Let's try
+to correct that:
+
+{% highlight python %}
+COLOUR_CORRECT_BLUR_FRAC = 0.6
+LEFT_EYE_POINTS = list(range(42, 48))
+RIGHT_EYE_POINTS = list(range(36, 42))
+
+def correct_colours(im1, im2, shape1):
+    blur_amount = COLOUR_CORRECT_BLUR_FRAC * numpy.linalg.norm(
+                                  numpy.mean(shape1[LEFT_EYE_POINTS], axis=0) -
+                                  numpy.mean(shape1[RIGHT_EYE_POINTS], axis=0))
+    blur_amount = int(blur_amount)
+    if blur_amount % 2 == 0:
+        blur_amount += 1
+    im1_blur = cv2.GaussianBlur(im1, (blur_amount, blur_amount), 0)
+    im2_blur = cv2.GaussianBlur(im2, (blur_amount, blur_amount), 0)
+
+    # Avoid divide-by-zero errors.
+    im2_blur += 128 * (im2_blur <= 1.0)
+
+    return (im2.astype(numpy.float64) * im1_blur.astype(numpy.float64) /
+                                                im2_blur.astype(numpy.float64))
+{% endhighlight %}
+
+And the result:
+
+![Colour corrected](/assets/switching-eds/colour-corrected.jpg)
+
+This function attempts to change the colouring of `im2` to match that of `im1`.
+It does this by dividing `im2` by a gaussian blur of `im2`, and then
+multiplying by a gaussian blur of `im1`. The idea here is that of a [RGB
+scaling
+colour-correction](https://en.wikipedia.org/wiki/Color_balance#
+Scaling_monitor_R.2C_G.2C_and_B), but instead of a constant scale factor across
+all of the image, each pixel has its own localised scale factor.
+
+With this approach differences in lighting between the two images can be
+accounted for, to some degree. For example, if image 1 is lit from one side
+but image 2 has uniform lighting then the colour corrected image 2 will 
+appear darker on the unlit side aswell.
+
+That said, this is a fairly crude solution to the problem and an appropriate
+size gaussian kernel is key. Too small and facial features from the first
+image will show up in the second. Too large and kernel strays outside of the
+face area for pixels being overlaid, and discolouration occurs. Here a kernel
+of 60% of the pupillary distance is used.
