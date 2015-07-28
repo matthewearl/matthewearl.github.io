@@ -199,4 +199,46 @@ That said, this is a fairly crude solution to the problem and an appropriate
 size gaussian kernel is key. Too small and facial features from the first
 image will show up in the second. Too large and kernel strays outside of the
 face area for pixels being overlaid, and discolouration occurs. Here a kernel
-of 60% of the pupillary distance is used.
+of 0.6 * the pupillary distance is used.
+
+## 4. Blending features from the second image onto the first
+
+
+{% highlight python %}
+LEFT_EYE_POINTS = list(range(42, 48))
+RIGHT_EYE_POINTS = list(range(36, 42))
+LEFT_BROW_POINTS = list(range(22, 27))
+RIGHT_BROW_POINTS = list(range(17, 22))
+NOSE_POINTS = list(range(27, 35))
+MOUTH_POINTS = list(range(48, 61))
+OVERLAY_POINTS = [
+    LEFT_EYE_POINTS + RIGHT_EYE_POINTS + LEFT_BROW_POINTS + RIGHT_BROW_POINTS,
+    NOSE_POINTS + MOUTH_POINTS,
+]
+DILATE_AMOUNT = 11
+
+def draw_convex_hull(im, points, color):
+    points = cv2.convexHull(points)
+    cv2.fillConvexPoly(im, points, color=color)
+
+def get_face_mask(im, shape):
+    im = numpy.zeros(im.shape[:2], dtype=numpy.float64)
+
+    for group in OVERLAY_POINTS:
+        draw_convex_hull(im,
+                         shape[group],
+                         color=1)
+
+    im = numpy.array([im, im, im]).transpose((1, 2, 0))
+
+    im = (cv2.GaussianBlur(im, (DILATE_AMOUNT, DILATE_AMOUNT), 0) > 0) * 1.0
+    im = cv2.GaussianBlur(im, (DILATE_AMOUNT, DILATE_AMOUNT), 0)
+
+    return im
+
+mask = get_face_mask(im2, shape2)
+warped_mask = warp_im(mask, M, im1.shape)
+combined_mask = numpy.max([get_face_mask(im1, shape1), warped_mask], axis=0)
+
+{% endhighlight %}
+
