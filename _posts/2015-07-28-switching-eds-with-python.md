@@ -203,6 +203,17 @@ of 0.6 * the pupillary distance is used.
 
 ## 4. Blending features from the second image onto the first
 
+A mask is used to select which parts of image 2 and which parts of image 1
+should be shown in the final image:
+
+![Mask](/assets/switching-eds/mask.jpg)
+
+Regions with value 1 (shown white here) correspond with areas where image 2
+should show, and regions with colour 0 (shown black here) correspond with areas
+where image 1 should show. Value in between 0 and 1 correspond with a mixture
+of image 1 and image2.
+
+Here's the code to generate the above:
 
 {% highlight python %}
 LEFT_EYE_POINTS = list(range(42, 48))
@@ -221,12 +232,12 @@ def draw_convex_hull(im, points, color):
     points = cv2.convexHull(points)
     cv2.fillConvexPoly(im, points, color=color)
 
-def get_face_mask(im, shape):
+def get_face_mask(im, landmark_points):
     im = numpy.zeros(im.shape[:2], dtype=numpy.float64)
 
     for group in OVERLAY_POINTS:
         draw_convex_hull(im,
-                         shape[group],
+                         landmark_points[group],
                          color=1)
 
     im = numpy.array([im, im, im]).transpose((1, 2, 0))
@@ -239,6 +250,25 @@ def get_face_mask(im, shape):
 mask = get_face_mask(im2, shape2)
 warped_mask = warp_im(mask, M, im1.shape)
 combined_mask = numpy.max([get_face_mask(im1, shape1), warped_mask], axis=0)
+{% endhighlight %}
 
+Let's break this down:
+
+* A routine `get_face_mask()` is defined to generate a mask for an image and a
+  landmark matrix. It draws two convex polygons in white: One surrounding the
+  eye area, and one surrounding the nose and mouth area. It then feathers the
+  edge of the mask outwards by 11 pixels. The feathering helps hide any
+  remaning discontinuities.
+* Such a face mask is generated for both images. The mask for the second is
+  transformed into image 1's coordinate space, using the same transformation as
+  in step 2.
+* The masks are then combined into one by taking an element-wise maximum.
+  Combining both masks ensures that the features from image 1 are covered up,
+  and that the features from image 2 show through.
+
+Finally, the mask is applied to give the final image:
+
+{% highlight python %}
+output_im = im1 * (1.0 - combined_mask) + warped_corrected_im2 * combined_mask
 {% endhighlight %}
 
