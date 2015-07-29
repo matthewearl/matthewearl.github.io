@@ -22,6 +22,9 @@ The process breaks down into four steps:
 * Adjusting the colour balance in the second image to match that of the first.
 * Blending features from the second image on top of the first.
 
+The full source-code for the script can be [found here](https://github.com/
+matthewearl/faceswap/blob/master/faceswap.py).
+
 ## 1. Using dlib to extract facial landmarks
 
 The script uses [dlib](http://dlib.net/)'s Python bindings to extract facial
