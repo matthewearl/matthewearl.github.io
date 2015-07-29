@@ -149,7 +149,7 @@ def warp_im(im, M, dshape):
 
 Which produces the following alignment:
 
-{% include img.html src="Aligned faces" alt="Aligned faces" %}
+{% include img.html src="/assets/switching-eds/aligned-faces.gif" alt="Aligned faces" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
