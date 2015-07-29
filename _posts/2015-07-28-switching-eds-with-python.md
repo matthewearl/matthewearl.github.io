@@ -7,6 +7,8 @@ title: Switching Eds Face swapping with Python, dlib, and OpenCV
 
 ![Header](/assets/switching-eds/header.jpg)
 
+<sup>[Image credit](#image_credits)</sup>
+
 ## Introduction
 
 In this post I'll describe how I wrote a short (200 line) Python script to
@@ -26,6 +28,8 @@ The script uses [dlib](http://dlib.net/)'s Python bindings to extract facial
 landmarks:
 
 ![Landmarks](/assets/switching-eds/landmarks.jpg)
+
+<sup>[Image credit](#image_credits)</sup>
 
 Dlib implements the algorithm described in the paper [One Millisecond Face
 Alignment with an Ensemble of Regression Trees](
@@ -142,7 +146,9 @@ def warp_im(im, M, dshape):
 
 Which produces the following alignment:
 
-![Aligned faces](/assets/switching-eds/aligned-faces.jpg)
+![Aligned faces](/assets/switching-eds/aligned-faces.gif)
+
+<sup>[Image credit](#image_credits)</sup>
 
 ## 3. Colour correcting the second image
 
@@ -151,6 +157,8 @@ problem:
 
 ![Non colour-corrected
 overlay](/assets/switching-eds/non-colour-corrected-overlay.jpg)
+
+<sup>[Image credit](#image_credits)</sup>
 
 The issue is that differences in skin-tone and lighting between the two images
 is causing a discontinuity around the edges of the overlaid region. Let's try
@@ -161,10 +169,10 @@ COLOUR_CORRECT_BLUR_FRAC = 0.6
 LEFT_EYE_POINTS = list(range(42, 48))
 RIGHT_EYE_POINTS = list(range(36, 42))
 
-def correct_colours(im1, im2, shape1):
+def correct_colours(im1, im2, landmarks1):
     blur_amount = COLOUR_CORRECT_BLUR_FRAC * numpy.linalg.norm(
-                                  numpy.mean(shape1[LEFT_EYE_POINTS], axis=0) -
-                                  numpy.mean(shape1[RIGHT_EYE_POINTS], axis=0))
+                              numpy.mean(landmarks1[LEFT_EYE_POINTS], axis=0) -
+                              numpy.mean(landmarks1[RIGHT_EYE_POINTS], axis=0))
     blur_amount = int(blur_amount)
     if blur_amount % 2 == 0:
         blur_amount += 1
@@ -181,6 +189,8 @@ def correct_colours(im1, im2, shape1):
 And the result:
 
 ![Colour corrected](/assets/switching-eds/colour-corrected.jpg)
+
+<sup>[Image credit](#image_credits)</sup>
 
 This function attempts to change the colouring of `im2` to match that of `im1`.
 It does this by dividing `im2` by a gaussian blur of `im2`, and then
@@ -206,7 +216,7 @@ of 0.6 * the pupillary distance is used.
 A mask is used to select which parts of image 2 and which parts of image 1
 should be shown in the final image:
 
-![Mask](/assets/switching-eds/mask.jpg)
+![Mask](/assets/switching-eds/mask.png)
 
 Regions with value 1 (shown white here) correspond with areas where image 2
 should show, and regions with colour 0 (shown black here) correspond with areas
@@ -226,30 +236,31 @@ OVERLAY_POINTS = [
     LEFT_EYE_POINTS + RIGHT_EYE_POINTS + LEFT_BROW_POINTS + RIGHT_BROW_POINTS,
     NOSE_POINTS + MOUTH_POINTS,
 ]
-DILATE_AMOUNT = 11
+FEATHER_AMOUNT = 11
 
 def draw_convex_hull(im, points, color):
     points = cv2.convexHull(points)
     cv2.fillConvexPoly(im, points, color=color)
 
-def get_face_mask(im, landmark_points):
+def get_face_mask(im, landmarks):
     im = numpy.zeros(im.shape[:2], dtype=numpy.float64)
 
     for group in OVERLAY_POINTS:
         draw_convex_hull(im,
-                         landmark_points[group],
+                         landmarks[group],
                          color=1)
 
     im = numpy.array([im, im, im]).transpose((1, 2, 0))
 
-    im = (cv2.GaussianBlur(im, (DILATE_AMOUNT, DILATE_AMOUNT), 0) > 0) * 1.0
-    im = cv2.GaussianBlur(im, (DILATE_AMOUNT, DILATE_AMOUNT), 0)
+    im = (cv2.GaussianBlur(im, (FEATHER_AMOUNT, FEATHER_AMOUNT), 0) > 0) * 1.0
+    im = cv2.GaussianBlur(im, (FEATHER_AMOUNT, FEATHER_AMOUNT), 0)
 
     return im
 
-mask = get_face_mask(im2, shape2)
+mask = get_face_mask(im2, landmarks2)
 warped_mask = warp_im(mask, M, im1.shape)
-combined_mask = numpy.max([get_face_mask(im1, shape1), warped_mask], axis=0)
+combined_mask = numpy.max([get_face_mask(im1, landmarks1), warped_mask],
+                          axis=0)
 {% endhighlight %}
 
 Let's break this down:
@@ -272,3 +283,19 @@ Finally, the mask is applied to give the final image:
 output_im = im1 * (1.0 - combined_mask) + warped_corrected_im2 * combined_mask
 {% endhighlight %}
 
+![Final](/assets/switching-eds/final.jpg)
+
+<sup>[Image credit](#image_credits)</sup>
+
+## Credits
+
+<a id="image_credits" />
+[Original Ed Miliband image](https://commons.wikimedia.org/
+wiki/File:Ed_Miliband.jpg) by the Department of Energy, licensed under the 
+[Open Government License v1.0](https://www.nationalarchives.gov.uk/doc/
+open-government-licence/version/1/).
+
+[Original Eddie Van Halen image](https://
+commons.wikimedia.org/wiki/File:Eddie_Van_Halen_(1993).jpg) by Alan Light,
+licensed under the [Creative Commons Attribution 2.0 Generic license](https://
+creativecommons.org/licenses/by/2.0/deed.en)
