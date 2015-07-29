@@ -7,6 +7,8 @@ title: Face swapping with The Gimp
 
 ![Face swap Header](/assets/face-swap/header.jpg)
 
+<sup>[Image credit](#image_credits)</sup>
+
 ## Introduction
 
 I've discovered a pretty quick and easy way to do face swaps such as the above
@@ -20,6 +22,8 @@ resolution:
 
 ![Ed](/assets/face-swap/ed.jpg)
 ![Dave](/assets/face-swap/dave.jpg)
+
+<sup>[Image credit](#image_credits)</sup>
 
 ## 2. Aligning the images
 
@@ -36,6 +40,8 @@ otherwise.
 
 ![Eye measure](/assets/face-swap/eye-measure.jpg)
 
+<sup>[Image credit](#image_credits)</sup>
+
 Break out a calculator and divide the head image's eye distance by the face
 image's eye distance, and scale the face image by this factor:
 
@@ -45,10 +51,14 @@ Now rotate the face image by the difference between the two eye-angles:
 
 ![Rotate image](/assets/face-swap/rotate-image.jpg)
 
+<sup>[Image credit](#image_credits)</sup>
+
 Copy the result, and paste it onto the head image as a new layer. Halve the new
 layer's opacity and line up the two faces using the *Move* tool (**M**):
 
 ![Align image](/assets/face-swap/align-image.jpg)
+
+<sup>[Image credit](#image_credits)</sup>
 
 Return the top layer's opacity to 100%.
 
@@ -59,6 +69,8 @@ below:
 
 ![layers](/assets/face-swap/layers.png)
 
+<sup>[Image credit](#image_credits)</sup>
+
 Now apply a gaussian blur to both. The blur amount should be as high as
 you can get without non-flesh tones from hair or background interfering with
 areas you want to transfer to the head image. About 2/3 of the head image
@@ -67,11 +79,14 @@ eye-distance has worked well for me:
 ![Face blur](/assets/face-swap/face-blur.jpg)
 ![Head blur](/assets/face-swap/head-blur.jpg)
 
+<sup>[Image credit](#image_credits)</sup>
 Now set the blurred face layer to divide, and the blurred head layer to
 multiply. The face image should now be shining through, but with the right
 lighting and fleshtones around the facial area:
 
 ![Colour adjusted face image](/assets/face-swap/colour-adjusted-face-image.jpg)
+
+<sup>[Image credit](#image_credits)</sup>
 
 At this point select *Copy Visible* from the *Edit* menu, and paste as a new
 layer.Move the new layer to second from bottom (right above the bottom head
@@ -85,9 +100,13 @@ nose and mouth area in white (opaque):
 
 ![Pre-blurred mask](/assets/face-swap/pre-blurred-mask.jpg)
 
+<sup>[Image credit](#image_credits)</sup>
+
 Apply a gaussian blur to the layer mask, *et voila*:
 
 ![Camerband](/assets/face-swap/camerband.jpg)
+
+<sup>[Image credit](#image_credits)</sup>
 
 ## Addendum
 
@@ -95,4 +114,18 @@ By swapping layers and re-doing the *Copy Visible* layer from step 3 one can
 easily get the reverse image:
 
 ![Milliron](/assets/face-swap/milliron.jpg)
+
+<sup>[Image credit](#image_credits)</sup>
+
+## Credits
+
+<a id="image_credits" />
+[Original Ed Miliband image](https://commons.wikimedia.org/
+wiki/File:Ed_Miliband.jpg) by the Department of Energy, licensed under the 
+[Open Government License v1.0](https://www.nationalarchives.gov.uk/doc/
+open-government-licence/version/1/).
+
+[Original David Cameron image](https://commons.wikimedia.org/wiki/
+File:Davidcameron.jpg) by [Land of Hope and Glory](https://en.wikipedia.org/
+wiki/User:Land_of_Hope_and_Glory), released into the public domain.
 
