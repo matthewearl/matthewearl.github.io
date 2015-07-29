@@ -4,8 +4,8 @@ title: Switching Eds Face swapping with Python, dlib, and OpenCV
 ---
 
 # Switching Eds: Face swapping with Python, dlib, and OpenCV
-
-![Header](/assets/switching-eds/header.jpg)
+ 
+{% include img.html src="/assets/switching-eds/header.jpg" alt="Header" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
@@ -30,7 +30,7 @@ matthewearl/faceswap/blob/master/faceswap.py).
 The script uses [dlib](http://dlib.net/)'s Python bindings to extract facial
 landmarks:
 
-![Landmarks](/assets/switching-eds/landmarks.jpg)
+{% include img.html src="/assets/switching-eds/landmarks.jpg" alt="Landmarks" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
@@ -149,7 +149,7 @@ def warp_im(im, M, dshape):
 
 Which produces the following alignment:
 
-![Aligned faces](/assets/switching-eds/aligned-faces.gif)
+{% include img.html src="Aligned faces" alt="Aligned faces" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
@@ -158,8 +158,7 @@ Which produces the following alignment:
 If we tried to overlay facial features at this point, we'd soon see we have a
 problem:
 
-![Non colour-corrected
-overlay](/assets/switching-eds/non-colour-corrected-overlay.jpg)
+{% include img.html src="/assets/switching-eds/non-colour-corrected-overlay.jpg" alt="Non colour-corrected overlay" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
@@ -191,7 +190,7 @@ def correct_colours(im1, im2, landmarks1):
 
 And the result:
 
-![Colour corrected](/assets/switching-eds/colour-corrected.jpg)
+{% include img.html src="/assets/switching-eds/colour-corrected.jpg" alt="Colour corrected" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
@@ -219,7 +218,7 @@ of 0.6 * the pupillary distance is used.
 A mask is used to select which parts of image 2 and which parts of image 1
 should be shown in the final image:
 
-![Mask](/assets/switching-eds/mask.png)
+{% include img.html src="/assets/switching-eds/mask.png" alt="Mask" %}
 
 Regions with value 1 (shown white here) correspond with areas where image 2
 should show, and regions with colour 0 (shown black here) correspond with areas
@@ -286,7 +285,7 @@ Finally, the mask is applied to give the final image:
 output_im = im1 * (1.0 - combined_mask) + warped_corrected_im2 * combined_mask
 {% endhighlight %}
 
-![Final](/assets/switching-eds/final.jpg)
+{% include img.html src="/assets/switching-eds/final.jpg" alt="Final" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
