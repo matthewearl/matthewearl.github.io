@@ -42,7 +42,8 @@ The process breaks down into these steps:
 
 I won't cover how to obtain the input images from the JHUAPL website as this is
 not very interesting (although it is included in [the source code](https://
-github.com/matthewearl/lorri-align)).
+github.com/matthewearl/lorri-align)). Note for this project only the
+short-exposure 100-150 msec images are used.
 
 ## Extracting star coordinates
 
@@ -124,9 +125,8 @@ At this point we assume each contiguous region is a star. We start by using
         raise ExtractFailed("Not enough stars ({})".format(len(contours)))
 {% endhighlight %}
 
-And then masking the original image by each contiguous region, and using
-`cv2.moments` to determine the centre-of-mass of the star, in terms of pixel
-coordinates:
+And then mask the original image by each contiguous region, using `cv2.moments`
+to determine the centre-of-mass of the star, in terms of pixel coordinates:
 
 {% highlight python %}
     for idx, contour in enumerate(contours):
@@ -149,6 +149,113 @@ Here's the resuls, plotted over the stretched input image:
 {% include img.html src="/assets/pluto-flyby/stars.jpg" alt="Stars" %}
 
 <sup>[Image credit](#image_credits)</sup>
+
+## Aligning images
+
+In this step, for each input image we seek to find an affine transformation
+\\( M \\) which maps points on the first image to corresponding points on the
+image in question. Given a function `register_pair` which takes stars from
+two images and returns a transformation to map the first image on to the
+second it is easy enough to write an algorithm that behaves well:
+
+{% highlight python %}
+REGISTRATION_RETRIES = 3
+
+def register_many(stars_seq):
+    stars_it = iter(stars_seq)
+
+    registered = [(next(stars_it), numpy.matrix(numpy.identity(3)))]
+    yield RegistrationResult(exception=None, transform=registered[0][1])
+
+    for stars2 in stars_it:
+        for stars1, M1 in [registered[0]] + registered[-REGISTRATION_RETRIES:]:
+            try:
+                M2 = register_pair(stars1, stars2)
+            except RegistrationFailed as e:
+                yield RegistrationResult(exception=e, transform=None)
+            yield RegistrationResult(exception=None, transform=(M1 * M2))
+        registered.append((stars2, (M1 * M2)))
+{% endhighlight %}
+
+What this does is to attempt to align each image directly with the first image.
+If this succeeds the transformation is simply the one returned by
+`register_pair`. Otherwise, the image is aligned with the third to last
+successfully registered image, then the second to last, and so on. If one of
+these succeeds the desired transformation is just the previously registered
+image's transformation composed with that of transformation just returned by
+`register_pair`.
+
+This technique works quite well: The majority of images line up with the first
+image directly, but if they don't (typically because they have a small set of
+detected stars) then they are lined up with the images that they are most
+similar to. Preferring to pair with the first image is desirable as it prevents
+alignment errors accumulating.
+
+## Aligning pairs of images
+
+This is all well and good, but how does `register_pair()` work? Well, it starts
+by selecting a random pair of stars from each image:
+
+{% include img.html src="/assets/pluto-flyby/pair-align1.jpg" alt="Pair align 1" %}
+
+<sup>[Image credit](#image_credits)</sup>
+
+These are hypothetical corresponding stars. If later in the procedure they are
+found not to be the same star, they procedure will restart, but for now they
+are assumed to be the same star.
+
+Next, random remaining (labelled red) pairs are picked until two are found
+which have approximately the same (with 4 pixels) distance from the first star:
+
+{% include img.html src="/assets/pluto-flyby/pair-align2.jpg" alt="Pair align 2" %}
+
+<sup>[Image credit](#image_credits)</sup>
+
+...if no such pairs are found the procedure restarts with a new initial pair.
+Otherwise a third pair is sought, which must have the same distance to the
+previously paired stars. This procedure repeats until 4 stars have been
+successfully paired:
+
+{% include img.html src="/assets/pluto-flyby/pair-align3.jpg" alt="Pair align 3" %}
+
+<sup>[Image credit](#image_credits)</sup>
+
+{% include img.html src="/assets/pluto-flyby/pair-align4.jpg" alt="Pair align 4" %}
+
+<sup>[Image credit](#image_credits)</sup>
+
+The procedure repeats a maximum of 500 times, after which the registration
+fails.
+
+This algorithm is similar to the [RANSAC](https://en.wikipedia.org/wiki/RANSAC)
+algorithm, except with slightly more efficient behaviour. From the Wikipedia
+page:
+
+> Random sample consensus (RANSAC) is an iterative method to estimate
+> parameters of a mathematical model from a set of observed data which contains
+> outliers.
+
+In our case the *parameters of the mathematical model* are the translation and
+rotation required to map the first image onto the second. The *observed data*
+are all possible pairs of stars in the first image and stars in the second
+image, ie. (number of stars in image 1) * (number of stars in image 2) such
+pairs.
+
+Pure RANSAC would proceed by randomly selecting a minimal set of data points in
+order to give a hypothetical model. In our case this would be 2 pairs: Enough
+to give a translation and a rotation. The 2 pairings would be immediately
+rejected and the process restarted if the distance between the two points in
+the first image differed from the distance in the two points in the second
+image. If the distances are the same, a model is constructed (in our case a
+rotation and a translation), and the remaining data are inspected to see how
+many fit the model. The model is accepted if the count reaches a predetermined
+value.
+
+Assuming there are \\( N \\) stars in each image, then RANSAC would
+complete \\( N * (N - 1) \\) iterations before finding a match. On average
+\\( N - 1 \\) of these iterations would pass the initial distance test, and
+thus require \\( N - 2 \\) * \\( N - 2 \\) 
+
 
 ## Credits
 
