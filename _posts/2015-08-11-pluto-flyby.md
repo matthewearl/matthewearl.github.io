@@ -197,7 +197,7 @@ This is all well and good, but how does `register_pair()` work? Well, it starts
 by randomly selecting 2 pairs of stars, the first of each pair being from the
 first image, and the second of each pair being from the second image:
 
-{% include img.html src="/assets/pluto-flyby/pair-align1.jpg" alt="Pair align 1" %}
+{% include img.html src="/assets/pluto-flyby/pair-align-1.png" alt="Pair align 1" %}
 
 This is a hypothetical correspondence between the two images: The first star
 chosen in the first image should correspond with the first star chosen in the
@@ -210,9 +210,12 @@ predetermined margin of error), as is the case above.
 The procedure is restarted until a hypothetical correspondence is found with
 (approximately) equal distances between the two stars in either image:
 
-{% include img.html src="/assets/pluto-flyby/pair-align2.jpg" alt="Pair align 2" %}
+{% include img.html src="/assets/pluto-flyby/pair-align-2.png" alt="Pair align 2" %}
 
 <sup>[Image credit](#image_credits)</sup>
+
+*Note that the blue lines are the same length. For remaining images in this
+section lines of the same colour will be of the same length*
 
 We have a reasonable hypothesis at this point, but it could just be that the
 two stars are coincidentally the same distance apart in each image, and are in
@@ -223,27 +226,68 @@ from each image), and seeing how many pairs fit the hypothesis.
 A pair is said to fit the hypothesis if in either image, the star described by
 the new pair has the same distance to the stars in the hypothesis. For example:
 
-{% include img.html src="/assets/pluto-flyby/pair-align3.jpg" alt="Pair align 3" %}
+{% include img.html src="/assets/pluto-flyby/pair-align-3.png" alt="Pair align 3" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
 As pairs are found they are added to the hypothetical correspondence. As such,
 the 4th star must have the same distance to the first 3 stars in either image:
 
-{% include img.html src="/assets/pluto-flyby/pair-align4.jpg" alt="Pair align 4" %}
+{% include img.html src="/assets/pluto-flyby/pair-align-4.png" alt="Pair align 4" %}
+
+<sup>[Image credit](#image_credits)</sup>
+
+...and the 5th star must have the same distance to the first 4 stars in either
+image:
+
+{% include img.html src="/assets/pluto-flyby/pair-align-5.png" alt="Pair align 5" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
 If at the end of this procedure there are at least 4 stars in the hypothetical
 correspondence the hypothesis is accepted. A [Procrustes
 Analysis](https://en.wikipedia.org/wiki/Procrustes_analysis) is performed on
-the correspondences in order to calculate a best-fit translation/rotation in
-order to fit the stars in the first image onto the corresponding stars in the
-second image.
+the correspondences in order to calculate a best-fit translation/rotation 
+so that the stars in the first image line up with the corresponding stars in
+the second image.
 
 If there are fewer than 4 stars, the procedure is restarted. The procedure is
 restarted up to 100,000 times after which the registration is deemed to have
 failed.
+
+Here's the code for the above:
+
+{% highlight python %}
+def _find_correspondences(stars1, stars2):
+    stars1 = list(stars1)
+    stars2 = list(stars2)
+
+    for i in range(MAX_ITERS):
+        model = _pick_random_model(stars1, stars2)
+        if not _fits_model(model[1], model[:1]):
+            continue
+
+        for s1 in stars1:
+            if s1 in (pair[0] for pair in model):
+                continue
+            for s2 in stars2:
+                if s2 in (pair[1] for pair in model):
+                    continue
+                if _fits_model((s1, s2), model):
+                    model.append((s1, s2))
+
+        if len(model) >= NUM_STARS_TO_PAIR:
+            return model
+
+    raise RegistrationFailed
+
+def _transformation_from_correspondences(correspondences):
+    # Omitted for brevity. See repository for full version.
+
+def register_pair(stars1, stars2):
+    return _transformation_from_correspondences(
+                                         _find_correspondences(stars1, stars2))
+{% endhighlight %}
 
 The above algorithm is an example of the [RANSAC
 method](https://en.wikipedia.org/wiki/RANSAC). In this case the model is just
@@ -252,6 +296,22 @@ explicit transform after finding the initial 2 pairs, and used this to test for
 inliers, however this approach would be senstive to the initial pair being
 close together and therefore would not provide an accurate rotation parameter,
 which might lead to a correct hypothesis being rejected.
+
+## Stacking
+
+The stacking phase isn't particularly complex. It proceeds as follows:
+
+1. Find a bounding rectangle for all the images. This is done by translating
+   all image corners into the reference frame of the first image, then finding
+   the element-wise minimum and maximum. This gives the top-left and
+   bottom-right corner of the bounding box, respectively.
+2. An output image (consisting of zeros, ie. black) is then created. Images are
+   drawn onto this blank canvas, using `cv2.warpAffine` to rotate and translate
+   the images by the transformation found during the alignment step.
+3. If an image is about to be processed which was taken more than 4 hours after
+   the previous image, the current output image is written to disk, and a fresh
+   image created. This avoids images taken at (approximately) the same time
+   from taking up lots of frames in the animation.
 
 ## Credits
 
