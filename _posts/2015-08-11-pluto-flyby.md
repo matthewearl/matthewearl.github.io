@@ -158,6 +158,15 @@ Here's the result, plotted over the stretched input image:
 
 <sup>[Image credit](#image_credits)</sup>
 
+There are other approaches to star extraction, in particular I've previously
+had success with Lang et al.'s method described in section 2.1 of the paper
+[Astrometry.net: Blind astrometric calibration of arbitrary astronomical
+images](http://arxiv.org/abs/0910.2233), however, it wasn't effective in this
+case, possibly due to the highly quantized nature of the brightness-stretched
+images. External tools are available too, such as
+[SExtractor](http://www.astromatic.net/software/sextractor) which I didn't try
+but may be worth considering if you're looking to do star extraction yourself.
+
 ## Aligning images
 
 In this step, for each input image we seek to find an affine transformation
