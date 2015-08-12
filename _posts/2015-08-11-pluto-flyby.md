@@ -20,8 +20,8 @@ directly from the [New Horizons jhuapl.edu LORRI
 page](http://pluto.jhuapl.edu/soc/Pluto-Encounter/index.php). The script
 translates and rotates input images such that background stars in the image
 line up, which are then composed into a GIF. The result is a timelapse of New
-Horizon's view, as if the camera were pointing in the direction of travel for
-the duration.
+Horizon's view, as if the camera were pointing in the same direction for the
+duration.
 
 Back when I made the original post the code was very much a prototype due to me
 rushing to get the image out before the point of closest approach. I've since
@@ -58,8 +58,10 @@ However, stretch the brightness 16 times and a few become visible:
 
 {% include img.html src="/assets/pluto-flyby/input-bright.jpg" alt="Input Bright" %}
 
+<sup>[Image credit](#image_credits)</sup>
+
 Given such an input image we wish to obtain the `x`, `y` coordinates of each
-star.  To do so we first
+star. To do so we first
 [threshold](https://en.wikipedia.org/wiki/Thresholding_(image_processing)) the
 input image:
 
@@ -94,10 +96,12 @@ detect, so thresholding on this will remove almost all of the background
 pixels. Due to sensor noise there are still some background pixels which get
 through at this level. `THRESHOLD_BIAS` is chosen to account for this.
 
-The above isn't perfect: Some stars have multiple contiguous regions associated
-with them. We account for this by [dilating](https://en.wikipedia.org/wiki/
-Dilation_(morphology)) the mask by a small amount, thereby joining up nearby
-regions:
+The above isn't perfect: Some stars can have multiple contiguous regions
+associated with them or, as is the case above, Pluto or its moon Charon can
+generate multiple regions around its fringe. Having a significant number of
+false positives may cause problems for the next step, so let's account for this
+by [dilating](https://en.wikipedia.org/wiki/Dilation_(morphology)) the mask by
+a small amount, thereby joining up nearby regions:
 
 {% highlight python %}
     DILATION_SIZE = 9
@@ -112,7 +116,11 @@ This gives the following:
 
 <sup>[Image credit](#image_credits)</sup>
 
-At this point we assume each contiguous region is a star. We start by using
+At this point we assume each contiguous region is a star. This obviously isn't
+true for the regions associated with Pluto and Charon, but the next step should
+handle the small number of false positives adequately.
+
+So how do we go from our mask to a list of star coordinates? We start by using
 `cv2.findContours` to extract contiguous regions:
 
 {% highlight python %}
@@ -144,9 +152,9 @@ to determine the centre-of-mass of the star, in terms of pixel coordinates:
         yield Star(x=(x + m['m10'] / m['m00']), y=(y + m['m01'] / m['m00']))
 {% endhighlight %}
 
-Here's the resuls, plotted over the stretched input image:
+Here's the result, plotted over the stretched input image:
 
-{% include img.html src="/assets/pluto-flyby/stars.jpg" alt="Stars" %}
+{% include img.html src="/assets/pluto-flyby/stars.png" alt="Stars" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
@@ -230,6 +238,10 @@ the new pair has the same distance to the stars in the hypothesis. For example:
 
 <sup>[Image credit](#image_credits)</sup>
 
+The new star (yellow) has the same distance to the first star (denoted by a
+blue line) in either image. Similarly it has the same distance to the second
+star (denoted by a green line) in either image.
+
 As pairs are found they are added to the hypothetical correspondence. As such,
 the 4th star must have the same distance to the first 3 stars in either image:
 
@@ -247,13 +259,12 @@ image:
 If at the end of this procedure there are at least 4 stars in the hypothetical
 correspondence the hypothesis is accepted. A [Procrustes
 Analysis](https://en.wikipedia.org/wiki/Procrustes_analysis) is performed on
-the correspondences in order to calculate a best-fit translation/rotation 
-so that the stars in the first image line up with the corresponding stars in
-the second image.
+the correspondences which calculates a best-fit translation/rotation so that
+the stars in the first image line up with the corresponding stars in the second
+image.
 
-If there are fewer than 4 stars, the procedure is restarted. The procedure is
-restarted up to 100,000 times after which the registration is deemed to have
-failed.
+If there are fewer than 4 stars, the procedure is restarted. If after 100,000
+restarts no registration has been found the registration is failed.
 
 Here's the code for the above:
 
@@ -282,7 +293,8 @@ def _find_correspondences(stars1, stars2):
     raise RegistrationFailed
 
 def _transformation_from_correspondences(correspondences):
-    # Omitted for brevity. See repository for full version.
+    # Use a Procrustes analysis to compute a matrix M from correspondences.
+    # Omitted for brevity. See reg.py in the repository for the full version.
 
 def register_pair(stars1, stars2):
     return _transformation_from_correspondences(
@@ -312,6 +324,8 @@ The stacking phase isn't particularly complex. It proceeds as follows:
    the previous image, the current output image is written to disk, and a fresh
    image created. This avoids images taken at (approximately) the same time
    from taking up lots of frames in the animation.
+
+The result is then composed into a GIF using ImageMagick.
 
 ## Credits
 
