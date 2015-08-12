@@ -326,9 +326,10 @@ The stacking phase isn't particularly complex. It proceeds as follows:
    all image corners into the reference frame of the first image, then finding
    the element-wise minimum and maximum. This gives the top-left and
    bottom-right corner of the bounding box, respectively.
-2. An output image (consisting of zeros, ie. black) is then created. Images are
-   drawn onto this blank canvas, using `cv2.warpAffine` to rotate and translate
-   the images by the transformation found during the alignment step.
+2. An output image (consisting of zeros, ie. black) is then created with the
+   same dimensions as the bounding rectangle. Images are drawn onto this blank
+   canvas, using `cv2.warpAffine` to rotate and translate the images by the
+   transformation found during the alignment step.
 3. If an image is about to be processed which was taken more than 4 hours after
    the previous image, the current output image is written to disk, and a fresh
    image created. This avoids images taken at (approximately) the same time
