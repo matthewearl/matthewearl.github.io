@@ -194,68 +194,64 @@ alignment errors accumulating.
 ## Aligning pairs of images
 
 This is all well and good, but how does `register_pair()` work? Well, it starts
-by selecting a random pair of stars from each image:
+by randomly selecting 2 pairs of stars, the first of each pair being from the
+first image, and the second of each pair being from the second image:
 
 {% include img.html src="/assets/pluto-flyby/pair-align1.jpg" alt="Pair align 1" %}
 
-<sup>[Image credit](#image_credits)</sup>
+This is a hypothetical correspondence between the two images: The first star
+chosen in the first image should correspond with the first star chosen in the
+second image, and the second star in the first image should correspond with the
+second star in the second image. Given we're only permitting rotation and
+translation and not scaling, we can immediately reject the hypothesis if the
+distance between the two stars is different for the two images (up to a
+predetermined margin of error), as is the case above.
 
-These are hypothetical corresponding stars. If later in the procedure they are
-found not to be the same star, they procedure will restart, but for now they
-are assumed to be the same star.
-
-Next, random remaining (labelled red) pairs are picked until two are found
-which have approximately the same (with 4 pixels) distance from the first star:
+The procedure is restarted until a hypothetical correspondence is found with
+(approximately) equal distances between the two stars in either image:
 
 {% include img.html src="/assets/pluto-flyby/pair-align2.jpg" alt="Pair align 2" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
-...if no such pairs are found the procedure restarts with a new initial pair.
-Otherwise a third pair is sought, which must have the same distance to the
-previously paired stars. This procedure repeats until 4 stars have been
-successfully paired:
+We have a reasonable hypothesis at this point, but it could just be that the
+two stars are coincidentally the same distance apart in each image, and are in
+fact images of completely different stars. We attempt to strengthen the
+hypothesis by performing an exhaustive search on remaining pairs of stars (one
+from each image), and seeing how many pairs fit the hypothesis.
+
+A pair is said to fit the hypothesis if in either image, the star described by
+the new pair has the same distance to the stars in the hypothesis. For example:
 
 {% include img.html src="/assets/pluto-flyby/pair-align3.jpg" alt="Pair align 3" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
+As pairs are found they are added to the hypothetical correspondence. As such,
+the 4th star must have the same distance to the first 3 stars in either image:
+
 {% include img.html src="/assets/pluto-flyby/pair-align4.jpg" alt="Pair align 4" %}
 
 <sup>[Image credit](#image_credits)</sup>
 
-The procedure repeats a maximum of 500 times, after which the registration
-fails.
+If at the end of this procedure there are at least 4 stars in the hypothetical
+correspondence the hypothesis is accepted. A [Procrustes
+Analysis](https://en.wikipedia.org/wiki/Procrustes_analysis) is performed on
+the correspondences in order to calculate a best-fit translation/rotation in
+order to fit the stars in the first image onto the corresponding stars in the
+second image.
 
-This algorithm is similar to the [RANSAC](https://en.wikipedia.org/wiki/RANSAC)
-algorithm, except with slightly more efficient behaviour. From the Wikipedia
-page:
+If there are fewer than 4 stars, the procedure is restarted. The procedure is
+restarted up to 100,000 times after which the registration is deemed to have
+failed.
 
-> Random sample consensus (RANSAC) is an iterative method to estimate
-> parameters of a mathematical model from a set of observed data which contains
-> outliers.
-
-In our case the *parameters of the mathematical model* are the translation and
-rotation required to map the first image onto the second. The *observed data*
-are all possible pairs of stars in the first image and stars in the second
-image, ie. (number of stars in image 1) * (number of stars in image 2) such
-pairs.
-
-Pure RANSAC would proceed by randomly selecting a minimal set of data points in
-order to give a hypothetical model. In our case this would be 2 pairs: Enough
-to give a translation and a rotation. The 2 pairings would be immediately
-rejected and the process restarted if the distance between the two points in
-the first image differed from the distance in the two points in the second
-image. If the distances are the same, a model is constructed (in our case a
-rotation and a translation), and the remaining data are inspected to see how
-many fit the model. The model is accepted if the count reaches a predetermined
-value.
-
-Assuming there are \\( N \\) stars in each image, then RANSAC would
-complete \\( N * (N - 1) \\) iterations before finding a match. On average
-\\( N - 1 \\) of these iterations would pass the initial distance test, and
-thus require \\( N - 2 \\) * \\( N - 2 \\) 
-
+The above algorithm is an example of the [RANSAC
+method](https://en.wikipedia.org/wiki/RANSAC). In this case the model is just
+the set of correspondences found so far. We could equally have calculated an
+explicit transform after finding the initial 2 pairs, and used this to test for
+inliers, however this approach would be senstive to the initial pair being
+close together and therefore would not provide an accurate rotation parameter,
+which might lead to a correct hypothesis being rejected.
 
 ## Credits
 
