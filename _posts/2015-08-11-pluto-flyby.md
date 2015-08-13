@@ -158,11 +158,11 @@ Here's the result, plotted over the stretched input image:
 
 <sup>[Image credit](#image_credits)</sup>
 
-There are other approaches to star extraction, in particular I've previously
+There are other approaches to star extraction in particular I've previously
 had success with Lang et al.'s method described in section 2.1 of the paper
 [Astrometry.net: Blind astrometric calibration of arbitrary astronomical
-images](http://arxiv.org/abs/0910.2233), however, it wasn't effective in this
-case, possibly due to the highly quantized nature of the brightness-stretched
+images](http://arxiv.org/abs/0910.2233), however it wasn't effective in this
+case possibly due to the highly quantized nature of the brightness-stretched
 images. External tools are available too, such as
 [SExtractor](http://www.astromatic.net/software/sextractor) which I didn't try
 but may be worth considering if you're looking to do star extraction yourself.
@@ -170,10 +170,11 @@ but may be worth considering if you're looking to do star extraction yourself.
 ## Aligning images
 
 In this step, for each input image we seek to find an affine transformation
-\\( M \\) which maps points on the first image to corresponding points on the
-image in question. Given a function `register_pair` which takes stars from
-two images and returns a transformation to map the first image on to the
-second it is easy enough to write an algorithm that behaves well:
+(rotation and translation only) which maps points on the first image to
+corresponding points on the image in question. Given a function `register_pair`
+which takes stars from two images and returns a transformation to map the first
+image on to the second it is easy enough to write an algorithm that behaves
+well:
 
 {% highlight python %}
 REGISTRATION_RETRIES = 3
@@ -181,9 +182,11 @@ REGISTRATION_RETRIES = 3
 def register_many(stars_seq):
     stars_it = iter(stars_seq)
 
+    # First image is defined to have the identity transformation.
     registered = [(next(stars_it), numpy.matrix(numpy.identity(3)))]
     yield RegistrationResult(exception=None, transform=registered[0][1])
 
+    # Attempt to find transformations for the remaining images.
     for stars2 in stars_it:
         for stars1, M1 in [registered[0]] + registered[-REGISTRATION_RETRIES:]:
             try:
@@ -204,9 +207,9 @@ image's transformation composed with that of transformation just returned by
 
 This technique works quite well: The majority of images line up with the first
 image directly, but if they don't (typically because they have a small set of
-detected stars) then they are lined up with the images that they are most
-similar to. Preferring to pair with the first image is desirable as it prevents
-alignment errors accumulating.
+detected stars that intersect with the first image) then they are lined up with
+the images that they are most similar to. Preferring to pair with the first
+image is desirable as it prevents alignment errors accumulating.
 
 ## Aligning pairs of images
 
@@ -315,8 +318,8 @@ method](https://en.wikipedia.org/wiki/RANSAC). In this case the model is just
 the set of correspondences found so far. We could equally have calculated an
 explicit transform after finding the initial 2 pairs, and used this to test for
 inliers, however this approach would be senstive to the initial pair being
-close together and therefore would not provide an accurate rotation parameter,
-which might lead to a correct hypothesis being rejected.
+close together. In that case the transform would not provide an accurate
+rotation parameter, which might lead to a correct hypothesis being rejected. 
 
 ## Stacking
 
