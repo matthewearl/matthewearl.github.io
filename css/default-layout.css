@@ -4,3 +4,27 @@ body {
 .starter-template {
   padding: 40px 15px;
 }
+.post-info {
+    font-size: smaller;
+    color: #A0A0A0;
+    margin-bottom: 30px;
+}
+
+.post-info > a {
+    color: #A0A0A0;
+    text-decoration: underline;
+}
+
+.post-info > a:hover {
+    color: #A0A0A0;
+    text-decoration: none;
+}
+
+.post-title > h1 {
+    margin-bottom: 5px;
+}
+
+.reddit-score {
+    display: inline;
+    //visibility: hidden;
+}

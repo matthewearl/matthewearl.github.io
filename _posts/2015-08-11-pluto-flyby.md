@@ -1,8 +1,10 @@
 ---
 layout: default
 title: Creating a Pluto flyby using unaligned New Horizons images
+reddit-url: https://www.reddit.com/r/programming/comments/3gu2v3/how_i_used_python_and_opencv_to_create_a_pluto/
 ---
-# Creating a Pluto flyby using unaligned New Horizons images
+
+{% include post-title.html %}
 
 {% include img.html src="/assets/pluto-flyby/anim2.gif" alt="Header" %}
 
