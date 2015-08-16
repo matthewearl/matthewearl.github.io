@@ -3,7 +3,7 @@ layout: default
 title: Line 6 Pocket POD Teardown
 ---
 
-# Line 6 Pocket POD Teardown
+{% include post-title.html %}
 
 Just a quick post showing the insides of a [Line 6 Pocket
 POD](http://uk.line6.com/pocketpod/):

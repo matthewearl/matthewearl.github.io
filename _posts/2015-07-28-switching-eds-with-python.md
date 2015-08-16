@@ -1,9 +1,10 @@
 ---
 layout: default
-title: Switching Eds Face swapping with Python, dlib, and OpenCV
+title: Switching Eds&#58; Face swapping with Python, dlib, and OpenCV
+reddit-url: https://www.reddit.com/r/programming/comments/3f591x/so_i_wrote_a_script_that_swaps_peoples_faces_in/
 ---
 
-# Switching Eds: Face swapping with Python, dlib, and OpenCV
+{% include post-title.html %}
  
 {% include img.html src="/assets/switching-eds/header.jpg" alt="Header" %}
 

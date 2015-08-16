@@ -1,9 +1,9 @@
 ---
 layout: default
-title: Face swapping with The Gimp
+title: Face swapping with The GIMP
 ---
 
-# Face Swapping with The GIMP
+{% include post-title.html %}
 
 {% include img.html src="/assets/face-swap/header.jpg" alt="Face swap Header" %}
 
