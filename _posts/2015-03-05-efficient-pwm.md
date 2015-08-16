@@ -3,7 +3,7 @@ layout: default
 title: Bresenham and Efficient Pulse-Width Modulation
 ---
 
-# Bresenham and Efficient Pulse-Width Modulation
+{% include post-title.html %}
 
 *Update*: I just noticed that [this](http://www.simplicate.info/2013/05/21/using-bresenham-line-algorithm-for-better-pwm-2/) [technique](http://trolsoft.ru/en/articles/bresenham-algo) is [known](https://github.com/prwhite/bham). I'm leaving this up here in case anyone finds my particular derivation interesting. :-)
 
