@@ -9,12 +9,11 @@
         on {{ page.date | date: '%B %d, %Y' }}.
         {% if page.reddit-url %}
         <a id="reddit-url" href="{{ page.reddit-url }}">
-            Discuss on Reddit.
+            Discuss on reddit!
             <div class="reddit-score">
-                ??? points / ??? comments.
+                (??? points / ??? comments).
             </div>
         </a>
-        <script src="/js/reddit-scores.js"></script>
         {% endif %}
     </div>
 </div>

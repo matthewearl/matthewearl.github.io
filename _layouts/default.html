@@ -56,9 +56,17 @@
 
       <div class="starter-template">
           {{ content }}
+          {% if page.reddit-url %}
+          <div id="discuss-footer">
+              <a href="{{ page.reddit-url }}">
+                  Discuss this post on reddit!
+                    <div class="reddit-score">
+                        (??? points / ??? comments).
+                    </div>
+              </a>
+          </div>
+          {% endif %}
       </div>
-
-    <script type="text/javascript" src="//www.redditstatic.com/button/button1.js"></script>
     </div><!-- /.container -->
 
     <footer id="footer">
@@ -66,6 +74,11 @@
         <small>&copy; {{ site.time | date: '%Y' }} Matthew Earl. All Rights Reserved.</small>
         </p>
     </footer>
+
+    {% if page.reddit-url %}
+    <script src="/js/reddit-scores.js"></script>
+    <script>reddit_scores.fetch();</script>
+    {% endif %}
 
     <!-- Google analytics -->
     <script>
