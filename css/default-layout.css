@@ -2,7 +2,11 @@ body {
   padding-top: 50px;
 }
 .starter-template {
-  padding: 40px 15px;
+  padding-top: 0px;
+  padding-bottom: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-bottom: 0em;
 }
 .post-info {
     font-size: smaller;
@@ -26,15 +30,28 @@ body {
 
 .reddit-score {
     display: inline;
-    //visibility: hidden;
 }
 
 #discuss-footer {
     font-size: large;
-    margin-top: 3em;
+    margin-top: 1em;
 }
 
 .sharing-links {
     margin-top: 1em;
     font-size: large;
 }
+
+#footer {
+    text-align: center;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #D0D0D0;
+    margin: 1em 0;
+    padding: 0; 
+}
+
