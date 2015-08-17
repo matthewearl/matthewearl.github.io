@@ -13,10 +13,8 @@ var reddit_scores = (function () {
                             num_comments + " comments)";
             var divs = document.getElementsByClassName('reddit-score');
             
-            console.log(divs.length);
             for (var i = 0; i < divs.length; i++) {
                 var div = divs[i];
-                console.log(div);
                 while (div.firstChild) {
                     div.removeChild(div.firstChild);
                 }
