@@ -1,6 +1,16 @@
+{% if page.nosharinglinks %}
+{% else %}
 {% capture full_uri %}{{ site.url }}{{ page.url }}{% endcapture %}
 {% capture encoded_uri %}{{ full_uri | cgi_escape }}{% endcapture %}
-{% capture encoded_title %}{{ page.title | cgi_escape }}{% endcapture %}
+
+{% comment %}
+Encode the title for use as a URI component. Colons are encoded as &#58; in
+titles (as a hack to work around the front-matter parser not supporting literal
+colons), so undo that here. Also HackerNews interprets plus chars literally, so
+make sure spaces are encoded as '%20'.
+{% endcomment %}
+{% capture encoded_title %}{{ page.title | replace:'&#58;',':' }}{% endcapture %}
+{% capture encoded_title %}{{ encoded_title | cgi_escape }}{% endcapture %}
 {% capture encoded_title %}{{ encoded_title | replace:'+','%20' }}{% endcapture %}
 
 <div class="sharing-links">
@@ -86,3 +96,4 @@
         </li>
       </ul>
 </div>
+{% endif %}
