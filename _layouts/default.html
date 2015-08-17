@@ -17,6 +17,9 @@
 
     <!-- Python syntax highlighting CSS -->
     <link href="/css/pygments.css" rel="stylesheet">
+
+    <!-- Ridiculously Responsive Social Sharing Buttons -->
+    <link href="/css/rrssb.css" rel="stylesheet">
   </head>
 
   <body>
@@ -57,6 +60,11 @@
               </a>
           </div>
           {% endif %}
+
+          {% if page.nosharinglinks %}
+          {% else %}
+          {% include sharing.html %}
+          {% endif %}
       </div>
     </div><!-- /.container -->
 
@@ -89,8 +97,10 @@
     <script src="/js/bootstrap.min.js"></script>
 
     <!-- MathJAX for inline math rendering -->
-    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+    <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <!-- Ridiculously Responsive Social Sharing Buttons -->
+    <script src="/js/rrssb.min.js"></script>
   </body>
 </html>
 
