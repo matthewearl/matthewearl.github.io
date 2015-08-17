@@ -10,7 +10,7 @@ var reddit_scores = (function () {
             var num_comments =
                          parsed["data"]["children"][0]["data"]["num_comments"];
             var text = "(" + score + " points / " +
-                            num_comments + " comments.)";
+                            num_comments + " comments)";
             var divs = document.getElementsByClassName('reddit-score');
             
             console.log(divs.length);
