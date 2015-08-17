@@ -28,3 +28,9 @@ body {
     display: inline;
     //visibility: hidden;
 }
+
+#discuss-footer {
+    font-size: large;
+    margin-top: 3em;
+}
+

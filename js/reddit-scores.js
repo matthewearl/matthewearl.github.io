@@ -2,14 +2,15 @@
 var reddit_scores = (function () {
     var fetch = function() {
         var id = ("t3_" +
-                  document.getElementById('reddit-url').href.split('/')[6])
+                  document.getElementById('reddit-url').href.split('/')[6]);
         var url = "http://www.reddit.com/api/info.json?id=" + id;
         var req = new XMLHttpRequest();
         var on_json_get = function(parsed) {
             var score = parsed["data"]["children"][0]["data"]["score"];
             var num_comments =
                          parsed["data"]["children"][0]["data"]["num_comments"];
-            var text = "" + score + " points / " + num_comments + " comments.";
+            var text = "(" + score + " points / " +
+                            num_comments + " comments.)";
             var divs = document.getElementsByClassName('reddit-score');
             
             console.log(divs.length);
@@ -36,6 +37,4 @@ var reddit_scores = (function () {
         'fetch': fetch,
     }
 })();
-
-reddit_scores.fetch();
 
