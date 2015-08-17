@@ -3,7 +3,7 @@ var reddit_scores = (function () {
     var fetch = function() {
         var id = ("t3_" +
                   document.getElementById('reddit-url').href.split('/')[6]);
-        var url = "http://www.reddit.com/api/info.json?id=" + id;
+        var url = "//www.reddit.com/api/info.json?id=" + id;
         var req = new XMLHttpRequest();
         var on_json_get = function(parsed) {
             var score = parsed["data"]["children"][0]["data"]["score"];
