@@ -17,19 +17,21 @@ puzzle](http://www.gchq.gov.uk/press_and_media/news_and_features/Pages/
 Directors-Christmas-puzzle-2015.aspx).
 
 The puzzle is an instance of a [Nonogram puzzle](https://en.wikipedia.org/
-wiki/ Nonogram), which is a grid with numbers by each row and column,
+wiki/ Nonogram). This is a grid with numbers by each row and column,
 indicating the lengths of runs of shaded cells in the completed puzzle.
 
 Being the over-zealous programmer I am I immediately dispensed with the idea
-that I might fill the grid in manually, instead leaping to trusty Python and
-some rusty CS knowledge. While it may not have saved me time over doing it by
-hand, it certainly was more interesting! Also the same script can be re-used to
-solve other Nonogram puzzles, so it's potentially useful beyond this teaser.
+that I might fill the grid in manually, instead opting to write an automatic
+solver using Python and some rusty CS knowledge. While it may not have saved me
+time over doing it by hand, it certainly was more interesting! Also the same
+script can be re-used to solve other Nonogram puzzles so it's potentially
+useful beyond GCHQ problem.
 
 In this post I'll explain how my script works, with the disclaimer that I don't
 claim to be an expert in CNF or SAT solvers. This approach may not even be
-more efficient than a basic backtracking algorithm, although it certainly
-*feels* more elegant.
+more efficient than a basic backtracking algorithm. Nevertheless, I found it an
+interesting exercise and hopefully you will too. Any feedback from SAT
+aficionados would also be much appreciated.
 
 ## SAT solvers
 
@@ -60,12 +62,12 @@ variables:
 
 $$A \wedge (B \vee \neg D) \wedge (B \vee \neg E)$$
 
-A SAT solver is a program which, given a boolean formula in CNF, assigns truth
-values to the variables of the formula such that the formula is true. Each such
-assignment is a solution to the boolean satisfiability problem. Above, \\(A =
-True, B = True, C = False, D = True\\), is a solution, as is \\(A = True, B =
-False, D = True, E = True\\), for example. \\(A = False, B = True, C = True, D =
-True\\) is not a solution however.
+A CNF-SAT solver is a program which, given a boolean formula in CNF, assigns
+truth values to the variables of the formula such that the formula is true.
+Each such assignment is a solution to the boolean satisfiability problem.
+Above, \\(A = True, B = True, C = False, D = True\\), is a solution, as is \\(A
+= True, B = False, D = True, E = True\\), for example. \\(A = False, B
+= True, C = True, D = True\\) is not a solution however.
 
 SAT solving algorithms have been the subject of [intense competition](http://
 www.satcompetition.org/) over the past decade due to applications in AI,
@@ -207,3 +209,7 @@ def pretty_print_solution(sol):
 And here is the result:
 
 {% include img.html src="/assets/gchq-xmas-card/output.png" alt="Output" %}
+
+Yep, it's a QR code which when decoded links you to the next stage in the
+puzzle.
+
