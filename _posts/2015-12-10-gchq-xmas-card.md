@@ -20,18 +20,17 @@ The puzzle is an instance of a [Nonogram puzzle](https://en.wikipedia.org/
 wiki/ Nonogram). This is a grid with numbers by each row and column,
 indicating the lengths of runs of shaded cells in the completed puzzle.
 
-Being the over-zealous programmer I am I immediately dispensed with the idea
-that I might fill the grid in manually, instead opting to write an automatic
-solver using Python and some rusty CS knowledge. While it may not have saved me
-time over doing it by hand, it certainly was more interesting! Also the same
-script can be re-used to solve other Nonogram puzzles so it's potentially
-useful beyond GCHQ problem.
+Instead of solving the problem by hand, I opted to write an automatic solver
+using Python and some rusty CS knowledge. The same script can be adapted to
+solve other Nonogram puzzles.
 
 In this post I'll explain how my script works, with the disclaimer that I don't
 claim to be an expert in CNF or SAT solvers. This approach may not even be
 more efficient than a basic backtracking algorithm. Nevertheless, I found it an
 interesting exercise and hopefully you will too. Any feedback from SAT
-aficionados would also be much appreciated.
+aficionados would also be much appreciated!
+
+Full source code is [available here](https://github.com/matthewearl/gchq-xmas).
 
 ## SAT solvers
 
@@ -62,12 +61,21 @@ variables:
 
 $$A \wedge (B \vee \neg D) \wedge (B \vee \neg E)$$
 
-A CNF-SAT solver is a program which, given a boolean formula in CNF, assigns
-truth values to the variables of the formula such that the formula is true.
-Each such assignment is a solution to the boolean satisfiability problem.
-Above, \\(A = True, B = True, C = False, D = True\\), is a solution, as is \\(A
-= True, B = False, D = True, E = True\\), for example. \\(A = False, B
-= True, C = True, D = True\\) is not a solution however.
+Each sequence of *OR*s is called a clause, and each element of the clause (ie.
+a possibly negated variable) is called a term. The whole CNF expression can
+therefore be seen as a sequence of clauses.
+
+A SAT solver is a program which given a boolean formula in CNF, assigns truth
+values to the variables of the formula such that the formula is true.  Each
+such assignment is a solution to the boolean *sat*isfiability problem.  Above,
+\\(A = True, B = True, C = False, D = True\\), is a solution, as is \\(A =
+True, B = False, D = True, E = True\\), for example. \\(A = False, B = True, C
+= True, D = True\\) is not a solution however.
+
+In practice, CNF expressions have many thousands of terms. For example the
+[Sudoku solver example](https://github.com/ContinuumIO/pycosat/blob/master/
+examples/sudoku.py) from the `picosat` repository has 11,764 clauses, and
+24,076 terms.
 
 SAT solving algorithms have been the subject of [intense competition](http://
 www.satcompetition.org/) over the past decade due to applications in AI,
@@ -125,12 +133,12 @@ en.wikipedia.org/wiki/Conjunctive_normal_form#Conversion_into_CNF) for an
 illustrative example.
 
 The exact choice of where it is best to introduce variables is non-trivial and
-is not discussed here.
+is beyond the scope of this post.
 
 ## CNF clauses ##
 
-With the above in place, we can now more or less directly translate the above
-English clauses into CNF clauses. Here's the code for rule #1:
+With our variables established, we can now more or less directly translate the
+above English clauses into CNF clauses. Here's the code for rule #1:
 
 {% highlight python %}
 # A row run being present at a particular column implies the corresponding
@@ -148,13 +156,34 @@ def row_run_implies_shaded():
 This is encoding the expression:
 
 $$\forall i \in rows \; \forall j \in (runs\ in\ row\ i) \;
-\forall j \in cols \; rowrunpos_i,j,k \implies shaded_i,k$$
+\forall j \in cols \; (rowrunpos_{i,j,k} \implies shaded_{i,k})$$
 
 Which by expanding the implication is equivalent to:
 
 $$\forall i \in rows \; \forall j \in (runs\ in\ row\ i) \;
-\forall j \in cols \; \neg rowrunpos_i,j,k \vee shaded_i,k$$
+\forall j \in cols \; (\neg rowrunpos_{i,j,k} \vee shaded_{i,k})$$
     
+Here's the first couple of clauses that the above function returns, with
+annotations:
+
+{% highlight python %}
+[
+  [
+    -809, # NOT (Row,run 1,2 starts at col 8) OR
+    34,   # (Shaded @ 1, 8)
+  ] # AND 
+  [
+    -809, # NOT (Row,run 1,2 starts at col 8) OR
+    35,   # (Shaded @ 1, 9)
+  ] # AND 
+  ...
+]
+{% endhighlight %}
+
+The first of these clauses says "if the third run in the second row starts at
+column 8, then cell (1, 8) must be shaded". There's one clause for each cell in
+each possible position of each row run.
+
 Some things to note about CNF expressions expected by `pycosat`:
 
 * A CNF expression is a list of lists of integers (!= 0).
@@ -167,14 +196,15 @@ Some things to note about CNF expressions expected by `pycosat`:
 In the above code, `row_run_vars[row, run_idx, start_col]` and
 `shaded_vars[row, col]` correspond with the variables \\( rowrunpos_{i,j,k} \\)
 and \\( shaded_{i,k} \\) respectively. Each variable is represented by a `Var`
-object (created by me) which exists to keep track of variable indices
-(accessible via the `.idx` attribute).
+object (created by me) which exists to associate useful debug information
+(`Var.__str__`) with the opaque variable index (`Var.idx`).
 
 `ROW_RUNS` encodes the numbers down the left hand side of the puzzle as a list
 of lists.
 
 The remaining clauses follow a similar pattern of translation. See [the source
-code for the full shebang](https://github.com/matthewearl/gchq-xmas).
+code for the full details](https://github.com/matthewearl/gchq-xmas). The
+resulting CNF expression has 307,703 clauses, and 637,142 terms.
 
 ## Extracting the solution ##
 
@@ -188,11 +218,10 @@ solution = pycosat.solve(all_clauses)
 The result encodes a single truth assignment:
 
 * A list of integers (!= 0).
+* There is one entry for each variable in the input CNF.
 * As before, each integer corresponds with a variable.
 * If the integer is negative then the corresponding variable is false in the
   solution, otherwise the variable is true in the solution.
-
-Each variable in the input problem will appear exactly once in the solution.
 
 It's then just a case of mapping the integers back to variables, and displaying
 in grid form.
@@ -210,6 +239,6 @@ And here is the result:
 
 {% include img.html src="/assets/gchq-xmas-card/output.png" alt="Output" %}
 
-Yep, it's a QR code which when decoded links you to the next stage in the
+...a QR code which when decoded links you to the next stage in the
 puzzle.
 
