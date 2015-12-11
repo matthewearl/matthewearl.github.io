@@ -159,13 +159,15 @@ def row_run_implies_shaded():
 This is encoding the expression:
 
 $$\forall i \in rows \; \forall j \in (runs\ in\ row\ i) \;
-\forall k \in cols \; \forall m \in (cols\ covered\ by\ run_{i,j}\ at\ k): \;
+\forall k \in cols \;
+\forall m \in (cols\ covered\ by\ run_{i,j}\ at\ k) \;
 (rowrunpos_{i,j,k} \implies shaded_{i,m})$$
 
 Which by expanding the implication is equivalent to:
 
 $$\forall i \in rows \; \forall j \in (runs\ in\ row\ i) \;
-\forall k \in cols \; \forall m \in (cols\ covered\ by\ run_{i,j}\ at\ k): \;
+\forall k \in cols \;
+\forall m \in (cols\ covered\ by\ run_{i,j}\ at\ k) \;
 (\neg rowrunpos_{i,j,k} \vee shaded_{i,m})$$
     
 Here's the first couple of clauses that the above function returns, with
