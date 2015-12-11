@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Solving the GCHQ christmas card with Python and pycosat
+reddit-url: https://www.reddit.com/r/programming/comments/3wcyu5/how_i_solved_gchqs_xmas_card_with_python_and/
 ---
 
 {% include post-title.html %}
