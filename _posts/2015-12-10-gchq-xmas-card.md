@@ -6,8 +6,9 @@ title: Solving the GCHQ christmas card with Python and pycosat
 {% include post-title.html %}
 
 {% include img.html src="/assets/gchq-xmas-card/header.png" alt="Header" %}
-<sup>(c) GCHQ. See [the GCHQ post for the full image](http://
-matthewearl.github.io/2015/12/10/gchq-xmas-card/).
+<sup>Copyright GCHQ. See [the GCHQ post for the full image](http://
+www.gchq.gov.uk/press_and_media/news_and_features/Pages/
+Directors-Christmas-puzzle-2015.aspx).
 
 ## Introduction
 
