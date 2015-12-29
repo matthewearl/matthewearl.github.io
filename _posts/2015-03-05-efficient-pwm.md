@@ -54,7 +54,7 @@ def timer_interrupt():
 
 ...and here's the result, for `P = 32` and `T = 20`.
 
-![Naive plot](/assets/efficient-pwm/naive.svg)
+{% include img.html src="/assets/efficient-pwm/naive.svg" alt="Naive plot" %}
 
 The green line is the unfiltered output, the red line is the filtered output
 (with an RC time period of 16) and the blue line is the target voltage (`20. /
@@ -98,7 +98,7 @@ def timer_interrupt():
 
 ...and here's the result, with the same parameters as the above plot:
 
-![Efficient plot](/assets/efficient-pwm/efficient.svg)
+{% include img.html src="/assets/efficient-pwm/efficient.svg" alt="Efficient plot" %}
 
 Much better. Note how, once stabilized, whenever the ISR fires the output state
 is adjusted to follow the target voltage. As a result the filtered signal
@@ -249,7 +249,7 @@ Just for fun let's plot the output of the algorithm (incrementing `x` at each
 step, and incrementing `y` at each positive output) against the line running
 though \\( \frac{T}{P} \\):
 
-![Line plot](/assets/efficient-pwm/bresenham.svg)
+{% include img.html src="/assets/efficient-pwm/bresenham.svg" alt="Line plot" %}
 
 ## Conclusion
 
