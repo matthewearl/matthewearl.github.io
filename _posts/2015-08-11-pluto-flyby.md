@@ -2,6 +2,12 @@
 layout: default
 title: Creating a Pluto flyby using unaligned New Horizons images
 reddit-url: https://www.reddit.com/r/programming/comments/3gu2v3/how_i_used_python_and_opencv_to_create_a_pluto/
+thumbimage: /assets/pluto-flyby/thumb.png
+summary:
+  In the months leading up to NASA's historic flyby of Pluto, the New Horizons
+  probe took a series of pictures of the dwarf planet as it approached. This
+  post describes how I used Python to turn these unaligned images into a flyby
+  animation.
 ---
 
 {% include post-title.html %}

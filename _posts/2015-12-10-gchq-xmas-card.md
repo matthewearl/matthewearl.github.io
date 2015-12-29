@@ -2,6 +2,12 @@
 layout: default
 title: Solving the GCHQ christmas card with Python and pycosat
 reddit-url: https://www.reddit.com/r/programming/comments/3wcyu5/how_i_solved_gchqs_xmas_card_with_python_and/
+thumbimage: /assets/gchq-xmas-card/thumb.png
+summary:
+  For Christmas 2015, the director of British spy agency GCHQ released a
+  Christmas card featuring a grid-shading puzzle. This post describes a Python
+  script to solve the puzzle (which can also be applied to similar puzzles),
+  which uses a SAT solver to find the solution.
 ---
 
 {% include post-title.html %}
