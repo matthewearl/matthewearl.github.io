@@ -28,18 +28,19 @@ body {
     margin-bottom: 5px;
 }
 
-.post-summary > p {
+.post-summary p {
     text-align: justify;
     text-justify: auto;
 }
 
-.post-summary > h2 {
+.post-summary h2 {
     font-size: x-large;
     font-weight: 600;
+    margin-top: 0.0em;
     margin-bottom: 0.1em;
 }
 
-.post-summary > .post-info {
+.post-summary .post-info {
     margin-bottom: 0.5em;
 }
 

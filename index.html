@@ -5,38 +5,40 @@ nosharinglinks: 1
 blogindex: 1
 ---
 
+<br />
 <div class="post-summary">
   {% for post in site.posts %}
-    {% if forloop.index != 1 %}
-      <hr />
-    {% endif %}
-    {% if post.h1title %}
-      {% assign title = post.h1title %}
-    {% else %}
-      {% assign title = post.title %}
-    {% endif %}
-    <h2>{{ title }}</h2>
-      <div class="post-info">
-        Created by
-        <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
-        on {{ post.date | date: '%B %d, %Y' }}.
-      </div>
-      <div class="row">
-        <div class="col-md-2">
-          {% if post.thumbimage %}
-            {% include img.html src=post.thumbimage alt="Header" %}
-          {% endif %}
-        </div>
-        <div class="col-md-4">
-            <p>
-              {% if post.summary %}
-                {{ post.summary }}
+    <div class="panel panel-default">
+      <div class="panel-body">
+        {% if post.h1title %}
+          {% assign title = post.h1title %}
+        {% else %}
+          {% assign title = post.title %}
+        {% endif %}
+        <h2>{{ title }}</h2>
+          <div class="post-info">
+            Created by
+            <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
+            on {{ post.date | date: '%B %d, %Y' }}.
+          </div>
+          <div class="row">
+            <div class="col-md-2">
+              {% if post.thumbimage %}
+                {% include img.html src=post.thumbimage alt="Header" %}
               {% endif %}
-              <a href="{{ post.url }}">Read more.</a>
-            </p>
-        </div>
-        <div class="col-md-4"></div>
+            </div>
+            <div class="col-md-4">
+                <p>
+                  {% if post.summary %}
+                    {{ post.summary }}
+                  {% endif %}
+                  <a href="{{ post.url }}">Read more.</a>
+                </p>
+            </div>
+            <div class="col-md-4"></div>
+          </div>
       </div>
+    </div>
   {% endfor %}
 </div>
 
