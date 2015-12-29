@@ -5,13 +5,38 @@ nosharinglinks: 1
 blogindex: 1
 ---
 
-Here are all my blog posts:
-
-<ul>
+<div class="post-summary">
   {% for post in site.posts %}
-    <li>
-      <a href="{{ post.url }}">{{ post.title }}</a>
-    </li>
+    {% if forloop.index != 1 %}
+      <hr />
+    {% endif %}
+    {% if post.h1title %}
+      {% assign title = post.h1title %}
+    {% else %}
+      {% assign title = post.title %}
+    {% endif %}
+    <h2>{{ title }}</h2>
+      <div class="post-info">
+        Created by
+        <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
+        on {{ post.date | date: '%B %d, %Y' }}.
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          {% if post.thumbimage %}
+            {% include img.html src=post.thumbimage alt="Header" %}
+          {% endif %}
+        </div>
+        <div class="col-md-4">
+            <p>
+              {% if post.summary %}
+                {{ post.summary }}
+              {% endif %}
+              <a href="{{ post.url }}">Read more.</a>
+            </p>
+        </div>
+        <div class="col-md-4"></div>
+      </div>
   {% endfor %}
-</ul>
+</div>
 

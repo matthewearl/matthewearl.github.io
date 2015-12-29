@@ -28,6 +28,21 @@ body {
     margin-bottom: 5px;
 }
 
+.post-summary > p {
+    text-align: justify;
+    text-justify: auto;
+}
+
+.post-summary > h2 {
+    font-size: x-large;
+    font-weight: 600;
+    margin-bottom: 0.1em;
+}
+
+.post-summary > .post-info {
+    margin-bottom: 0.5em;
+}
+
 .reddit-score {
     display: inline;
 }
