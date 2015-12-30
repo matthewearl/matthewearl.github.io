@@ -14,9 +14,9 @@
         <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
         on {{ post.date | date: '%B %d, %Y' }}.
         {% if post.reddit-url %}
-        <a id="reddit-url" href="{{ post.reddit-url }}">
+        <a class="reddit-url" href="{{ post.reddit-url }}">
             Discuss on reddit!
-            <div class="reddit-score">
+            <div class="reddit-score" data-fetched="0">
                 (??? points / ??? comments)
             </div>
         </a>
