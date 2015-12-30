@@ -15,7 +15,7 @@ blogindex: 1
         {% else %}
           {% assign title = post.title %}
         {% endif %}
-        <h2>{{ title }}</h2>
+        <a href="{{ post.url }}"><h2>{{ title }}</h2></a>
         <div class="post-info">
           Created by
           <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
