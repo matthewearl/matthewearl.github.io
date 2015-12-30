@@ -1,26 +1,21 @@
 <div class="post-title">
-    {% if include.post %}
-      {% assign post = include.post %}
-    {% else %}
-      {% assign post = page %}
+  {% if include.post %}
+    {% assign post = include.post %}
+  {% else %}
+    {% assign post = page %}
+  {% endif %}
+  
+  {% if post.h1title %}
+  <h1>{{ post.h1title }}</h1>
+  {% else %}
+  <h1>{{ post.title }}</h1>
+  {% endif %}
+  <div class="post-info">Created by
+    <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
+    on {{ post.date | date: '%B %d, %Y' }}.
+    {% if post.reddit-url %}
+      {% include discuss-link.html %}
     {% endif %}
-    
-    {% if post.h1title %}
-    <h1>{{ post.h1title }}</h1>
-    {% else %}
-    <h1>{{ post.title }}</h1>
-    {% endif %}
-    <div class="post-info">Created by
-        <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
-        on {{ post.date | date: '%B %d, %Y' }}.
-        {% if post.reddit-url %}
-        <a class="reddit-url" href="{{ post.reddit-url }}">
-            Discuss on reddit!
-            <div class="reddit-score" data-fetched="0">
-                (??? points / ??? comments)
-            </div>
-        </a>
-        {% endif %}
-    </div>
+  </div>
 </div>
 

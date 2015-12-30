@@ -1,0 +1,13 @@
+{% if include.post %}
+  {% assign post = include.post %}
+{% else %}
+  {% assign post = page %}
+{% endif %}
+
+<a class="reddit-url" href="{{ post.reddit-url }}">
+    Discuss on reddit!
+    <div data-fetched="0" class="reddit-score">
+        (??? points / ??? comments)
+    </div>
+</a>
+
