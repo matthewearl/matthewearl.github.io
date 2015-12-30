@@ -20,23 +20,31 @@ blogindex: 1
             Created by
             <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
             on {{ post.date | date: '%B %d, %Y' }}.
+            {% if post.reddit-url %}
+            <a class="reddit-url" href="{{ post.reddit-url }}">
+                Discuss on reddit!
+                <div data-fetched="0" class="reddit-score">
+                    (??? points / ??? comments)
+                </div>
+            </a>
+        {% endif %}
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            {% if post.thumbimage %}
+              {% include img.html src=post.thumbimage alt="Header" %}
+            {% endif %}
           </div>
-          <div class="row">
-            <div class="col-md-2">
-              {% if post.thumbimage %}
-                {% include img.html src=post.thumbimage alt="Header" %}
-              {% endif %}
-            </div>
-            <div class="col-md-4">
-                <p>
-                  {% if post.summary %}
-                    {{ post.summary }}
-                  {% endif %}
-                  <a href="{{ post.url }}">Read more.</a>
-                </p>
-            </div>
-            <div class="col-md-4"></div>
+          <div class="col-md-4">
+              <p>
+                {% if post.summary %}
+                  {{ post.summary }}
+                {% endif %}
+                <a href="{{ post.url }}">Read more.</a>
+              </p>
           </div>
+          <div class="col-md-4"></div>
+        </div>
       </div>
     </div>
   {% endfor %}

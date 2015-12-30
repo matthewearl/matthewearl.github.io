@@ -1,34 +1,46 @@
 
 var reddit_scores = (function () {
-    var fetch = function() {
-        var id = ("t3_" +
-                  document.getElementById('reddit-url').href.split('/')[6]);
-        var url = "//www.reddit.com/api/info.json?id=" + id;
-        var req = new XMLHttpRequest();
-        var on_json_get = function(parsed) {
-            var score = parsed["data"]["children"][0]["data"]["score"];
-            var num_comments =
-                         parsed["data"]["children"][0]["data"]["num_comments"];
-            var text = "(" + score + " points / " +
-                            num_comments + " comments)";
-            var divs = document.getElementsByClassName('reddit-score');
-            
-            for (var i = 0; i < divs.length; i++) {
-                var div = divs[i];
-                while (div.firstChild) {
-                    div.removeChild(div.firstChild);
+    function reddit_url_div_to_id(div, _) {
+        var out = "t3_" + $(div).attr("href").split('/')[6];
+        if ($(div).children(".reddit-score").attr("data-fetched") == 0) {
+            return out;
+        }
+    }
+
+    function update_divs(details) {
+        $.each(
+            $(".reddit-url"),
+            function(idx, div) {
+                var id = reddit_url_div_to_id(div);
+                if (id in details) {
+                    $(div).children(".reddit-score")
+                          .text("(" + details[id].score + " points / " +
+                                details[id].num_comments + " comments)")
+                          .attr("data-fetched", "1");
                 }
-                div.appendChild(document.createTextNode(text));
+            });
+    }
+
+    var fetch = function() {
+        var ids = $.map($(".reddit-url"), reddit_url_div_to_id).join(",");
+        console.log("Fetching scores for " + ids);
+        if (ids.length > 0) {
+          var url = "//www.reddit.com/api/info.json?id=" + ids;
+          console.log(url);
+          $.ajax(url, {"method": "get", "dataType": "json"}).done(
+            function (d) {
+              var details = new Object()
+              $.each(d["data"]["children"],
+                     function(i, el) {
+                         details["t3_" + el["data"]["id"]] = {
+                                "score": el["data"]["score"],
+                                "num_comments": el["data"]["num_comments"],
+                         }
+                     });
+              console.log(details);
+              update_divs(details);
             }
-        }
-        req.onreadystatechange = function() {
-            if (req.readyState == 4 && req.status == 200) {
-                var parsed = JSON.parse(req.responseText);
-                on_json_get(parsed);
-            }
-        }
-        req.open("get", url, true);
-        req.send();
+          );
     }
 
     return {
