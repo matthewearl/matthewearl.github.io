@@ -34,8 +34,8 @@ blogindex: 1
               </div>
               <div class="col-md-9">
                   <p>
-                    {% if post.summary %}
-                      {{ post.summary }}
+                    {% if post.excerpt %}
+                      {{ post.excerpt }}
                     {% endif %}
                     <a href="{{ post.url }}">Read more.</a>
                   </p>

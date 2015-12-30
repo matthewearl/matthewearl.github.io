@@ -3,7 +3,7 @@ layout: default
 title: Switching Eds&#58; Face swapping with Python, dlib, and OpenCV
 reddit-url: https://www.reddit.com/r/programming/comments/3f591x/so_i_wrote_a_script_that_swaps_peoples_faces_in/
 thumbimage: /assets/switching-eds/thumb.jpg
-summary:
+excerpt:
   Automating the algorithm from the previous post. Facial landmarks are
   detected using dlib. Alignment, colour correction, and blending is then done
   with numpy and OpenCV.
