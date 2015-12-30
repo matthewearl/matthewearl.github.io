@@ -23,10 +23,8 @@ var reddit_scores = (function () {
 
     var fetch = function() {
         var ids = $.map($(".reddit-url"), reddit_url_div_to_id).join(",");
-        console.log("Fetching scores for " + ids);
         if (ids.length > 0) {
             var url = "//www.reddit.com/api/info.json?id=" + ids;
-            console.log(url);
             $.ajax(url, {"method": "get", "dataType": "json"}).done(
               function (d) {
                 var details = new Object()
@@ -37,7 +35,6 @@ var reddit_scores = (function () {
                                   "num_comments": el["data"]["num_comments"],
                            }
                        });
-                console.log(details);
                 update_divs(details);
               }
             );
