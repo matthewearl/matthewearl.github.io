@@ -53,12 +53,7 @@
           <hr>
           {% if page.reddit-url %}
           <div id="discuss-footer">
-              <a class="reddit-url" href="{{ page.reddit-url }}">
-                  Discuss this post on reddit!
-                    <div data-fetched="0" class="reddit-score">
-                        (??? points / ??? comments)
-                    </div>
-              </a>
+              {% include discuss-link.html %}
           </div>
           {% endif %}
 

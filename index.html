@@ -16,18 +16,13 @@ blogindex: 1
           {% assign title = post.title %}
         {% endif %}
         <h2>{{ title }}</h2>
-          <div class="post-info">
-            Created by
-            <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
-            on {{ post.date | date: '%B %d, %Y' }}.
-            {% if post.reddit-url %}
-            <a class="reddit-url" href="{{ post.reddit-url }}">
-                Discuss on reddit!
-                <div data-fetched="0" class="reddit-score">
-                    (??? points / ??? comments)
-                </div>
-            </a>
-        {% endif %}
+        <div class="post-info">
+          Created by
+          <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
+          on {{ post.date | date: '%B %d, %Y' }}.
+          {% if post.reddit-url %}
+            {% include discuss-link.html post=post %}
+          {% endif %}
         </div>
         <div class="row">
           <div class="col-md-2">
