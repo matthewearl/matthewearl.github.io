@@ -2,7 +2,7 @@
 layout: default
 title: Bresenham and Efficient Pulse-Width Modulation
 thumbimage: /assets/efficient-pwm/efficient.svg
-summary:
+excerpt:
   A (re)derivation of an efficient algorithm for performing pulse-width
   modulation. The algorithm is closely to Bresenham's line algorithm.
 ---

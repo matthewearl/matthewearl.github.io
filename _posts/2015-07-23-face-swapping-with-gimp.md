@@ -2,7 +2,7 @@
 layout: default
 title: Face swapping with The GIMP
 thumbimage: /assets/face-swap/thumb.jpg
-summary:
+excerpt:
   A methodical technique for face swapping in the GIMP. The approach replaces
   the face of a person in one image with the face of a person in another image. 
 ---
