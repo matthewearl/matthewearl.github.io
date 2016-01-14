@@ -8,6 +8,7 @@ blogindex: 1
 <br />
 <div class="post-summary">
   {% for post in site.posts %}
+    {% unless post.noindex %}
     <div class="row">
       <div class="col-md-8">
         <div class="panel panel-default">
@@ -46,6 +47,7 @@ blogindex: 1
       </div>
       <div class="col-md-4"></div>
     </div>
+    {% endunless %}
   {% endfor %}
 </div>
 
