@@ -13,9 +13,10 @@ post](/2015/07/28/switching-eds-with-python/). The face detection step there
 uses the popular "cascade of Haar-like features" algorithm to get initial
 bounds for faces in an image.
 
-In this post I discuss my attempts to invert this face detection algorihm:
-Instead of taking an image and telling you whether it contains a face, it will
-generate an image of a face, using nothing more than cascade data.
+In this post I describe a script I wrote to invert this face detection
+algorihm: Instead of taking an image and telling you whether it contains a
+face, it will generate an image of a face, using nothing more than cascade
+data.
 
 ## Haar Cascades
 
@@ -212,11 +213,47 @@ model.set_objective("max",
 {% endhighlight %}
 
 This objective will try and find the solution which most exceeds the stage
-constraints.
+constraints. It can take an unreasonably long time to find the true maximum, so
+we can set a time limit:
+
+{% highlight python %}
+model.set_time_limit(60 * 60)
+{% endhighlight %}
+
+This line instructs the solver to stop after an hour and output the best
+solution found so far (if any).
 
 See the [source code](https://github.com/matthewearl/inversehaar) for the full
 details.
 
 ## Results
 
+Here's the output of running the program on OpenCV's
+`haarcascade_frontalface_alt.xml` cascade for an hour:
+
+{% include img.html src="/assets/inverse-haar/face_max_3600.png" alt="Face max" %}
+
+Not bad. Shame about the low resolution, but that's unavoidable given the
+features are only defined on a 20x20 grid. Here is the same image blurred,
+which is more convincingly face-like:
+
+{% include img.html src="/assets/inverse-haar/face_max_3600_blurred.png" alt="Face max blurred" %}
+
+And, to test the limits of the detector, lets minimize the stage constraint
+instead of maximising:
+
+{% include img.html src="/assets/inverse-haar/face_min_3600.png" alt="Face min" %}
+
+{% include img.html src="/assets/inverse-haar/face_min_3600_blurred.png" alt="Face min blurred" %}
+
+Decidedly less face-like!
+
+Here's the best and worst eye image (based on `haarcascade_eye.xml`)
+
+{% include img.html src="/assets/inverse-haar/eye_max_3600.png" alt="Eye max" %}
+
+{% include img.html src="/assets/inverse-haar/eye_max_3600_blurred.png" alt="Eye max blurred" %}
+{% include img.html src="/assets/inverse-haar/eye_min_3600.png" alt="Eye min" %}
+
+{% include img.html src="/assets/inverse-haar/eye_min_3600_blurred.png" alt="Eye min blurred" %}
 
