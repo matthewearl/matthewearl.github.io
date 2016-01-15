@@ -9,44 +9,44 @@ blogindex: 1
 <div class="post-summary">
   {% for post in site.posts %}
     {% unless post.noindex %}
-    <div class="row">
-      <div class="col-md-8">
-        <div class="panel panel-default">
-          <div class="panel-body">
-            {% if post.h1title %}
-              {% assign title = post.h1title %}
-            {% else %}
-              {% assign title = post.title %}
-            {% endif %}
-            <a href="{{ post.url }}"><h2>{{ title }}</h2></a>
-            <div class="post-info">
-              Created by
-              <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
-              on {{ post.date | date: '%B %d, %Y' }}.
-              {% if post.reddit-url %}
-                {% include discuss-link.html post=post %}
+      <div class="row">
+        <div class="col-md-8">
+          <div class="panel panel-default">
+            <div class="panel-body">
+              {% if post.h1title %}
+                {% assign title = post.h1title %}
+              {% else %}
+                {% assign title = post.title %}
               {% endif %}
-            </div>
-            <div class="row">
-              <div class="col-md-3">
-                {% if post.thumbimage %}
-                  {% include img.html src=post.thumbimage alt="Header" %}
+              <a href="{{ post.url }}"><h2>{{ title }}</h2></a>
+              <div class="post-info">
+                Created by
+                <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
+                on {{ post.date | date: '%B %d, %Y' }}.
+                {% if post.reddit-url %}
+                  {% include discuss-link.html post=post %}
                 {% endif %}
               </div>
-              <div class="col-md-9">
-                  <p>
-                    {% if post.excerpt %}
-                      {{ post.excerpt }}
-                    {% endif %}
-                    <a href="{{ post.url }}">Read more.</a>
-                  </p>
+              <div class="row">
+                <div class="col-md-3">
+                  {% if post.thumbimage %}
+                    {% include img.html src=post.thumbimage alt="Header" %}
+                  {% endif %}
+                </div>
+                <div class="col-md-9">
+                    <p>
+                      {% if post.excerpt %}
+                        {{ post.excerpt }}
+                      {% endif %}
+                      <a href="{{ post.url }}">Read more.</a>
+                    </p>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="col-md-4"></div>
       </div>
-      <div class="col-md-4"></div>
-    </div>
     {% endunless %}
   {% endfor %}
 </div>

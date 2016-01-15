@@ -76,19 +76,53 @@ stage will contain only a handful of features, but can reject a large
 proportion of negative images. There are typically hundreds of features in a
 particular cascade, and a dozen or more stages.
 
-
 ## Mixed integer linear programming
 
-Mixed integer linear programming is a variant of [Integer programming](
-[Mixed integer linear
-programming](https://en.wikipedia.org/wiki/Integer_programming) is a variant of 
+In order to invert the `detect` function described above, I express the forward
+problem in terms of [Mixed integer linear programming](https://
+en.wikipedia.org/wiki/Integer_programming), and then apply a MILP solver to the
+linear program.
 
-$$ f_i^T p >= t_i $$ 
+Here's the `detect` function described in terms of MILP constraints:
 
-Where \\( f_i \\) is a column vector representing feature \\( i \\), \\( t_i
-\\) is the threshold associated with \\( f_i \\) and \\( p \\) is a column 
-vector containing the pixel values in the image. \\( f_i \\) would contain 1s
-for the white regions of the feature, and -1s for the black regions. All other
-regions would be zero.
+$$ \forall j \in {positive\_classifiers} \ \colon \ \Bigg(
+M_{j} (1 - {passed}_j)\ + \sum_{i=0}^{N_{pixels} - 1} {pixel}_i {feature}_{j,i}
+                                                   \geq threshold_{j} \Bigg) $$
+
+$$ \forall j \in {negative\_classifiers} \ \colon \ \Bigg(
+   -M_{j} {passed}_j\ + \sum_{i=0}^{N_{pixels} - 1} {pixel}_i {feature}_{j,i} 
+                                                      < threshold_{j} \Bigg) $$
+
+$$ \forall k \in [0, {N_{stages}} - 1] \ \colon \ \Bigg(
+        \sum_{j \in {classifiers}_k}  {passed}_j * {weight}_j \geq
+                                                   stage\_threshold_k \Bigg) $$
+
+Where:
+
+* $$ {pixel}_i \in [0, 1], 0 \leq i < N_{pixels} $$ are the pixel values of the
+  input image. (Corresponds with `im` in the code.)
+* $$ {feature}_{j,i} \in \mathbb{R}, 0 \leq j < N_{classifiers},
+  0 \leq i < N_{pixels} $$ are the
+  weight values of the feature associated with weak classifier $$ j $$.
+  (Corresponds with `classifier.feature` in the code.)
+* $$ {threshold}_j $$ is the threshold value of weak classifier $$ j $$.
+  (`classifier.threshold` in the code.)
+* $$ {weight}_j $$ is the weight of weak classifier $$ j $$. (Corresponds
+  with `classifier.weight` in the code.)
+* $$ {positive\_classifiers} $$ is the set of classifier indices with
+  positive weights, ie. $$ \{ j \in [0, N_{classifiers} - 1] : {weight}_j > 0
+  \} $$
+* $$ {negative\_classifiers} $$ is the set of classifier indices with
+  negative weights, ie. $$ \{ j \in [0, N_{classifiers} - 1] : {weight}_j < 0
+  \} $$.
+* $$ {passed}_j \in \{0, 1\} $$ is a binary indicator variable, corresponding
+  with whether weak classifier $$ j $$ has passed.
+* $$ M_{j} $$ are numbers chosen to be large enough such that if the term they
+  appear in is non-zero, then the inequality holds true.
+* $$ classifiers\_k $$ is the set of weak classifier indices associated with
+  stage $$ k $$.
+* $$ stage\_threshold_k $$ is the stage threshold of stage $$ k $$.
+  (Corresponds with `stage.threshold` in the code.)
+
 
 
