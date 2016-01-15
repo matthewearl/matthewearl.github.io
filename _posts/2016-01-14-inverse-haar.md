@@ -191,17 +191,32 @@ for stage in cascade.stages:
 The problem is then solved by calling `model.solve()`.
 
 If succesful, the pixel variable values are extracted from the solution, and
-converted into an image (a `numpy` array):
+converted into an image (a `numpy` array) which can then be written to disk
+using `cv2` (or similar).
 
 {% highlight python %}
 im = numpy.array([[pixel_vars[x, y].solution_value
                     for x in range(cascade.width)]
                   for y in range(cascade.width)])
+cv2.imwrite("out.png", im * 255.)
 {% endhighlight %}
+
+By default, `docplex` will just search for a feasible solution. However, one
+can set an objective like so:
+
+{% highlight python %}
+model.set_objective("max",
+    sum((c.weight * passed_vars[c.feature_idx] 
+            for s in self.cascade.stages
+            for c in s.weak_classifiers)))
+{% endhighlight %}
+
+This objective will try and find the solution which most exceeds the stage
+constraints.
 
 See the [source code](https://github.com/matthewearl/inversehaar) for the full
 details.
 
 ## Results
 
-@@@ Add results here
+
