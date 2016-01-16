@@ -1,6 +1,13 @@
 ---
 layout: default
 title: Making faces with Haar cascades and mixed integer linear programming
+thumbimage: /assets/inverse-haar/feature1.png
+excerpt:
+  In 2001 Viola and Jones introduced their successful face (and other object)
+  detection algorithm, based on so-called Haar-like features. This post
+  describes how I used mixed integer linear programming (MILP) and Python to
+  write a script which inverts this algorithm; instead of detecting faces in an
+  input image, it will generate an image of a face.
 noindex: 1
 ---
 
@@ -18,6 +25,9 @@ algorihm: Instead of taking an image and telling you whether it contains a
 face, it will generate an image of a face, using nothing more than cascade
 data.
 
+As always, full source code is [available on GitHub](https://github.com/
+matthewearl/inversehaar).
+
 ## Haar Cascades
 
 In 2001 Viola and Jones introduced their revolutionary [object detection
@@ -30,18 +40,28 @@ At its core, the algorithm accepts a small (typically 20x20) image along with
 some cascade data, and returns whether or not the object of interest is present
 there.  The full algorithm simply applies this core algorithm to the full
 image in multiple windows, with the windows at various scales and positions,
-returning any where the core algorithm detected the object.
+returning any where the core algorithm detected the object:
+
+{% include img.html src="/assets/inverse-haar/major_opt.gif" alt="Header" %}
 
 It is this core algorithm that I'm attempting to invert in this post. But how
 does it work? Well, it's based on so called Haar-like features:
 
-@@@Insert pic
+<img src="/assets/inverse-haar/feature1.png" alt="Feature 1" />
+<img src="/assets/inverse-haar/feature2.png" alt="Feature 2" />
+<img src="/assets/inverse-haar/feature3.png" alt="Feature 3" />
+<img src="/assets/inverse-haar/feature4.png" alt="Feature 4" />
 
 Each feature is associated with a threshold to form a so-called *weak
 classifer*.  If the sum of the pixel values in the black region subtracted 
 from the sum of the pixel values in the white region exceed the threshold then
-the weak classifier is said to have passed. In this case the weak classifer is
-detecting a dark area around the eyes, compared to above the cheeks.
+the weak classifier is said to have passed. In the first image the weak
+classifer is detecting a dark area around the eyes compared to above the
+cheeks.
+
+Features are all defined with axially aligned rectangles and take one of a
+few basic forms, as shown above. They are defined on the same small (eg. 20x20)
+grid as the input image.
 
 Weak classifiers are combined into *stages*. A stage passes based on which
 weak classifiers associated with the stage pass; each weak classifier has a
@@ -69,8 +89,8 @@ The input image `im` is assumed to already have been resized to the small
 cascade size.  `classifier.feature` is an array the same shape as `im`, with
 `1`s at points corresponding with white areas of the feature, `-1`s at points
 corresponding with black areas of the feature, and `0`s elsewhere.  Note the
-actual algorithm as described by Viola and Jones uses integral images at this
-point (one of the main reasons for the algorithms fast operation).
+actual algorithm as described by Viola and Jones uses integral images to add up
+pixel values, one of the reasons for the algorithm's fast operation.
 
 The main reason for the multiple stages is efficiency: Typically the first
 stage will contain only a handful of features, but can reject a large
@@ -79,7 +99,7 @@ particular cascade, and a dozen or more stages.
 
 ## Mixed integer linear programming
 
-In order to invert the `detect` function described above, I express the forward
+In order to invert the `detect` function described above, I express the 
 problem in terms of [Mixed integer linear programming](https://
 en.wikipedia.org/wiki/Integer_programming), and then apply a MILP solver to the
 linear program.
@@ -135,17 +155,17 @@ $$ {passed}_j $$ values. The rest of the values are derived from the cascade
 definition itself.
 
 The main thing to note is the use of $$ {passed}_j $$ as an indicator variable,
-ie. how it's state can turn on or off one of the feature constraints.  For
-example, take $$ j \in {positive\_classifiers} $$. If a particular solution
+ie. how its state can turn on or off one of the feature constraints.  For
+example, take $$ j \in {positive\_classifiers} $$. If a particular solution has
 $$ {passed}_j $$ as 1, then we better be sure that the feature $$ j $$ actually
 exceeds the classifier's threshold, as it is contributing positively towards
-the stage passing.
+the stage constraint passing.
 
 Conversely, for a classifier $$ j $$ with a negative weight, we only care that
 the feature *doesn't* pass its classifier threshold if $$ {passed}_j $$ is 0.
 
-With this in mind, it's clear that `detect(cascade, im)` is True if and only if
-there's a solution to the linear program derived from `cascade` where the $$
+With this in mind, it's clear that `detect(cascade, im)` is `True` if and only
+if there's a solution to the linear program derived from `cascade` where the $$
 {pixel}_j $$ variables take on the corresponding pixel values in `im`.
 
 ## MILPs in Python
@@ -153,15 +173,13 @@ there's a solution to the linear program derived from `cascade` where the $$
 I chose to use the [docplex](https://pypi.python.org/pypi/
 docplex?cm_mc_uid=67935383877914501094737&cm_mc_sid_50200000=1452877037) module
 to write the above constraints in Python. With this module constraints can be
-written in the "natural" way, which are then dispatched to [IBM's DoCloud
-Service](https://developer.ibm.com/docloud/) for solving offline. Note DoCloud
+written in a natural way, which are then dispatched to [IBM's DoCloud
+Service](https://developer.ibm.com/docloud/) for solving remotely. Note DoCloud
 requires registration and is not free, although they offer a free month's
-trial which is what I used for this project.
-
-For what it's worth I did initially try solving the problem with the
-[PuLP](https://pypi.python.org/pypi/PuLP) module, with which I had limited
-success either due to the underlying solver being less sophisticated, or
-limitations of my machine.
+trial which is what I used for this project.  I did initially try solving the
+problem with the [PuLP](https://pypi.python.org/pypi/PuLP) module, with which I
+had limited success either due to the underlying solver being less
+sophisticated or limitations of my machine.
 
 As an example, here's how the variables are defined:
 
@@ -224,7 +242,9 @@ This line instructs the solver to stop after an hour and output the best
 solution found so far (if any).
 
 See the [source code](https://github.com/matthewearl/inversehaar) for the full
-details.
+details. Note the code there is a little more complex due to supporting tilted
+features and also because of the format of the cascade data in OpenCV, but the
+essence is the same.
 
 ## Results
 
@@ -239,21 +259,31 @@ which is more convincingly face-like:
 
 {% include img.html src="/assets/inverse-haar/face_max_3600_blurred.png" alt="Face max blurred" %}
 
-And, to test the limits of the detector, lets minimize the stage constraint
+And to test the limits of the detector, lets minimize the stage constraint
 instead of maximising:
 
-{% include img.html src="/assets/inverse-haar/face_min_3600.png" alt="Face min" %}
+<img src="/assets/inverse-haar/face_min_3600.png" alt="Face min" />
+<img src="/assets/inverse-haar/face_min_3600_blurred.png" alt="Face min blurred" />
 
-{% include img.html src="/assets/inverse-haar/face_min_3600_blurred.png" alt="Face min blurred" %}
+Decidedly less face-like, but should still be detected by OpenCV.
 
-Decidedly less face-like!
+Here's the best eye image (based on `haarcascade_eye.xml`)
 
-Here's the best and worst eye image (based on `haarcascade_eye.xml`)
+<img src="/assets/inverse-haar/eye_max_3600.png" alt="Eye max" />
+<img src="/assets/inverse-haar/eye_max_3600_blurred.png" alt="Eye max blurred" />
 
-{% include img.html src="/assets/inverse-haar/eye_max_3600.png" alt="Eye max" %}
+...and the worst:
 
-{% include img.html src="/assets/inverse-haar/eye_max_3600_blurred.png" alt="Eye max blurred" %}
-{% include img.html src="/assets/inverse-haar/eye_min_3600.png" alt="Eye min" %}
+<img src="/assets/inverse-haar/eye_min_3600.png" alt="Eye min" />
+<img src="/assets/inverse-haar/eye_min_3600_blurred.png" alt="Eye min blurred" />
 
-{% include img.html src="/assets/inverse-haar/eye_min_3600_blurred.png" alt="Eye min blurred" %}
+Here's the best profile face image (based on `haarcascade_profileface.xml`):
+
+<img src="/assets/inverse-haar/profileface_max_3600.png" alt="Profile face max" />
+<img src="/assets/inverse-haar/profileface_max_3600_blurred.png" alt="Profile face max blurred" />
+
+...and the worst:
+
+<img src="/assets/inverse-haar/profileface_min_3600.png" alt="Profile face min" />
+<img src="/assets/inverse-haar/profileface_min_3600_blurred.png" alt="Profile face min blurred" />
 
