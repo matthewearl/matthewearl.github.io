@@ -1,6 +1,7 @@
 ---
 layout: default
 title: Making faces with Haar cascades and mixed integer linear programming
+reddit-url: https://www.reddit.com/r/programming/comments/41ihqx/how_i_wrote_a_script_to_generate_faces_by/
 thumbimage: /assets/inverse-haar/feature1.png
 excerpt:
   In 2001 Viola and Jones introduced their successful face (and other object)
