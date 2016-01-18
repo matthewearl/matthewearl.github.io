@@ -8,7 +8,6 @@ excerpt:
   describes how I used mixed integer linear programming (MILP) and Python to
   write a script which inverts this algorithm; instead of detecting faces in an
   input image, it will generate an image of a face.
-noindex: 1
 ---
 
 {% include post-title.html %}
@@ -21,7 +20,7 @@ uses the popular "cascade of Haar-like features" algorithm to get initial
 bounds for faces in an image.
 
 In this post I describe a script I wrote to invert this face detection
-algorihm: Instead of taking an image and telling you whether it contains a
+algorithm: Instead of taking an image and telling you whether it contains a
 face, it will generate an image of a face, using nothing more than cascade
 data.
 
@@ -37,10 +36,11 @@ Viola%E2%80%93Jones_object_detection_framework), enabling for the first time
 real-time detection of faces (and other objects) in video data.
 
 At its core, the algorithm accepts a small (typically 20x20) image along with
-some cascade data, and returns whether or not the object of interest is present
-there.  The full algorithm simply applies this core algorithm to the full
-image in multiple windows, with the windows at various scales and positions,
-returning any where the core algorithm detected the object:
+some precomputed cascade data (described below), and returns whether or not the
+object of interest is present there.  One can then just apply the core
+algorithm to the full image in multiple windows, with the windows at various
+scales and positions, returning any where the core algorithm detected the
+object:
 
 {% include img.html src="/assets/inverse-haar/major_opt.gif" alt="Header" %}
 
@@ -55,8 +55,8 @@ does it work? Well, it's based on so called Haar-like features:
 Each feature is associated with a threshold to form a so-called *weak
 classifer*.  If the sum of the pixel values in the black region subtracted 
 from the sum of the pixel values in the white region exceed the threshold then
-the weak classifier is said to have passed. In the first image the weak
-classifer is detecting a dark area around the eyes compared to above the
+the weak classifier is said to have passed. For example, the weak classifier in
+the first image is detecting a dark area around the eyes compared to above the
 cheeks.
 
 Features are all defined with axially aligned rectangles and take one of a
@@ -67,6 +67,11 @@ Weak classifiers are combined into *stages*. A stage passes based on which
 weak classifiers associated with the stage pass; each weak classifier has a
 weight associated with it, and if the sum of all the passing weak classifiers'
 weights exceeds a *stage threshold* then the stage is said to have passed.
+
+The stages, weak classifiers and associated weights are calculated by running a
+training algorithm on thousands of positive and negative training images. See
+the [Viola-Jones paper](https://www.cs.cmu.edu/~efros/courses/LBMV07/Papers/
+viola-cvpr-01.pdf) for more details.
 
 If all the stages in the cascade data pass then the algorithm returns that an
 object has been detected.
@@ -145,7 +150,7 @@ Where:
   with whether weak classifier $$ j $$ has passed.
 * $$ M_{j} $$ are numbers chosen to be large enough such that if the term they
   appear in is non-zero, then the inequality holds true.
-* $$ classifiers\_k $$ is the set of weak classifier indices associated with
+* $$ {classifiers}_k $$ is the set of weak classifier indices associated with
   stage $$ k $$.
 * $$ stage\_threshold_k $$ is the stage threshold of stage $$ k $$.
   (Corresponds with `stage.threshold` in the code.)
@@ -159,7 +164,8 @@ ie. how its state can turn on or off one of the feature constraints.  For
 example, take $$ j \in {positive\_classifiers} $$. If a particular solution has
 $$ {passed}_j $$ as 1, then we better be sure that the feature $$ j $$ actually
 exceeds the classifier's threshold, as it is contributing positively towards
-the stage constraint passing.
+the stage constraint passing. In this case the $$ M_{j} (1 - {passed}_j) $$
+term in the relevant feature constraint is zero, ie. the constraint is "on".
 
 Conversely, for a classifier $$ j $$ with a negative weight, we only care that
 the feature *doesn't* pass its classifier threshold if $$ {passed}_j $$ is 0.
@@ -170,15 +176,14 @@ if there's a solution to the linear program derived from `cascade` where the $$
 
 ## MILPs in Python
 
-I chose to use the [docplex](https://pypi.python.org/pypi/
-docplex?cm_mc_uid=67935383877914501094737&cm_mc_sid_50200000=1452877037) module
-to write the above constraints in Python. With this module constraints can be
+I chose to use the [docplex](https://pypi.python.org/pypi/docplex) module to
+write the above constraints in Python. With this module constraints can be
 written in a natural way, which are then dispatched to [IBM's DoCloud
 Service](https://developer.ibm.com/docloud/) for solving remotely. Note DoCloud
 requires registration and is not free, although they offer a free month's
 trial which is what I used for this project.  I did initially try solving the
-problem with the [PuLP](https://pypi.python.org/pypi/PuLP) module, with which I
-had limited success either due to the underlying solver being less
+problem with the free [PuLP](https://pypi.python.org/pypi/PuLP) module, with
+which I had limited success either due to the underlying solver being less
 sophisticated or limitations of my machine.
 
 As an example, here's how the variables are defined:
