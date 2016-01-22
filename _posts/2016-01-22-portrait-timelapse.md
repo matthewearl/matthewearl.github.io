@@ -2,6 +2,12 @@
 layout: default
 title: 12 years in 15 seconds&#58;
     Aligning and condensing a self-portrait time-lapse
+thumbimage: /assets/portrait-timelapse/thumb.png
+excerpt:
+  Following from my previous experiments with face alignment, I got to thinking
+  if the same techniques could be applied to photo-a-day time lapse projects,
+  such as Noah Kalina's 12.5 year (and counting) epic. It turns out they can;
+  in this post I explain how I smoothed out this video.
 ---
 
 {% include post-title.html %}
