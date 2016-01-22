@@ -16,9 +16,9 @@ excerpt:
 src="https://www.youtube.com/embed/c26xputO8yA" frameborder="0"
 allowfullscreen></iframe>
 
-The above is derived from the images in [this video](https://www.youtube.com/
-watch?v=iPPzXlMdi7o) by [Noah Kalina](http://www.noahkalina.com/) (not me!).
-Used with permission.
+The above is derived from the images in [this timelapse video](https://
+www.youtube.com/watch?v=iPPzXlMdi7o) by [Noah Kalina](http://
+www.noahkalina.com/) (not me!).  Used with permission.
 
 ## Introduction
 
