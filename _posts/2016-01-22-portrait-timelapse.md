@@ -6,7 +6,9 @@ title: 12 years in 15 seconds&#58;
 
 {% include post-title.html %}
 
-<!-- Add video here -->
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/c26xputO8yA" frameborder="0"
+allowfullscreen></iframe>
 
 <sup>Based on [this video](https://www.youtube.com/watch?v=iPPzXlMdi7o) 
 by [Noah Kalina](http://www.noahkalina.com/). Used with permission.</sup>
@@ -27,17 +29,19 @@ eliminated are:
 * *Lighting*: Differences in illumination colour and/or white balance.
 * *Pose*: Differences in facial pose, and lighting direction.
 
-As usual, I'm attacking this problem in Python. I'm using
-[dlib](http://dlib.net/), [OpenCV](http://opencv.org/) and
-[numpy](http://www.numpy.org/) to do the heavy lifting. Source code
-[is available here](https://github.com/matthewearl/photo-a-day-aligner).
+As usual, I'm attacking this problem in Python. The code is relatively short
+(~250 lines), although I'm using [dlib](http://dlib.net/),
+[OpenCV](http://opencv.org/) and [numpy](http://www.numpy.org/) to do the heavy
+lifting. Source code [is available
+here](https://github.com/matthewearl/photo-a-day-aligner).
 
 ## Aligning
 
 As a first step, lets account for facial position by rotating, translating and
-scaling images to match the first:
+scaling images to match the first. Here's the code to do that:
 
 {% highlight python %}
+input_fnames = # Video frames
 ref_landmarks = None
 for fname in input_fnames:
     im = cv2.imread(fname)
@@ -67,7 +71,8 @@ for fname in input_fnames:
     cv2.imwrite(os.path.join(OUT_PATH, fname), warped)
 {% endhighlight %}
 
-The `get_landmarks()` function uses `dlib` to use facial landmark features:
+Here, the `get_landmarks()` function uses `dlib` to use facial landmark
+features:
 
 {% include img.html src="/assets/portrait-timelapse/annotated.jpg" alt="Annotated image" %}
 
@@ -80,7 +85,9 @@ to align the images.
 
 After correcting for face position, you get a video that looks like this:
 
-<!-- insert 5s video of just correcting for face position -->
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/4PTmt-zxClI" frameborder="0"
+allowfullscreen></iframe>
 
 ## Colour adjustment
 
@@ -121,9 +128,14 @@ that of the average face colour of the first image:
 im = im * ref_color / color
 {% endhighlight %}
 
+...where `ref_color` is the color of the first face, saved from the first
+iteration.
+
 Here's the first 5 seconds with color correction applied:
 
-<!-- insert 5s video of correcting for position and colour -->
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/dD63lNlZBTU" frameborder="0"
+allowfullscreen></iframe>
 
 ## Speeding up
 
@@ -138,21 +150,20 @@ can do is select a subset of frames which is in some sense smooth.
 
 To solve this I went the graph theory route:
 
-{% include img.html src="/assets/portrait-timelapse/image_graph.svg" alt="Frame graph" %}
+{% include img.html src="/assets/portrait-timelapse/frame-graph.svg" alt="Frame graph" %}
 
 Here I've split the video into 10 frame layers, with full connections from each
-layer to the next. The weights of edges measure how different the two frames
-are, with the goal being to find the shortest path from *Start* to *End*.
-Frames on the selected path are used in the output video.
-
-By doing this the total "frame difference" is minimized. Because the path length
-is fixed by the graph structure, this is equivalent to minimizing the average
-frame difference.
+layer to the next. The weights of each edge measures how different the two
+frames are, with the goal being to find the shortest path from *Start* to
+*End*; frames on the selected path are used in the output video. By doing this
+the total "frame difference" is minimized. Because the path length is fixed by
+the graph structure, this is equivalent to minimizing the average frame
+difference.
 
 The metric used for frame difference is the euclidean norm between the pair of
 images, after being masked to the face area. Here's the code to calculate
-`weights`, a dict of dicts such that `weight[n1][n2]` gives the weight of the
-edge between node `n1` and `n2`:
+`weights`, a dict of dicts where `weight[n1][n2]` gives the weight of the edge
+between node `n1` and `n2`:
 
 {% highlight python %}
 names = # Input image names
@@ -160,7 +171,6 @@ mask = # Mask which covers the face region
 FRAME_SKIP = 10
 
 def find_weights():
-    # `weights` is a 
     weights = collections.defaultdict(dict) 
     prev_layer = None
     layer = []
@@ -191,7 +201,7 @@ And because the graph is in fact a [directed acyclic graph](https://
 en.wikipedia.org/wiki/Directed_acyclic_graph) we can use
 [a simplified version of Dijkstra's Algorithm](http://www.stoimen.com/blog/
 2012/10/28/computer-algorithms-shortest-path-in-a-directed-acyclic-graph/) to
-solve it:
+find the shortest path:
 
 {% highlight python %}
 # Find the nodes in the first and last layer.
@@ -227,5 +237,7 @@ shortest_path = reversed(list(drain_to_source))
 
 Which yields the final smoother, although shorter video:
 
-<!-- Add video here -->
+<iframe width="560" height="315"
+src="https://www.youtube.com/embed/c26xputO8yA" frameborder="0"
+allowfullscreen></iframe>
 
