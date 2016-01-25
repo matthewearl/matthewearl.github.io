@@ -2,6 +2,7 @@
 layout: default
 title: 12 years in 15 seconds&#58;
     Aligning and condensing a self-portrait time-lapse
+reddit-url: https://www.reddit.com/r/programming/comments/4257pm/how_i_wrote_a_python_script_to_align_and_smooth/
 thumbimage: /assets/portrait-timelapse/thumb.png
 excerpt:
   Following from my previous experiments with face alignment, I got to thinking
