@@ -8,6 +8,7 @@ paginate: 10
 markdown: kramdown
 permalink: pretty
 highlighter: pygments
+future: true
 
 gems:
   - jekyll
