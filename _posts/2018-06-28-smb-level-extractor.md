@@ -5,7 +5,6 @@ thumbimage: /assets/smb-level-extractor/thumb.png
 excerpt:
   A Python script for extracting level data from the Super Mario Bros ROM, using
   a 6502 emulator (also written in Python).
-noindex: 1
 ---
 
 {% include post-title.html %}
@@ -329,7 +328,7 @@ from the game (bytes with the value 0 are not shown):
 
 ## Metatile imagery
 
-(Alternatively skip to the end [here](#putting-it-all-together).)
+(Alternatively skip to see the end result [here](#putting-it-all-together).)
 
 Now let's look at how we turn the metatile numbers we fetched above into actual
 images.  The following steps were found by analysing the source and studying the
