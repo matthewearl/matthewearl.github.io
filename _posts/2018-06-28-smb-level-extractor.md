@@ -341,7 +341,7 @@ in total, although black is duplicated a few times (see [Nesdev for details](htt
 
 {% include img.html src="/assets/smb-level-extractor/nespal.png" alt="Output" %}
 
-Although, each Mario level is limited to using only 10 colours for its
+Each Mario level is limited to using only 10 of these 64 colours for its
 background, divided into 4 four colour palettes; the first colour is always the
 same. Here are the 4 palettes for World 1-1:
 
@@ -403,7 +403,8 @@ line, reassuringly commented with `cracked rock terrain`.
 The four entries on this line are in fact tile IDs:  Each metatile consists of
 four 8x8 pixel tiles, in the order top-left, bottom-left, top-right, and
 bottom-right.  These IDs are sent directly to the NES's PPU and the ID refers to
-16 bytes of data in the NES's CHR-ROM:
+16 bytes of data in the NES's CHR-ROM, with each entry starting at address
+`0x1000 + 16 * <tile id>`:
 
 
 ```
