@@ -230,7 +230,7 @@ We need of telling the routine what level we are trying to render, or which
 particular column we want to parse.
 
 Unlike a high-level language such as C or Python, subroutines in 6502 assembly
-don not take explicit inputs.  Rather, inputs are passed by setting memory
+do not take explicit inputs.  Rather, inputs are passed by setting memory
 locations at some point prior to the call, which are then read anywhere within
 the subroutine call.  Given the size of `AreaParserCore`, reverse engineering
 the required inputs purely by looking at the source would be difficult and open
