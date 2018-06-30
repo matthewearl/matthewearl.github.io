@@ -2,6 +2,7 @@
 layout: default
 title: Extracting Super Mario Bros levels with Python
 thumbimage: /assets/smb-level-extractor/thumb.png
+reddit-url: https://www.reddit.com/r/programming/comments/8us6jx/how_i_extracted_super_mario_bros_level_data_using/
 excerpt:
   A Python script for extracting level data from the Super Mario Bros ROM, using
   a 6502 emulator (also written in Python).
