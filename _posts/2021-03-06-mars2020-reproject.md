@@ -26,10 +26,10 @@ sense of scale, since there is no familiar frame of reference to tell us how far
 away the ground is.  This inspired me to embark on this project in which I
 reproject the footage onto a satellite image obtained from the
 [Mars Express](https://en.wikipedia.org/wiki/Mars_Express),
-along with a scale to tell us how far large features on the ground are:
+along with a scale to tell us how large features on the ground are:
 
 <iframe width="560" height="315"
-src="https://www.youtube.com/embed/video-id-here" frameborder="0"
+src="https://www.youtube.com/embed/7kflC1nU0OM" frameborder="0"
 allowfullscreen></iframe>
 
 In this post I'm going to explain how I used Python, OpenCV, PyTorch, and
