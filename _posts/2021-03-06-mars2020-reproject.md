@@ -104,8 +104,6 @@ projecting each point towards the origin, back onto the z=1 plane:
 
 {% include vid.html src="/assets/mars2020-reproject/diagram.webm" %}
 
-<br/>
-
 When we talk about composing projective transformations, what we are actually doing is
 multiplying the underlying matrices: projective transformations have the property
 that the composition of two transformations is equal to the projective transformation
