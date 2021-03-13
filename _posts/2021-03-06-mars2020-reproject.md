@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Reprojecting the Mars 2020 landing footage onto satellite imagery
+title: Reprojecting the Perseverance landing footage onto satellite imagery
 thumbimage: /assets/mars2020-reproject/thumb.jpg
 #reddit-url: https://www.reddit.com/r/programming/comments/8us6jx/how_i_extracted_super_mario_bros_level_data_using/
 excerpt:
