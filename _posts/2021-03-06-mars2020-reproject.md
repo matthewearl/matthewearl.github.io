@@ -28,9 +28,9 @@ reproject the footage onto a satellite image obtained from the
 [Mars Express Orbiter](https://en.wikipedia.org/wiki/Mars_Express),
 along with a scale to tell us how large features on the ground actually are:
 
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/7kflC1nU0OM" frameborder="0"
-allowfullscreen></iframe>
+<div class="embed-responsive embed-responsive-16by9">
+  <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/7kflC1nU0OM" allowfullscreen></iframe>
+</div>
 
 <br/>
 
