@@ -57,6 +57,12 @@
       <div class="starter-template post">
       {% endif %}
           {{ content }}
+
+          {% unless page.blogindex %}
+          <br /><br />If you enjoyed this post, please consider supporting my efforts:<br /><br/>
+
+		<script type="text/javascript" src="https://cdnjs.buymeacoffee.com/1.0.0/button.prod.min.js" data-name="bmc-button" data-slug="mattsramblings" data-color="#FFDD00" data-emoji="" data-font="Cookie" data-text="Buy me a coffee" data-outline-color="#000000" data-font-color="#000000" data-coffee-color="#ffffff" ></script> 
+          {% endunless %}
           <hr>
           {% if page.reddit-url %}
           <div id="discuss-footer">
