@@ -180,17 +180,17 @@ To do this, I wrote a loss function which returns the total reprojection error,
 given a satellite-relative transformation for each image:
 
 {% highlight python %}
-    def project(v):
-        # Project onto the plane z=1
-        return v / v[..., -1][..., None]
+def project(v):
+    # Project onto the plane z=1
+    return v / v[..., -1][..., None]
 
-    def loss(frame_transforms, src_pts, dst_pts, src_idx, dst_idx):
-        M_src_inv = torch.inverse(frame_transforms)[src_idx]
-        M_dst = frame_transforms[dst_idx]
-        ref_pts = torch.einsum('nij,nj->ni', M_src_inv, src_pts)
-        reprojected_dst_pts = project(torch.einsum('nij,nj->ni', M_dst, ref_pts))
+def loss(frame_transforms, src_pts, dst_pts, src_idx, dst_idx):
+    M_src_inv = torch.inverse(frame_transforms)[src_idx]
+    M_dst = frame_transforms[dst_idx]
+    ref_pts = torch.einsum('nij,nj->ni', M_src_inv, src_pts)
+    reprojected_dst_pts = project(torch.einsum('nij,nj->ni', M_dst, ref_pts))
 
-        return torch.dist(reprojected_dst_pts, dst_pts)
+    return torch.dist(reprojected_dst_pts, dst_pts)
 {% endhighlight %}
 
 `src_pts` and `dst_pts` are both `N x 3` arrays, representing every pair of
@@ -220,15 +220,15 @@ As such we can use it to iteratively improve our `frame_transforms`:
 
 {% highlight python %}
 
-    src_pts, dst_pts, src_idx, dst_idx = dataset
-    frame_transforms = initial_frame_transforms
+src_pts, dst_pts, src_idx, dst_idx = dataset
+frame_transforms = initial_frame_transforms
 
-    optim = torch.optim.Adam([frame_transforms], lr=1e-5)
-    while True:
-        optim.zero_grad()
-        l = loss(frame_transforms, src_pts, dst_pts, src_idx, dst_idx)
-        l.backward()
-        optim.step()
+optim = torch.optim.Adam([frame_transforms], lr=1e-5)
+while True:
+    optim.zero_grad()
+    l = loss(frame_transforms, src_pts, dst_pts, src_idx, dst_idx)
+    l.backward()
+    optim.step()
 
 {% endhighlight %}
 
