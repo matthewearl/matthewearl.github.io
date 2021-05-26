@@ -35,20 +35,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/">{{ site.name }}</a>
+          <a class="navbar-brand" href="/"><i class="fas fa-scroll"></i> {{ site.name }}</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li
-            {% if page.blogindex %}
-                class="active"
-            {% endif %}
-            ><a href="/">Home</a></li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="https://twitter.com/matts_ramblings">Twitter</a></li>
-            <li><a href="mailto:blog@matthewearl.com">E-mail</a></li>
-            <li><a href="/feed.xml">Atom</a></li>
+          <ul class="nav navbar-nav navbar-right navbar-icons">
+              <li><a href="https://www.buymeacoffee.com/mattsramblings"><i class="fas fa-coffee"></i></a></li>
+              <li><a href="https://twitter.com/matts_ramblings"><i class="fab fa-twitter"></i></a></li>
+              <li><a href="https://www.youtube.com/channel/UC5rM5xw7l2Y5n8YbdZx7-ow"><i class="fab fa-youtube"></i></a></li>
+              <li><a href="mailto:blog@matthewearl.com"><i class="fas fa-envelope"></i></a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -118,6 +112,8 @@
     <script src="/js/reddit-scores.js"></script>
     <script>reddit_scores.fetch();</script>
     {% endif %}
+
+    <script src="https://kit.fontawesome.com/f30cf74147.js" crossorigin="anonymous"></script>
   </body>
 </html>
 
