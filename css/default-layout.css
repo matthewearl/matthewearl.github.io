@@ -1,6 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text&family=Lato&display=swap');
+
 body {
   padding-top: 50px;
+  font-family: 'Lato', sans-serif;
 }
+
+.post > h2, h1 {
+  font-family: "Crimson Text", serif;
+}
+
 .starter-template {
   padding-top: 0px;
   padding-bottom: 15px;
@@ -8,6 +16,7 @@ body {
   padding-right: 15px;
   margin-bottom: 0em;
 }
+
 .post-info {
     font-size: smaller;
     color: #A0A0A0;

@@ -56,7 +56,11 @@
 
     <div class="container">
 
+      {% if page.blogindex %}
       <div class="starter-template">
+      {% else %}
+      <div class="starter-template post">
+      {% endif %}
           {{ content }}
           <hr>
           {% if page.reddit-url %}
