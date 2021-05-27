@@ -77,9 +77,18 @@ therefore be seen as a sequence of clauses.
 A SAT solver is a program which given a boolean formula in CNF, assigns truth
 values to the variables of the formula such that the formula is true.  Each
 such assignment is a solution to the boolean *sat*isfiability problem.  Above,
-\\(A = True, B = True, C = False, D = True\\), is a solution, as is \\(A =
-True, B = False, D = True, E = True\\), for example. \\(A = False, B = True, C
-= True, D = True\\) is not a solution however.
+
+$$A = True, B = True, \\ C = False, D = True$$
+
+is a solution, as is 
+
+$$A = True, B = False, \\ D = True, E = True$$
+
+for example. 
+    
+$$A = False, B = True, \\ C = True, D = True$$
+
+is not a solution however.
 
 In practice, CNF expressions have many thousands of terms. For example the
 [Sudoku solver example](https://github.com/ContinuumIO/pycosat/blob/master/
@@ -164,16 +173,16 @@ def row_run_implies_shaded():
 
 This is encoding the expression:
 
-$$\forall i \in rows \; \forall j \in (runs\ in\ row\ i) \;
-\forall k \in cols \;
-\forall m \in (cols\ covered\ by\ run_{i,j}\ at\ k) \; : \;
+$$\forall i \in rows \; \\ \forall j \in (runs\ in\ row\ i) \\ \;
+\forall k \in cols \; \\
+\forall m \in (cols\ covered\ by\ run_{i,j}\ at\ k) \; : \\ \;
 (rowrunpos_{i,j,k} \implies shaded_{i,m})$$
 
 Which by expanding the implication is equivalent to:
 
-$$\forall i \in rows \; \forall j \in (runs\ in\ row\ i) \;
-\forall k \in cols \;
-\forall m \in (cols\ covered\ by\ run_{i,j}\ at\ k) \; : \;
+$$\forall i \in rows \\ \forall j \in (runs\ in\ row\ i) \\
+\forall k \in cols \\
+\forall m \in (cols\ covered\ by\ run_{i,j}\ at\ k) : \\
 (\neg rowrunpos_{i,j,k} \vee shaded_{i,m})$$
     
 Here's the first couple of clauses that the above function returns, with
