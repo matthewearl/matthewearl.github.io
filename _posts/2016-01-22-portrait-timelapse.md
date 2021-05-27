@@ -13,9 +13,7 @@ excerpt:
 
 {% include post-title.html %}
 
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/c26xputO8yA" frameborder="0"
-allowfullscreen></iframe>
+{% include yt-embed.html ytid="c26xputO8yA" aspect="16by9" %}
 
 The above is derived from the images in [this timelapse video](https://
 www.youtube.com/watch?v=iPPzXlMdi7o) by [Noah Kalina](http://
@@ -93,9 +91,7 @@ to align the images.
 
 After correcting for face position, you get a video that looks like this:
 
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/4PTmt-zxClI" frameborder="0"
-allowfullscreen></iframe>
+{% include yt-embed.html ytid="4PTmt-zxClI" aspect="16by9" %}
 
 ## Colour adjustment
 
@@ -141,9 +137,7 @@ iteration.
 
 Here's the first 5 seconds with color correction applied:
 
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/dD63lNlZBTU" frameborder="0"
-allowfullscreen></iframe>
+{% include yt-embed.html ytid="dD63lNlZBTU" aspect="16by9" %}
 
 ## Speeding up
 
@@ -245,7 +239,5 @@ shortest_path = reversed(list(drain_to_source))
 
 Which yields the final smoother, although shorter video:
 
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/c26xputO8yA" frameborder="0"
-allowfullscreen></iframe>
+{% include yt-embed.html ytid="c26xputO8yA" aspect="16by9" %}
 
