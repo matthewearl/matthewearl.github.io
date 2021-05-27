@@ -131,10 +131,10 @@ $$ \forall k \in [0, {N_{stages}} - 1] \ \colon \ \Bigg(
 
 Where:
 
-* $$ {pixel}_i \in [0, 1], 0 \leq i < N_{pixels} $$ are the pixel values of the
+* $$ {pixel}_i \in [0, 1], $$ $$ 0 \leq i < N_{pixels} $$ are the pixel values of the
   input image. (Corresponds with `im` in the code.)
-* $$ {feature}_{j,i} \in \mathbb{R}, 0 \leq j < N_{classifiers},
-  0 \leq i < N_{pixels} $$ are the weight values of the feature associated with
+* $$ {feature}_{j,i} \in \mathbb{R}, $$ $$ 0 \leq j < N_{classifiers}, $$
+  $$ 0 \leq i < N_{pixels} $$ are the weight values of the feature associated with
   weak classifier $$ j $$.  (Corresponds with `classifier.feature` in the
   code.)
 * $$ {threshold}_j $$ is the threshold value of weak classifier $$ j $$.
