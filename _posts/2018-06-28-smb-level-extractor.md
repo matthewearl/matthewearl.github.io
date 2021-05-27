@@ -282,7 +282,15 @@ the emulated RAM has ever been written to.  When an uninitialized read occurs,
 the address of the invalid read and the corresponding symbol name are printed.
 
 Here is what the wrapped MMU produces when
-`execute_subroutine(sym_file['AREAPARSERCORE'])` is called:
+
+{% highlight python %}
+execute_subroutine(
+    sym_file['AREAPARSERCORE']
+)
+{% endhighlight %}
+
+is called:
+
 ```
 Uninitialized read! 0x0728 (BACKLOADINGFLAG):
 Uninitialized read! 0x0742 (BACKGROUNDSCENERY):
