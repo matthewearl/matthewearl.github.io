@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Text&family=Lato&display=swap');
 
 body {
+  padding-top: 60px;
   font-family: 'Lato', sans-serif;
 }
 
