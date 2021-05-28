@@ -101,3 +101,7 @@ a.summary-title:hover {
 a.summary-title > h4 {
     margin-bottom: 0;
 }
+
+.MathJax .mi, .MathJax .mo {
+    color: inherit;
+}
