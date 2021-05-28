@@ -80,9 +80,7 @@ The routine writes into a `MetatileBuffer`: a 13-byte-long section of memory,
 which respresents a single column of blocks in a level, each byte representing a
 single block. A metatile is a 16x16 block that makes up the backgrounds in SMB:
 
-{% include img.html src="/assets/smb-level-extractor/metatiles.png" alt="Metatiles" %}
-
-<sup>Level with boxes drawn around the metatiles</sup>
+{% include img-caption.html caption="Level with boxes drawn around the metatiles" src="/assets/smb-level-extractor/metatiles.png" alt="Metatiles" %}
 
 They are called metatiles because each one consists of four 8x8 pixel tiles ---
 but more on this later.

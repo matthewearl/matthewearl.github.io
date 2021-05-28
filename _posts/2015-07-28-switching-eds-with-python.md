@@ -11,9 +11,7 @@ excerpt:
 
 {% include post-title.html %}
  
-{% include img.html src="/assets/switching-eds/header.jpg" alt="Header" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/switching-eds/header.jpg" alt="Header" %}
 
 ## Introduction
 
@@ -36,9 +34,7 @@ matthewearl/faceswap/blob/master/faceswap.py).
 The script uses [dlib](http://dlib.net/)'s Python bindings to extract facial
 landmarks:
 
-{% include img.html src="/assets/switching-eds/landmarks.jpg" alt="Landmarks" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/switching-eds/landmarks.jpg" alt="Landmarks" %}
 
 Dlib implements the algorithm described in the paper [One Millisecond Face
 Alignment with an Ensemble of Regression Trees](
@@ -155,18 +151,14 @@ def warp_im(im, M, dshape):
 
 Which produces the following alignment:
 
-{% include img.html src="/assets/switching-eds/aligned-faces.gif" alt="Aligned faces" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/switching-eds/aligned-faces.gif" alt="Aligned faces" %}
 
 ## 3. Colour correcting the second image
 
 If we tried to overlay facial features at this point, we'd soon see we have a
 problem:
 
-{% include img.html src="/assets/switching-eds/non-colour-corrected-overlay.jpg" alt="Non colour-corrected overlay" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/switching-eds/non-colour-corrected-overlay.jpg" alt="Non colour-corrected overlay" %}
 
 The issue is that differences in skin-tone and lighting between the two images
 is causing a discontinuity around the edges of the overlaid region. Let's try
@@ -196,9 +188,7 @@ def correct_colours(im1, im2, landmarks1):
 
 And the result:
 
-{% include img.html src="/assets/switching-eds/colour-corrected.jpg" alt="Colour corrected" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/switching-eds/colour-corrected.jpg" alt="Colour corrected" %}
 
 This function attempts to change the colouring of `im2` to match that of `im1`.
 It does this by dividing `im2` by a gaussian blur of `im2`, and then
@@ -291,9 +281,7 @@ Finally, the mask is applied to give the final image:
 output_im = im1 * (1.0 - combined_mask) + warped_corrected_im2 * combined_mask
 {% endhighlight %}
 
-{% include img.html src="/assets/switching-eds/final.jpg" alt="Final" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/switching-eds/final.jpg" alt="Final" %}
 
 ## Credits
 

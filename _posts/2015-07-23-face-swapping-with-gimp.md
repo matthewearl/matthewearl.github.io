@@ -9,9 +9,7 @@ excerpt:
 
 {% include post-title.html %}
 
-{% include img.html src="/assets/face-swap/header.jpg" alt="Face swap Header" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/header.jpg" alt="Face swap Header" %}
 
 ## Introduction
 
@@ -24,10 +22,8 @@ Obtain images of the subjects whose faces you wish to swap. For best results
 the faces should be looking in the same direction, and be of reasonable
 resolution:
 
-{% include img.html src="/assets/face-swap/ed.jpg" alt="Ed" %}
-{% include img.html src="/assets/face-swap/dave.jpg" alt="Dave" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/ed.jpg" alt="Ed" %}
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/dave.jpg" alt="Dave" %}
 
 ## 2. Aligning the images
 
@@ -42,9 +38,7 @@ take note of whether The GIMP is measuring the angle above the horizontal axis
 or below; record the angle as negative for above the line and positive
 otherwise.
 
-{% include img.html src="/assets/face-swap/eye-measure.jpg" alt="Eye measure" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/eye-measure.jpg" alt="Eye measure" %}
 
 Break out a calculator and divide the head image's eye distance by the face
 image's eye distance, and scale the face image by this factor:
@@ -53,16 +47,12 @@ image's eye distance, and scale the face image by this factor:
 
 Now rotate the face image by the difference between the two eye-angles:
 
-{% include img.html src="/assets/face-swap/rotate-image.jpg" alt="Rotate image" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/rotate-image.jpg" alt="Rotate image" %}
 
 Copy the result, and paste it onto the head image as a new layer. Halve the new
 layer's opacity and line up the two faces using the *Move* tool (**M**):
 
-{% include img.html src="/assets/face-swap/align-image.jpg" alt="Align image" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/align-image.jpg" alt="Align image" %}
 
 Return the top layer's opacity to 100%.
 
@@ -71,30 +61,22 @@ Return the top layer's opacity to 100%.
 Make a copy of both layers, with the face copy on top and the head copy just
 below:
 
-{% include img.html src="/assets/face-swap/layers.png" alt="layers" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/layers.png" alt="layers" %}
 
 Now apply a gaussian blur to both. The blur amount should be as high as
 you can get without non-flesh tones from hair or background interfering with
 areas you want to transfer to the head image. About 2/3 of the head image
 eye-distance has worked well for me:
 
-{% include img.html src="/assets/face-swap/face-blur.jpg" alt="Face blur" %}
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/face-blur.jpg" alt="Face blur" %}
 
-<sup>[Image credit](#image_credits)</sup>
-
-{% include img.html src="/assets/face-swap/head-blur.jpg" alt="Head blur" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/head-blur.jpg" alt="Head blur" %}
 
 Now set the blurred face layer to divide, and the blurred head layer to
 multiply. The face image should now be shining through, but with the right
 lighting and fleshtones around the facial area:
 
-{% include img.html src="/assets/face-swap/colour-adjusted-face-image.jpg" alt="Colour adjusted face image" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/colour-adjusted-face-image.jpg" alt="Colour adjusted face image" %}
 
 At this point select *Copy Visible* from the *Edit* menu, and paste as a new
 layer.Move the new layer to second from bottom (right above the bottom head
@@ -106,24 +88,18 @@ Add a layer mask to the newly pasted, colour-corrected face layer. Initialise
 it to black (fully transparent). Now with the *Brush* tool draw over the eye,
 nose and mouth area in white (opaque):
 
-{% include img.html src="/assets/face-swap/pre-blurred-mask.jpg" alt="Pre-blurred mask" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/pre-blurred-mask.jpg" alt="Pre-blurred mask" %}
 
 Apply a gaussian blur to the layer mask, *et voila*:
 
-{% include img.html src="/assets/face-swap/camerband.jpg" alt="Camerband" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/camerband.jpg" alt="Camerband" %}
 
 ## Addendum
 
 By swapping layers and re-doing the *Copy Visible* layer from step 3 one can
 easily get the reverse image:
 
-{% include img.html src="/assets/face-swap/milliron.jpg" alt="Milliron" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/face-swap/milliron.jpg" alt="Milliron" %}
 
 ## Credits
 
