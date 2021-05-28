@@ -61,26 +61,31 @@
           {% endif %}
 
           {% unless page.blogindex %}
-            <nav>
-              <ul class="pager">
-                <li 
-                  {% if page.previous %}
-                      class="previous"
-                  {% else %}
-                      class="previous disabled"
-                  {% endif %}
-                >
-                <a href="{{ page.previous.url }}"><span aria-hidden="true">&larr;</span>Older</a></li>
-                <li><a href="/">Blog Index</a></li>
-                <li
-                  {% if page.next %}
-                      class="next"
-                  {% else %}
-                      class="next disabled"
-                  {% endif %}
-                ><a href="{{ page.next.url }}">Newer<span aria-hidden="true">&rarr;</span></a></li>
-              </ul>
-            </nav>
+            <div class="d-flex justify-content-between">
+              <div 
+                {% if page.previous %}
+                  class="pager-button btn btn-outline-primary"
+                {% else %}
+                  class="pager-button btn btn-outline-primary invisible"
+                {% endif %}
+              >
+                <a href="{{ page.previous.url }}"><span aria-hidden="true">&larr;</span>Older</a>
+              </div>
+
+              <div class="pager-button btn btn-outline-primary">
+                <a href="/">Blog Index</a>
+              </div>
+
+              <div 
+                {% if page.next %}
+                  class="pager-button btn btn-outline-primary"
+                {% else %}
+                  class="pager-button btn btn-outline-primary invisible"
+                {% endif %}
+              >
+                <a href="{{ page.next.url }}">Newer<span aria-hidden="true">&rarr;</span></a>
+              </div>
+            </div>
           {% include share-buttons.html %}
           {% endunless %}
       </div>
