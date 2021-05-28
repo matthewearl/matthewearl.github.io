@@ -3,17 +3,15 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title>{{ page.title }} - {{ site.name }}</title>
 
     <!-- Atom feed discovery -->
     {% feed_meta %}
 
-    <!-- Bootstrap core CSS -->
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <!-- Custom styles for this template -->
     <link href="/css/default-layout.css" rel="stylesheet">
@@ -23,26 +21,20 @@
   </head>
 
   <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="/"><i class="fas fa-scroll"></i> {{ site.name }}</a>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-          <ul class="nav navbar-nav navbar-right navbar-icons">
-              <li><a href="https://www.buymeacoffee.com/mattsramblings"><i class="fas fa-coffee"></i> Buy Me A Coffee!</a></li>
-              <li><a href="https://twitter.com/matts_ramblings"><i class="fab fa-twitter"></i> Twitter</a></li>
-              <li><a href="https://www.youtube.com/channel/UC5rM5xw7l2Y5n8YbdZx7-ow"><i class="fab fa-youtube"></i>
-                      YouTube</a></li>
-              <li><a href="mailto:blog@matthewearl.com"><i class="fas fa-envelope"></i> E-mail</a></li>
-          </ul>
-        </div><!--/.nav-collapse -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="/"><i class="fas fa-scroll"></i> {{ site.name }}</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="https://www.buymeacoffee.com/mattsramblings" class="nav-link"><i class="fas fa-coffee"></i> Buy Me A Coffee!</a></li>
+            <li class="nav-item"><a href="https://twitter.com/matts_ramblings" class="nav-link"><i class="fab fa-twitter"></i> Twitter</a></li>
+            <li class="nav-item"><a href="https://www.youtube.com/channel/UC5rM5xw7l2Y5n8YbdZx7-ow" class="nav-link"><i class="fab fa-youtube"></i>
+                    YouTube</a></li>
+            <li class="nav-item"><a href="mailto:blog@matthewearl.com" class="nav-link"><i class="fas fa-envelope"></i> E-mail</a></li>
+        </ul>
       </div>
     </nav>
 
@@ -101,19 +93,29 @@
         </p>
     </footer>
 
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 
     <!-- MathJAX for inline math rendering -->
     <script type="text/javascript" src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
+    <!--
     {% if page.reddit-url or page.blogindex %}
     <script src="/js/reddit-scores.js"></script>
     <script>reddit_scores.fetch();</script>
     {% endif %}
+    -->
 
     <script src="https://kit.fontawesome.com/f30cf74147.js" crossorigin="anonymous"></script>
   </body>

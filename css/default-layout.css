@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Crimson+Text&family=Lato&display=swap');
 
 body {
-  padding-top: 50px;
   font-family: 'Lato', sans-serif;
 }
 
@@ -69,16 +68,6 @@ body {
 .sharing-links {
     margin-top: 1em;
     font-size: large;
-}
-
-.navbar-icons > li > a {
-    padding-left: 5px;
-    padding-right: 5px;
-}
-
-.navbar-brand {
-    font-size: 20px;
-    letter-spacing: 0.1em;
 }
 
 #footer {

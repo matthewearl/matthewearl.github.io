@@ -7,47 +7,39 @@ blogindex: 1
 
 <br />
 <div class="post-summary">
+  <div class="card-columns">
   {% for post in site.posts %}
     {% unless post.noindex %}
-      <div class="row">
-        <div class="col-md-8">
-          <div class="panel panel-default">
-            <div class="panel-body">
+      <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="{{ post.thumbimage }}">
+          <div class="card-body">
               {% if post.h1title %}
                 {% assign title = post.h1title %}
               {% else %}
                 {% assign title = post.title %}
               {% endif %}
-              <a href="{{ post.url }}"><h2>{{ title }}</h2></a>
-              <div class="post-info">
-                Created by
-                <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
-                on {{ post.date | date: '%B %d, %Y' }}.
-                {% if post.reddit-url %}
-                  {% include discuss-link.html post=post %}
+              <a href="{{ post.url }}"><h5 class="card-title">{{ title }}</h5></a>
+              <p class="card-text">
+                {% if post.excerpt %}
+                  {{ post.excerpt }}
                 {% endif %}
-              </div>
-              <div class="row">
-                <div class="col-md-3">
-                  {% if post.thumbimage %}
-                    {% include img.html src=post.thumbimage alt="Header" %}
-                  {% endif %}
-                </div>
-                <div class="col-md-9">
-                    <p>
-                      {% if post.excerpt %}
-                        {{ post.excerpt }}
-                      {% endif %}
-                      <a href="{{ post.url }}">Read more.</a>
-                    </p>
-                </div>
-              </div>
+                <br/>
+                <a href="{{ post.url }}">Read more.</a>
+              </p>
+          </div>
+          <div class="card-footer">
+            <div class="post-info">
+              Created by
+              <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
+              on {{ post.date | date: '%B %d, %Y' }}.
+              {% if post.reddit-url %}
+                {% include discuss-link.html post=post %}
+              {% endif %}
             </div>
           </div>
-        </div>
-        <div class="col-md-4"></div>
       </div>
     {% endunless %}
   {% endfor %}
+  </div>
 </div>
 
