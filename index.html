@@ -6,40 +6,43 @@ blogindex: 1
 ---
 
 <br />
-<div class="post-summary">
-  <div class="card-columns">
+<div class="container">
   {% for post in site.posts %}
     {% unless post.noindex %}
-      <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="{{ post.thumbimage }}">
-          <div class="card-body">
-              {% if post.h1title %}
-                {% assign title = post.h1title %}
-              {% else %}
-                {% assign title = post.title %}
-              {% endif %}
-              <a href="{{ post.url }}"><h5 class="card-title">{{ title }}</h5></a>
+      {% if post.h1title %}
+        {% assign title = post.h1title %}
+      {% else %}
+        {% assign title = post.title %}
+      {% endif %}
+      <div class="card">
+        <div class="row no-gutters">
+          <div class="col-auto">
+            <img src="{{ post.thumbimage }}" class="img-fluid" alt="" style="width: 10em;">
+          </div>
+          <div class="col">
+            <div class="card-block px-2">
+              <h4 class="card-title">{{ title }}</h4>
               <p class="card-text">
                 {% if post.excerpt %}
                   {{ post.excerpt }}
                 {% endif %}
-                <br/>
-                <a href="{{ post.url }}">Read more.</a>
               </p>
-          </div>
-          <div class="card-footer">
-            <div class="post-info">
-              Created by
-              <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
-              on {{ post.date | date: '%B %d, %Y' }}.
-              {% if post.reddit-url %}
-                {% include discuss-link.html post=post %}
-              {% endif %}
+              <a href="{{ post.url }}" class="btn btn-primary">Read more.</a>
             </div>
           </div>
+        </div>
+        <div class="card-footer w-100 text-muted">
+          <div class="post-info">
+            Created by
+            <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
+            on {{ post.date | date: '%B %d, %Y' }}.
+            {% if post.reddit-url %}
+              {% include discuss-link.html post=post %}
+            {% endif %}
+          </div>
+        </div>
       </div>
+	  <br />
     {% endunless %}
   {% endfor %}
-  </div>
 </div>
-
