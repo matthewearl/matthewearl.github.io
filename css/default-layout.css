@@ -86,3 +86,17 @@ hr {
     overflow-x: auto;
     overflow-y: hidden;
 }
+
+a.summary-title {
+    color: black;
+    text-decoration: none;
+}
+
+a.summary-title:hover {
+    color: black;
+    text-decoration: underline;
+}
+
+a.summary-title > h4 {
+    margin-bottom: 0;
+}

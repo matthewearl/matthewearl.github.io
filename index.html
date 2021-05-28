@@ -21,24 +21,25 @@ blogindex: 1
           </div>
           <div class="col">
             <div class="card-block px-2">
-              <h4 class="card-title">{{ title }}</h4>
+              <a class="summary-title" href="{{ post.url }}">
+                <h4 class="card-title">{{ title }}</h4>
+              </a>
+              <div class="post-info">
+                Created by
+                <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
+                on {{ post.date | date: '%B %d, %Y' }}.
+                {% if post.reddit-url %}
+                  {% include discuss-link.html post=post %}
+                {% endif %}
+              </div>
+              <br/>
               <p class="card-text">
                 {% if post.excerpt %}
                   {{ post.excerpt }}
                 {% endif %}
+              &nbsp;&nbsp;<a href="{{ post.url }}">Read more</a>
               </p>
-              <a href="{{ post.url }}" class="btn btn-primary">Read more.</a>
             </div>
-          </div>
-        </div>
-        <div class="card-footer w-100 text-muted">
-          <div class="post-info">
-            Created by
-            <a href="mailto:blog@matthewearl.com">Matthew Earl</a>
-            on {{ post.date | date: '%B %d, %Y' }}.
-            {% if post.reddit-url %}
-              {% include discuss-link.html post=post %}
-            {% endif %}
           </div>
         </div>
       </div>
