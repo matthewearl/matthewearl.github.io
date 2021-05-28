@@ -2,7 +2,7 @@
 layout: default
 title: Reprojecting the Perseverance landing footage onto satellite imagery
 thumbimage: /assets/mars2020-reproject/thumb.jpg
-#reddit-url: https://www.reddit.com/r/programming/comments/8us6jx/how_i_extracted_super_mario_bros_level_data_using/
+reddit-url: https://www.reddit.com/r/space/comments/m4a6jm/perseverance_rover_landing_footage_stabilized/
 excerpt:
   Using Python, OpenCV, and PyTorch to reproject the Mars 2020 / Perseverance
   descent and landing footage onto satellite imagery of the area.
