@@ -99,3 +99,6 @@ hr {
     overflow-y: hidden;
 }
 
+.MathJax .mi, .MathJax .mo {
+    color: inherit;
+}
