@@ -12,9 +12,7 @@ excerpt:
 
 {% include post-title.html %}
 
-{% include img.html src="/assets/pluto-flyby/anim2.gif" alt="Header" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/pluto-flyby/anim2.gif" alt="Header" %}
 
 ## Introduction
 
@@ -58,15 +56,11 @@ short-exposure 100-150 msec images are used.
 Looking at one of the input images we wish to compose, it doesn't appear at
 first as if there are any background stars at all:
 
-{% include img.html src="/assets/pluto-flyby/input.jpg" alt="Input" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/pluto-flyby/input.jpg" alt="Input" %}
 
 However, stretch the brightness 16 times and a few become visible:
 
-{% include img.html src="/assets/pluto-flyby/input-bright.jpg" alt="Input Bright" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/pluto-flyby/input-bright.jpg" alt="Input Bright" %}
 
 Given such an input image we wish to obtain the `x`, `y` coordinates of each
 star. To do so we first
@@ -92,9 +86,7 @@ This code picks the smallest thresholding constanting `thr` such that less than
 2.5% of the thresholded image is white, then adds 2 to it. The resulting image
 is:
 
-{% include img.html src="/assets/pluto-flyby/thresholded.png" alt="Thresholded" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/pluto-flyby/thresholded.png" alt="Thresholded" %}
 
 The idea is to make a mask such that contiguous white regions in the
 thresholded image correspond with stars in the original image. The value of
@@ -120,9 +112,7 @@ a small amount, thereby joining up nearby regions:
 
 This gives the following:
 
-{% include img.html src="/assets/pluto-flyby/dilated.png" alt="Dilated" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/pluto-flyby/dilated.png" alt="Dilated" %}
 
 At this point we assume each contiguous region is a star. This obviously isn't
 true for the regions associated with Pluto and Charon, but the next step should
@@ -162,9 +152,7 @@ to determine the centre-of-mass of the star, in terms of pixel coordinates:
 
 Here's the result, plotted over the stretched input image:
 
-{% include img.html src="/assets/pluto-flyby/stars.png" alt="Stars" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/pluto-flyby/stars.png" alt="Stars" %}
 
 There are other approaches to star extraction in particular I've previously
 had success with Lang et al.'s method described in section 2.1 of the paper
@@ -238,9 +226,7 @@ predetermined margin of error), as is the case above.
 The procedure is restarted until a hypothetical correspondence is found with
 (approximately) equal distances between the two stars in either image:
 
-{% include img.html src="/assets/pluto-flyby/pair-align-2.png" alt="Pair align 2" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/pluto-flyby/pair-align-2.png" alt="Pair align 2" %}
 
 *Note that the blue lines are the same length. For remaining images in this
 section lines of the same colour will be of the same length*
@@ -254,9 +240,7 @@ from each image), and seeing how many pairs fit the hypothesis.
 A pair is said to fit the hypothesis if in either image, the star described by
 the new pair has the same distance to the stars in the hypothesis. For example:
 
-{% include img.html src="/assets/pluto-flyby/pair-align-3.png" alt="Pair align 3" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/pluto-flyby/pair-align-3.png" alt="Pair align 3" %}
 
 The new star (yellow) has the same distance to the first star (denoted by a
 blue line) in either image. Similarly it has the same distance to the second
@@ -265,16 +249,12 @@ star (denoted by a green line) in either image.
 As pairs are found they are added to the hypothetical correspondence. As such,
 the 4th star must have the same distance to the first 3 stars in either image:
 
-{% include img.html src="/assets/pluto-flyby/pair-align-4.png" alt="Pair align 4" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/pluto-flyby/pair-align-4.png" alt="Pair align 4" %}
 
 ...and the 5th star must have the same distance to the first 4 stars in either
 image:
 
-{% include img.html src="/assets/pluto-flyby/pair-align-5.png" alt="Pair align 5" %}
-
-<sup>[Image credit](#image_credits)</sup>
+{% include img-caption.html caption="[Image credit](#image_credits)" src="/assets/pluto-flyby/pair-align-5.png" alt="Pair align 5" %}
 
 If at the end of this procedure there are at least 4 stars in the hypothetical
 correspondence the hypothesis is accepted. A [Procrustes
