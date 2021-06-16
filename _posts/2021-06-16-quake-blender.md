@@ -297,11 +297,13 @@ and code for importing BSP files is
 Loading a demo then, consists of reading the intro section to tell us which
 game assets (models and map) to convert into Blender assets, and then animating
 them according to the baseline / update sections.  I make use of Blender's rich
-animation support to do this, in particular, keyframing.
+animation support to do this.  More specifically, I keyframe object positions
+and animation poses at the times indicated in the demo.  Here is a screen
+capture showing the resulting scene:
 
-[clip of panning around a demo file?]
+{% include vid.html src="/assets/quake-blender/cap.webm" %}
 
-My code for converting demos files into Blender can be found
+My code for importing demos files into Blender can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/blenddemo.py#L673).
 
 
@@ -352,7 +354,6 @@ powerful graphics card, and it is still incredibly grainy!  Even applying
 Blender's bundled denoiser can't recover a clean image.  Blender can normally
 handle scenes of this complexity with no issues, so what's going on?
 
-
 ## Reducing noise
 
 When Blender wishes to work out how well a point is illuminated, it (by default)
@@ -367,16 +368,27 @@ the `sample_as_light` flag (referred to as Multiple Importance Sampling in the
 UI) on textures.  This flag can be animated with keyframes, so we can make it
 change depending on the current player position.
 
+The task then, is to come up with a heuristic that can cull as many occluded
+light sources as possible.
+
 ## BSP visibility
 
-The BSP file divides the level into a set of disjoint volumes called leaves.
-Each leaf contains a handful of faces.
+Fortunately BSP files come with built-in data structures for solving a similar
+problem.  One of the great innovations that enabled Quake to run efficiently on
+1996 hardware was that of visible surface determination, that is to say, working
+out which parts of the level are visible from any given player position.
 
-[leaf bitmap image]
+In order to solve this problem, the BSP file divides the level into a set of
+disjoint volumes called leaves.  Each leaf contains a handful of faces:
 
-The visibility information in the BSP is a large 2D bitmap telling us which
-leaves can *potentially* see each other.  The set of leaves that a given leaf
-can potentially see is known as its potentially visible set, or PVS.
+[img of leaves]
+
+The visibility information in the BSP is a large (but compressed) pre-computed
+2D bitmap telling us which leaves can *potentially* see each other.  The set of
+leaves that a given leaf can potentially see is known as its potentially visible
+set, or PVS:
+
+{% include img.html src="/assets/quake-blender/vis.png" alt="bitmap of mutual leaf visibility" %}
 
 As a first approximation, we can simply sample a light if and only if the
 camera's PVS has any leaves in common with the light's PVS. For example, here
@@ -414,3 +426,9 @@ looking image:
 
 {% include img.html src="/assets/quake-blender/e1m1-1132-denoised.png" alt="further noise reduced version of the above" %}
 
+
+## Conclusions
+
+
+- Contrast with RTX
+- Explain how else the scene might be useful, eg. demo analysis.
