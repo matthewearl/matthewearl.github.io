@@ -1,3 +1,16 @@
+---
+layout: default
+title: 
+thumbimage: /assets/quake-blender/thumb.jpg
+#reddit-url: https://www.reddit.com/r/space/comments/m4a6jm/perseverance_rover_landing_footage_stabilized/
+excerpt:
+  Using Python and Blender I produce a tool for converting Quake demo files into
+  a path-traced scene.
+---
+
+{% include post-title.html %}
+
+{% include img.html src="/assets/quake-blender/title.jpg" alt="Header pic" %}
 
 ## Introduction
 
@@ -30,7 +43,7 @@ of the traffic that goes from server to client during the game.  Given a demo,
 and an installation of Quake, it's then possible to reproduce exactly what the
 player saw at the time of recording:
 
-[Clip of demo explain vid]
+{% include vid.html src="/assets/quake-blender/demo_record.webm" %}
 
 Note that even in single player mode, internally there are still client and
 server components in the code (with the network layer replaced by a simple
@@ -45,7 +58,72 @@ When parsed, the demo file can be read a little like a script for a play.  The
 initial commands set the scene, saying which level is being played, along with
 what assets --- models and sounds --- will be used throughout the demo.
 
-[Parsed demo code for intro section]
+<div class="code-vertical-scroll">
+{% highlight python %}
+ServerMessagePrint(string='\x02\nVERSION 1.09 SERVER (5336 CRC)')
+ServerMessageServerInfo(
+    protocol=Protocol(version=<ProtocolVersion.NETQUAKE: 15>,
+                      flags=<ProtocolFlags.0: 0>),
+    max_clients=1, game_type=0, level_name='the Slipgate Complex',
+    models=['maps/e1m1.bsp', '*1', '*2', '*3', '*4', '*5', '*6', '*7', '*8',
+            '*9', '*10', '*11', '*12', '*13', '*14', '*15', '*16', '*17', '*18',
+            '*19', '*20', '*21', '*22', '*23', '*24', '*25', '*26', '*27',
+            '*28', '*29', '*30', '*31', '*32', '*33', '*34', '*35', '*36',
+            '*37', '*38', '*39', '*40', '*41', '*42', '*43', '*44', '*45',
+            '*46', '*47', '*48', '*49', '*50', '*51', '*52', '*53', '*54',
+            '*55', '*56', '*57', 'progs/player.mdl', 'progs/eyes.mdl',
+            'progs/h_player.mdl', 'progs/gib1.mdl', 'progs/gib2.mdl',
+            'progs/gib3.mdl', 'progs/s_bubble.spr', 'progs/s_explod.spr',
+            'progs/v_axe.mdl', 'progs/v_shot.mdl', 'progs/v_nail.mdl',
+            'progs/v_rock.mdl', 'progs/v_shot2.mdl', 'progs/v_nail2.mdl',
+            'progs/v_rock2.mdl', 'progs/bolt.mdl', 'progs/bolt2.mdl',
+            'progs/bolt3.mdl', 'progs/lavaball.mdl', 'progs/missile.mdl',
+            'progs/grenade.mdl', 'progs/spike.mdl', 'progs/s_spike.mdl',
+            'progs/backpack.mdl', 'progs/zom_gib.mdl', 'progs/v_light.mdl',
+            'progs/armor.mdl', 'progs/g_nail.mdl', 'progs/soldier.mdl',
+            'progs/h_guard.mdl', 'maps/b_nail0.bsp', 'progs/quaddama.mdl',
+            'maps/b_bh100.bsp', 'maps/b_shell0.bsp', 'maps/b_bh10.bsp',
+            'maps/b_bh25.bsp', 'maps/b_nail1.bsp', 'progs/h_dog.mdl',
+            'progs/dog.mdl', 'progs/suit.mdl', 'progs/g_shot.mdl',
+            'maps/b_explob.bsp'], sounds=['weapons/r_exp3.wav',
+            'weapons/rocket1i.wav', 'weapons/sgun1.wav', 'weapons/guncock.wav',
+            'weapons/ric1.wav', 'weapons/ric2.wav', 'weapons/ric3.wav',
+            'weapons/spike2.wav', 'weapons/tink1.wav', 'weapons/grenade.wav',
+            'weapons/bounce.wav', 'weapons/shotgn2.wav', 'items/damage2.wav',
+            'demon/dland2.wav', 'misc/h2ohit1.wav', 'items/itembk2.wav',
+            'player/plyrjmp8.wav', 'player/land.wav', 'player/land2.wav',
+            'player/drown1.wav', 'player/drown2.wav', 'player/gasp1.wav',
+            'player/gasp2.wav', 'player/h2odeath.wav', 'misc/talk.wav',
+            'player/teledth1.wav', 'misc/r_tele1.wav', 'misc/r_tele2.wav',
+            'misc/r_tele3.wav', 'misc/r_tele4.wav', 'misc/r_tele5.wav',
+            'weapons/lock4.wav', 'weapons/pkup.wav', 'items/armor1.wav',
+            'weapons/lhit.wav', 'weapons/lstart.wav', 'items/damage3.wav',
+            'misc/power.wav', 'player/gib.wav', 'player/udeath.wav',
+            'player/tornoff2.wav', 'player/pain1.wav', 'player/pain2.wav',
+            'player/pain3.wav', 'player/pain4.wav', 'player/pain5.wav',
+            'player/pain6.wav', 'player/death1.wav', 'player/death2.wav',
+            'player/death3.wav', 'player/death4.wav', 'player/death5.wav',
+            'weapons/ax1.wav', 'player/axhit1.wav', 'player/axhit2.wav',
+            'player/h2ojump.wav', 'player/slimbrn2.wav', 'player/inh2o.wav',
+            'player/inlava.wav', 'misc/outwater.wav', 'player/lburn1.wav',
+            'player/lburn2.wav', 'misc/water1.wav', 'misc/water2.wav',
+            'ambience/buzz1.wav', 'doors/basetry.wav', 'doors/baseuse.wav',
+            'doors/hydro1.wav', 'doors/hydro2.wav', 'misc/null.wav',
+            'ambience/fl_hum1.wav', 'buttons/switch21.wav', 'plats/plat1.wav',
+            'plats/plat2.wav', 'doors/stndr1.wav', 'doors/stndr2.wav',
+            'doors/basesec1.wav', 'doors/basesec2.wav', 'misc/trigger1.wav',
+            'soldier/death1.wav', 'soldier/idle.wav', 'soldier/pain1.wav',
+            'soldier/pain2.wav', 'soldier/sattck1.wav', 'soldier/sight1.wav',
+            'items/damage.wav', 'buttons/airbut1.wav', 'ambience/hum1.wav',
+            'items/r_item2.wav', 'items/r_item1.wav', 'items/health1.wav',
+            'doors/drclos4.wav', 'doors/doormv1.wav', 'dog/dattack1.wav',
+            'dog/ddeath.wav', 'dog/dpain1.wav', 'dog/dsight.wav',
+            'dog/idle.wav', 'items/suit.wav', 'items/suit2.wav',
+            'misc/secret.wav', 'ambience/comp1.wav', 'ambience/drone6.wav'])
+ServerMessageCdTrack(track=6, loop=6)
+ServerMessageSetView(viewentity=1)
+{% endhighlight %}
+</div>
 
 Next comes a series of baseline commands, which define a set of entities, each
 of which is associated with one of the aforementioned models, like a cast list
