@@ -105,3 +105,19 @@ a.summary-title > h4 {
 .MathJax .mi, .MathJax .mo {
     color: inherit;
 }
+
+.code-vertical-scroll pre {
+  max-height: 40em;
+}
+
+.highlight pre code * {
+  white-space: nowrap;
+}
+
+.highlight pre {
+  overflow: auto;
+}
+
+.highlight pre code {
+  white-space: pre;
+}
