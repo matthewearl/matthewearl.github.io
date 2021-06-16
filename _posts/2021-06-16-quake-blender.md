@@ -10,7 +10,7 @@ excerpt:
 
 {% include post-title.html %}
 
-{% include img.html src="/assets/quake-blender/title.jpg" alt="Header pic" %}
+{% include img.html src="/assets/quake-blender/header.jpg" alt="Header pic" %}
 
 ## Introduction
 
@@ -131,12 +131,125 @@ in a play.  Entities represent all objects in the game.  An entity might be a
 monster, the player, a health pack, a lift, a button.  Everything except for the
 static parts of the level.
 
-[Baseline commands]
+<div class="code-vertical-scroll">
+{% highlight python %}
+ServerMessageSpawnBaseline(entity_num=0, model_num=1, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=1, model_num=59, frame=0, colormap=1, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=8, model_num=2, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=9, model_num=3, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=11, model_num=85, frame=0, colormap=0, skin=0,
+						   origin=(688.0, 480.0, 80.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=12, model_num=4, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=13, model_num=5, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=14, model_num=6, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=15, model_num=7, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=22, model_num=8, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, -152.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=24, model_num=9, frame=0, colormap=0, skin=0,
+						   origin=(0.0, -240.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=25, model_num=10, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=31, model_num=86, frame=0, colormap=0, skin=0,
+						   origin=(112.0, 2352.0, 16.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=32, model_num=11, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=34, model_num=87, frame=0, colormap=0, skin=0,
+						   origin=(248.0, 2392.0, 40.0), angles=(0.0, 3.141592653589793, 0.0))
+ServerMessageSpawnBaseline(entity_num=35, model_num=89, frame=0, colormap=0, skin=0,
+						   origin=(272.0, 2352.0, 64.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=41, model_num=14, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=42, model_num=15, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=43, model_num=16, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, -66.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=45, model_num=18, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=47, model_num=90, frame=0, colormap=0, skin=0,
+						   origin=(544.0, 2480.0, -87.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=48, model_num=20, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=50, model_num=22, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=51, model_num=23, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, -400.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=53, model_num=24, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=55, model_num=91, frame=0, colormap=0, skin=0,
+						   origin=(944.0, 1008.0, -271.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=57, model_num=92, frame=0, colormap=0, skin=0,
+						   origin=(296.0, 2136.0, -191.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=58, model_num=93, frame=0, colormap=0, skin=0,
+						   origin=(1424.0, 904.0, -431.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=59, model_num=94, frame=0, colormap=0, skin=0,
+						   origin=(1376.0, 808.0, -431.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=60, model_num=94, frame=0, colormap=0, skin=0,
+						   origin=(1176.0, 936.0, -431.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=61, model_num=26, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=62, model_num=27, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=63, model_num=28, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=65, model_num=30, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=70, model_num=35, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=71, model_num=36, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=72, model_num=37, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=73, model_num=38, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=75, model_num=95, frame=0, colormap=0, skin=0,
+						   origin=(1376.0, 1024.0, -279.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=76, model_num=94, frame=0, colormap=0, skin=0,
+						   origin=(1184.0, 992.0, -279.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=77, model_num=93, frame=0, colormap=0, skin=0,
+						   origin=(1376.0, 856.0, -279.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=78, model_num=93, frame=0, colormap=0, skin=0,
+						   origin=(1256.0, 1704.0, -431.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=83, model_num=39, frame=0, colormap=0, skin=0,
+						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=85, model_num=94, frame=0, colormap=0, skin=0,
+						   origin=(328.0, 848.0, -223.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=86, model_num=94, frame=0, colormap=0, skin=0,
+						   origin=(344.0, 920.0, -223.875), angles=(0.0, 0.0, 0.0))
+ServerMessageSpawnBaseline(entity_num=87, model_num=93, frame=0, colormap=0, skin=0,
+						   origin=(-16.0, 2064.0, -207.875), angles=(0.0, 0.0, 0.0))
+
+...
+{% endhighlight %}
+</div>
 
 Finally, a series of update and time commands given the entities' position,
-angle, and pose at the given time, a series of stage directions in the analogy.
+angle, and pose at the given time, a series of stage directions in the analogy:
 
-[update commands]
+<div class="code-vertical-scroll">
+{% highlight python %}
+ServerMessageTime(time=1.4415020942687988)
+ServerMessageClientData(
+	view_height=22, ideal_pitch=0, punch_angles=(0, 0, 0), m_velocity=(0, 0, -32),
+	items=<ItemFlags.SIGIL4|AXE|SHELLS|SHOTGUN: 2147488001>, on_ground=False,
+	in_water=False, weapon_frame=0, armor=0, weapon_model_index=68, health=100,
+    ammo=25, shells=25, nails=0, rockets=0, cells=0, active_weapon=<ItemFlags.SHOTGUN: 1>)
+ServerMessageUpdate(
+    entity_num=1, model_num=None, frame=13, colormap=None,
+    skin=None, effects=None, origin=(480.0, -352.0, 88.0), angle=(None, None, None),
+    step=False)
+ServerMessageUpdate(
+    entity_num=101, model_num=None, frame=None, colormap=None, skin=None, effects=None,
+    origin=(None, None, None), angle=(None, None, None), step=False)
+{% endhighlight %}
+</div>
 
 My Python code for parsing demo files can
 be found [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/proto.py).
@@ -151,7 +264,7 @@ and with a little effort can be parsed into Python classes.  My Python code for
 parsing BSP files can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/bsp.py)
 
-[fly-through of level?]
+{% include vid.html src="/assets/quake-blender/flythrough.webm" %}
 
 Similarly, the models defined in .mdl files, which represent things like
 monsters, weapon models, and so on, are in a
@@ -160,7 +273,7 @@ monsters, weapon models, and so on, are in a
 My Python code for parsing MDL files can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/mdl.py).
 
-[rotating shot of monster?]
+{% include vid.html src="/assets/quake-blender/monster.webm" %}
 
 ## Loading into Blender
 
@@ -209,25 +322,30 @@ illuminate my scene.  However, because Blender can do accurate multi-bounce
 illumination by itself including all these lights would mean doubling up on
 bounced lights, and would give an over illuminated scene.
 
-[View of a light texture on LHS with palette on RHS]
-
 Instead, I'm going to illuminate the scene directly from the texture
-information.  All textures in Quake are composed using a 256 colour palette.
+information.  All textures in Quake are composed using a 256 colour palette:
+
+{% include img.html src="/assets/quake-blender/pal-frame.png" alt="shot of light in Quake with palette overlaid" %}
+
 The last 32 colours in this palette are special in that they always appear as
 fullbright, that is to say, even when in shadow they still appear fully
-illuminated.
+illuminated:
 
-[Shot of light in a render showing emissiveness]
+{% include img.html src="/assets/quake-blender/pal-fb-frame.png" alt="shot of light in Quake with fullbright areas highlighted" %}
 
 In my system, I treat these fullbright colours as being emissive,
 so that they illuminate the space around them as well as appearing bright to the
-camera.  In addition, I treat select models as being emissive, for example the
+camera:  
+
+{% include img.html src="/assets/quake-blender/fullbright-tex-emissive.png" alt="shot of light in Quake but illuminated using Blender" %}
+
+In addition, I treat select models as being emissive, for example the
 flame models that are used in the non-tech levels.
 
 So our scene is now set --- our geometry is in place, textures are applied, and
 lighting is defined.  Let's render an image and see what we get:
 
-[image of noisy image produced with all lights on e1m1 set as sample_as_light]
+{% include img.html src="/assets/quake-blender/e1m1-1132-sal-all.png" alt="noisy image produced with all lights on e1m1 set as sample_as_light" %}
 
 Oh dear!  This single frame took around 20 seconds to render on my reasonably
 powerful graphics card, and it is still incredibly grainy!  Even applying
@@ -287,9 +405,12 @@ bounding box.
 
 The final system I use then is based on seeing whether these two reduced PVS
 volumes intersect.  As you can see, it works better than the unreduced system,
-and a lot better than the system that simply samples all lights.  Applying
-Blender's noise reduction system yields a pretty smooth looking image.
+and a lot better than the system that simply samples all lights.
 
-[image]
+{% include img.html src="/assets/quake-blender/e1m1-1132.png" alt="un-noisy render of e1m1 produced with selective light sampling and denoising" %}
 
+Applying Blender's noise reduction system to the above yields an even cleaner
+looking image:
+
+{% include img.html src="/assets/quake-blender/e1m1-1132-denoised.png" alt="further noise reduced version of the above" %}
 
