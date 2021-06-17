@@ -379,9 +379,7 @@ problem.  One of the great innovations that enabled Quake to run efficiently on
 out which parts of the level are visible from any given player position.
 
 In order to solve this problem, the BSP file divides the level into a set of
-disjoint volumes called leaves.  Each leaf contains a handful of faces:
-
-[img of leaves]
+disjoint volumes called leaves.  Each leaf contains a handful of faces.
 
 The visibility information in the BSP is a large (but compressed) pre-computed
 2D bitmap telling us which leaves can *potentially* see each other.  The set of
@@ -390,34 +388,58 @@ set, or PVS:
 
 {% include img.html src="/assets/quake-blender/vis.png" alt="bitmap of mutual leaf visibility" %}
 
+Here's an external shot of the first corridor in the game, with a light just
+round the corner from the player. In this example we want to see if the light,
+indicated by the cross, should be sampled given the player's view, indicated by
+the pyramid:
+
+{% include img.html src="/assets/quake-blender/pvs-level.png" alt="external shot of level showing a corner with a light at one end and the camera at the other" %}
+
+In this case we *do* want to sample the light, since the light illuminates parts
+of the scene that are visible to the player.
+
 As a first approximation, we can simply sample a light if and only if the
-camera's PVS has any leaves in common with the light's PVS. For example, here
-you can see the light PVS intersects with the camera's and so we enable
-importance sampling on this light.  This distant light however would not be
-drawn.
+camera's PVS has any leaves in common with the light's PVS.  If we now draw the
+PVS of the light and the camera, we can see that there is in fact an
+intersection, so this light should be sampled:
 
-[Highlight sampled lights in green, and non-sampled lights in red]
+{% include img.html src="/assets/quake-blender/pvs.png" alt="yellow leaves around the light are shown, and blue leaves around the camera are shown, the intersection is shown in green" %}
 
-This works well, and does improve the situation a little, however, there's a
-couple more things we can do.
+Leaves in the  light's PVS are shown in yellow, whereas leaves in the camera's
+PVS are shown in blue.  Leaves that are in both are shown in green.
 
-Again taking inspiration from Quake's visibility calculations we can apply
-what's known as frustum culling.  With the camera we can associate a viewing
-frustum, that is to say, a volume whose faces correspond with the edges of the
-screen projected out from the camera's origin.  Any point lying outside of the
-viewing frustum will be invisible to the camera.
+This works well, and does improve the situation a little, however, there's more
+we can do.  The problem is that the PVS is too conservative in that there are
+still lots of leaves that are in fact fully occluded from the camera (or light)
+but nevertheless appear in the PVS.  The net effect is that we still end up
+sampling many occluded lights.
 
-[Draw camera PVS intersected with viewing frustum]
+To improve things, we again take inspiration from Quake's visibility
+calculations and apply what's known as frustum culling.  With the camera we can
+associate a [viewing frustum](https://en.wikipedia.org/wiki/Viewing_frustum),
+that is to say, a volume whose faces correspond with the edges of the screen
+projected out from the camera's origin.  Any point lying outside of the viewing
+frustum will be invisible to the camera, and so we can exclude these leaves from
+the PVS.  This has the effect of hiding leaves that are behind the player, and
+otherwise outside the bounds of the camera's field of view.
 
-A similar concept can be applied to the light's PVS --- practically a light's
+A similar concept can be applied to the light's PVS --- practically, a light's
 sphere of influence is bounded by the inverse square law, and so we can place a
 bounding box around each light,  whose size is determined by how bright the
 light is.  We can therefore reduce the light's PVS by intersecting with this
 bounding box.
 
 The final system I use then is based on seeing whether these two reduced PVS
-volumes intersect.  As you can see, it works better than the unreduced system,
-and a lot better than the system that simply samples all lights.
+volumes intersect:
+
+{% include img.html src="/assets/quake-blender/pvs-reduced.png" alt="yellow leaves around the light are shown, and blue leaves around the camera are shown, the intersection is shown in green" %}
+
+In this case they still do, however you can imagine if the player were turned
+to face the opposite direction then the intersection would now be nil and the
+light would (correctly) not be sampled.
+
+As you can see, it works better than the unreduced system, and a lot better than
+the system that simply samples all lights:
 
 {% include img.html src="/assets/quake-blender/e1m1-1132.png" alt="un-noisy render of e1m1 produced with selective light sampling and denoising" %}
 
@@ -426,9 +448,9 @@ looking image:
 
 {% include img.html src="/assets/quake-blender/e1m1-1132-denoised.png" alt="further noise reduced version of the above" %}
 
-
 ## Conclusions
 
-
-- Contrast with RTX
+- Caveat about PVS only accounting for a single bounce.
+- Contrast with RTX (per pixel culling, temporal AA, pipeline optimized for
+  realtime rendering, fewer bounces than Blender).
 - Explain how else the scene might be useful, eg. demo analysis.
