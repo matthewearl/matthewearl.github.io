@@ -36,10 +36,70 @@ improve realism.
 <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img class="d-block w-100" src="/assets/quake-blender/e1m1-render.jpg" alt="First slide">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-render.jpg" alt="">
     </div>
     <div class="carousel-item">
-      <img class="d-block w-100" src="/assets/quake-blender/e1m1-quakespasm.jpg" alt="Second slide">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-quakespasm.jpg" alt="">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-2-render.jpg" alt="e1m1 render from Blender">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-2-quakespasm.jpg" alt="e1m1 Quakespasm screenshot">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-3-render.jpg" alt="e1m1 render from Blender">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-3-quakespasm.jpg" alt="e1m1 Quakespasm screenshot">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-4-render.jpg" alt="e1m1 render from Blender">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-4-quakespasm.jpg" alt="e1m1 Quakespasm screenshot">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m5-render.jpg" alt="e1m5 render from Blender">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m5-quakespasm.jpg" alt="e1m5 Quakespasm screenshot">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m5-2-render.jpg" alt="e1m5 render from Blender">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m5-2-quakespasm.jpg" alt="e1m5 Quakespasm screenshot">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m5-3-render.jpg" alt="e1m5 render from Blender">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m5-3-quakespasm.jpg" alt="e1m5 Quakespasm screenshot">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m5-4-render.jpg" alt="e1m5 render from Blender">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m5-4-quakespasm.jpg" alt="e1m5 Quakespasm screenshot">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m6-2-render.jpg" alt="e1m6 render from Blender">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m6-2-quakespasm.jpg" alt="e1m6 Quakespasm screenshot">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m6-render.jpg" alt="e1m6 render from Blender">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m6-quakespasm.jpg" alt="e1m6 Quakespasm screenshot">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m7-render.jpg" alt="e1m7 render from Blender">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m7-quakespasm.jpg" alt="e1m7 Quakespasm screenshot">
     </div>
   </div>
   <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
