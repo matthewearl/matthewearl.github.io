@@ -33,6 +33,24 @@ having to write a new renderer.  My objective is to use the original game assets
 as much as possible, while relying on Blender's accurate lighting simulation to
 improve realism.
 
+<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-render.jpg" alt="First slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-quakespasm.jpg" alt="Second slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
 
 ## Parsing demos
 
@@ -492,7 +510,7 @@ possible reasons for this:
   sampled per pixel.  From my reading I can't confirm this to be the case with
   Q2RTX, but it seems likely.
 - Blender's path-tracing renderer, Cycles, is very general in that it has to be
-  able to cope with a wide variety of scene types --- different sizes of
+  able to cope with a wide variety of scene types --- different complexities of
   geometry, different number of lights, and so on.  In contrast, Q2RTX is a very
   specialized renderer and can thus be optimized for the specific task of
   rendering Quake levels.
