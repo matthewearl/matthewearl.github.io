@@ -448,9 +448,52 @@ looking image:
 
 {% include img.html src="/assets/quake-blender/e1m1-1132-denoised.png" alt="further noise reduced version of the above" %}
 
-## Conclusions
+One caveat about this scheme for selecting lights to sample is that it ignores
+the potential for influence from multiple light bounces --- a bright light at
+the end of a serpentine corridor might still illuminate the other end via
+multiple bounces, yet PVS calculations would mean this light would not be
+sampled.  While this is an issue in theory, it doesn't appear to be an issue in
+practice.
 
-- Caveat about PVS only accounting for a single bounce.
-- Contrast with RTX (per pixel culling, temporal AA, pipeline optimized for
-  realtime rendering, fewer bounces than Blender).
-- Explain how else the scene might be useful, eg. demo analysis.
+## Conclusion
+
+I have produced a system that imports Quake demo files and all the associated
+assets into Blender.  In many ways this has been a case of replicating a decent
+chunk of Quake's client into Python, replacing the rendering portion with code
+that duplicates the game's state into Blender.  This took a long time, so
+perhaps it would have been more efficient to re-use some of Quake's code and
+hook my Blender code in at a lower level?  On the other hand, I have built up a
+library of code for interfacing with several of Quake's file formats, and some
+supporting code (eg. a simplex solver). These might be useful for other
+projects within the Quake community.
+
+Speaking of other uses, the scene produced by Blender could be useful for
+player analysis.  Speedruns of the game are often won or lost by small fractions
+of a second.  Being able to load up multiple demos into the same scene and track
+exactly who is ahead at what point could give insight into where time can be
+gained.
+
+While doing this project one comparison that has been at the back of my mind is
+that of real-time renderers, particularly the
+[Quake II RTX (Q2RTX)](https://developer.nvidia.com/blog/path-tracing-quake-ii/)
+project.  Even with all of my optimizations, rendering still takes several
+seconds per frame, whereas Q2RTX runs in real-time.  Blender also supports
+hardware ray-tracing, so why is it still so much slower?  I can think of a few
+possible reasons for this:
+
+- Q2RTX employs temporal filtering to smooth its images.  This means that
+  samples from earlier frames contribute to the current frame.  Blender doesn't
+  yet fully support temporal filtering, so I had to render each frame
+  independently.
+- My system has to determine lights to sample on a per-frame basis.  An RTX
+  based system could decide lights to sample on a per-path basis.  Just a single
+  bounce PVS calculation needs to be done for each surface point whose incoming
+  light is being integrated.  This would naturally lead to less lights being
+  sampled per pixel.  From my reading I can't confirm this to be the case with
+  Q2RTX, but it seems likely.
+- Blender's path-tracing renderer, Cycles, is very general in that it has to be
+  able to cope with a wide variety of scene types --- different sizes of
+  geometry, different number of lights, and so on.  In contrast, Q2RTX is a very
+  specialized renderer and can thus be optimized for the specific task of
+  rendering Quake levels.
+
