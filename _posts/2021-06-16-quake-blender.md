@@ -169,15 +169,19 @@ Still, the requirement that the game run in real time on the meagre hardware of
 want to explore just how good the game can be made to look, with modern
 hardware, and offline rendering.
 
-More specifically, I'm going to talk about how I wrote a script for converting
-Quake demo files into Blender scenes.  Blender is a free and open source 3D
-modelling and rendering application. Its renderer, Cycles, is a path-tracer
-capable of producing photo-realistic imagery, supporting features such as motion
-blur, depth of field, a comprehensive shader system, and much more.  By
-exporting to Blender we get to use all of these features for free, without
-having to write a new renderer.  My objective is to use the original game assets
-as much as possible, while relying on Blender's accurate lighting simulation to
-improve realism.
+I'm going to talk about how I wrote a script for converting Quake demo files
+into Blender scenes. If you just want to see the results here's a speedrun of
+the first episode converted into Blender:
+
+{% include yt-embed.html ytid="e9MVJw9fFgA" aspect="16by9" %}
+
+Blender is a free and open source 3D modelling and rendering application. Its
+renderer, Cycles, is a path-tracer capable of producing photo-realistic imagery,
+supporting features such as motion blur, depth of field, a comprehensive shader
+system, and much more.  By exporting to Blender we get to use all of these
+features for free, without having to write a new renderer.  My objective is to
+use the original game assets as much as possible, while relying on Blender's
+accurate lighting simulation to improve realism.
 
 
 ## Parsing demos
