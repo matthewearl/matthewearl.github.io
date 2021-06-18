@@ -10,6 +10,31 @@ excerpt:
 
 {% include post-title.html %}
 
+{% include yt-embed.html ytid="e9MVJw9fFgA" aspect="16by9" %}
+
+
+## Introduction
+
+Quake, released in 1996 broke new ground in game engine realism.  For the first
+time, fully texture mapped 3D scenes were rendered in real-time in a commercial
+game,  with pre-computed lightmaps adding an extra layer of atmosphere.
+
+Still, the requirement that the game run in real time on the meagre hardware of
+25 years ago, places massive constraints on graphical realism.  In this post I
+want to explore how good the game can be made to look, with modern hardware, and
+offline rendering.
+
+I'm going to talk about how I wrote a script for converting Quake demo files
+into Blender scenes.  [Blender](https://www.blender.org/) is a free and open
+source 3D modelling and rendering application. Its renderer, Cycles, is a
+path-tracer capable of producing photo-realistic imagery, supporting features
+such as motion blur, depth of field, a comprehensive shader system, and much
+more.  By exporting to Blender we get to use all of these features for free,
+without having to write a new renderer.  My objective is to use the original
+game assets as much as possible, while relying on Blender's accurate lighting
+simulation to improve realism.
+
+
 <figure class="figure">
 <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
   <div class="carousel-inner">
@@ -158,31 +183,6 @@ excerpt:
 <figcaption class="figure-caption text-left">Use the navigation arrows to see renderings compared with game screenshots</figcaption>
 </figure>
 
-## Introduction
-
-Quake, released in 1996 broke new ground in game engine realism.  For the first
-time, fully texture mapped 3D scenes were rendered in real-time in a commercial
-game,  with pre-computed lightmaps adding an extra layer of atmosphere.
-
-Still, the requirement that the game run in real time on the meagre hardware of
-25 years ago, places massive constraints on graphical realism.  In this post I
-want to explore just how good the game can be made to look, with modern
-hardware, and offline rendering.
-
-I'm going to talk about how I wrote a script for converting Quake demo files
-into Blender scenes. If you just want to see the results here's a speedrun of
-the first episode converted into Blender:
-
-{% include yt-embed.html ytid="e9MVJw9fFgA" aspect="16by9" %}
-
-Blender is a free and open source 3D modelling and rendering application. Its
-renderer, Cycles, is a path-tracer capable of producing photo-realistic imagery,
-supporting features such as motion blur, depth of field, a comprehensive shader
-system, and much more.  By exporting to Blender we get to use all of these
-features for free, without having to write a new renderer.  My objective is to
-use the original game assets as much as possible, while relying on Blender's
-accurate lighting simulation to improve realism.
-
 
 ## Parsing demos
 
@@ -193,11 +193,11 @@ of the traffic that goes from server to client during the game.  Given a demo,
 and an installation of Quake, it's then possible to reproduce exactly what the
 player saw at the time of recording:
 
-{% include vid.html src="/assets/quake-blender/demo_record.webm" %}
+{% include vid-caption.html caption="Illustration of recording a demo.  The client (right) communicates with the server (left).  Traffic received by the client is recorded to the demo file.." src="/assets/quake-blender/demo_record.webm" %}
 
-Note that even in single player mode, internally there are still client and
-server components in the code (with the network layer replaced by a simple
-memory transfer) which means demos can be recorded in this setting too.
+Note that even in single player mode, there are still client and server
+components in the code, with the network layer replaced by a simple memory
+transfer, which means demos can be recorded in this setting too.
 
 Since the demo file format is closely related to the Quake networking code it
 can be understood by reading the appropriate layer of Quake's networking code.
@@ -206,7 +206,7 @@ for the demo file format in Python.
 
 When parsed, the demo file can be read a little like a script for a play.  The
 initial commands set the scene, saying which level is being played, along with
-what assets --- models and sounds --- will be used throughout the demo.
+what assets --- models and sounds --- will be used throughout the demo:
 
 <div class="code-vertical-scroll">
 {% highlight python %}
@@ -279,102 +279,100 @@ Next comes a series of baseline commands, which define a set of entities, each
 of which is associated with one of the aforementioned models, like a cast list
 in a play.  Entities represent all objects in the game.  An entity might be a
 monster, the player, a health pack, a lift, a button.  Everything except for the
-static parts of the level.
+static parts of the level:
 
 <div class="code-vertical-scroll">
 {% highlight python %}
 ServerMessageSpawnBaseline(entity_num=0, model_num=1, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=1, model_num=59, frame=0, colormap=1, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=8, model_num=2, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=9, model_num=3, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=11, model_num=85, frame=0, colormap=0, skin=0,
-						   origin=(688.0, 480.0, 80.0), angles=(0.0, 0.0, 0.0))
+                           origin=(688.0, 480.0, 80.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=12, model_num=4, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=13, model_num=5, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=14, model_num=6, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=15, model_num=7, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=22, model_num=8, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, -152.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, -152.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=24, model_num=9, frame=0, colormap=0, skin=0,
-						   origin=(0.0, -240.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, -240.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=25, model_num=10, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=31, model_num=86, frame=0, colormap=0, skin=0,
-						   origin=(112.0, 2352.0, 16.0), angles=(0.0, 0.0, 0.0))
+                           origin=(112.0, 2352.0, 16.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=32, model_num=11, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=34, model_num=87, frame=0, colormap=0, skin=0,
-						   origin=(248.0, 2392.0, 40.0), angles=(0.0, 3.141592653589793, 0.0))
+                           origin=(248.0, 2392.0, 40.0), angles=(0.0, 3.141592653589793, 0.0))
 ServerMessageSpawnBaseline(entity_num=35, model_num=89, frame=0, colormap=0, skin=0,
-						   origin=(272.0, 2352.0, 64.0), angles=(0.0, 0.0, 0.0))
+                           origin=(272.0, 2352.0, 64.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=41, model_num=14, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=42, model_num=15, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=43, model_num=16, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, -66.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, -66.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=45, model_num=18, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=47, model_num=90, frame=0, colormap=0, skin=0,
-						   origin=(544.0, 2480.0, -87.875), angles=(0.0, 0.0, 0.0))
+                           origin=(544.0, 2480.0, -87.875), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=48, model_num=20, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=50, model_num=22, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=51, model_num=23, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, -400.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, -400.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=53, model_num=24, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=55, model_num=91, frame=0, colormap=0, skin=0,
-						   origin=(944.0, 1008.0, -271.875), angles=(0.0, 0.0, 0.0))
+                           origin=(944.0, 1008.0, -271.875), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=57, model_num=92, frame=0, colormap=0, skin=0,
-						   origin=(296.0, 2136.0, -191.875), angles=(0.0, 0.0, 0.0))
+                           origin=(296.0, 2136.0, -191.875), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=58, model_num=93, frame=0, colormap=0, skin=0,
-						   origin=(1424.0, 904.0, -431.875), angles=(0.0, 0.0, 0.0))
+                           origin=(1424.0, 904.0, -431.875), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=59, model_num=94, frame=0, colormap=0, skin=0,
-						   origin=(1376.0, 808.0, -431.875), angles=(0.0, 0.0, 0.0))
+                           origin=(1376.0, 808.0, -431.875), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=60, model_num=94, frame=0, colormap=0, skin=0,
-						   origin=(1176.0, 936.0, -431.875), angles=(0.0, 0.0, 0.0))
+                           origin=(1176.0, 936.0, -431.875), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=61, model_num=26, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=62, model_num=27, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=63, model_num=28, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=65, model_num=30, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=70, model_num=35, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=71, model_num=36, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=72, model_num=37, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=73, model_num=38, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, -16.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=75, model_num=95, frame=0, colormap=0, skin=0,
-						   origin=(1376.0, 1024.0, -279.875), angles=(0.0, 0.0, 0.0))
+                           origin=(1376.0, 1024.0, -279.875), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=76, model_num=94, frame=0, colormap=0, skin=0,
-						   origin=(1184.0, 992.0, -279.875), angles=(0.0, 0.0, 0.0))
-ServerMessageSpawnBaseline(entity_num=77, model_num=93, frame=0, colormap=0, skin=0,
-						   origin=(1376.0, 856.0, -279.875), angles=(0.0, 0.0, 0.0))
+
 ServerMessageSpawnBaseline(entity_num=78, model_num=93, frame=0, colormap=0, skin=0,
-						   origin=(1256.0, 1704.0, -431.875), angles=(0.0, 0.0, 0.0))
+                           origin=(1256.0, 1704.0, -431.875), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=83, model_num=39, frame=0, colormap=0, skin=0,
-						   origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
+                           origin=(0.0, 0.0, 0.0), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=85, model_num=94, frame=0, colormap=0, skin=0,
-						   origin=(328.0, 848.0, -223.875), angles=(0.0, 0.0, 0.0))
+                           origin=(328.0, 848.0, -223.875), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=86, model_num=94, frame=0, colormap=0, skin=0,
-						   origin=(344.0, 920.0, -223.875), angles=(0.0, 0.0, 0.0))
+                           origin=(344.0, 920.0, -223.875), angles=(0.0, 0.0, 0.0))
 ServerMessageSpawnBaseline(entity_num=87, model_num=93, frame=0, colormap=0, skin=0,
-						   origin=(-16.0, 2064.0, -207.875), angles=(0.0, 0.0, 0.0))
+                           origin=(-16.0, 2064.0, -207.875), angles=(0.0, 0.0, 0.0))
 
 ...
 {% endhighlight %}
@@ -401,6 +399,9 @@ ServerMessageUpdate(
 {% endhighlight %}
 </div>
 
+The above sequence repeats for every frame in the demo, with each frame
+containing an `ServerMessageUpdate` command for each entity.
+
 My Python code for parsing demo files can
 be found [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/proto.py).
 
@@ -411,47 +412,51 @@ information, for the level, along with some other data structures which we'll
 come onto later.  The file format is
 [well documented](https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_4.htm)
 and with a little effort can be parsed into Python classes.  My Python code for
-parsing BSP files can be found
+parsing .bsp files can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/bsp.py)
 
 {% include vid.html src="/assets/quake-blender/flythrough.webm" %}
 
-Similarly, the models defined in .mdl files, which represent things like
+Similarly, the models are defined in .mdl files, which represent things like
 monsters, weapon models, and so on, are in a
 [well documented format](https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_5.htm)
 
-My Python code for parsing MDL files can be found
+My Python code for parsing .mdl files can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/mdl.py).
 
 {% include vid.html src="/assets/quake-blender/monster.webm" %}
 
 ## Loading into Blender
 
-[Blender](https://www.blender.org/) is a free and open-source 3D graphics and
-modelling application, with a realistic path-tracing renderer.  Furthermore, it
-is highly scriptable with Python.  Using this interface, I made a script to
-convert the BSP files and models parsed above into Blender.  For most of the
-concepts in the Quake assets there are direct analogues Blender's representation
-of the scene:
+Blender has a rich Python scripting interface.  In fact, Blender's GUI works by
+interacting with a Python API, and so anything that can be done through the UI
+can also be scripted.  Using this Python interface, I made a script to import
+the .bsp files and models parsed above into Blender.  For most of the concepts in
+the Quake assets there are direct analogues Blender's representation of the
+scene:
 
 - Quake models and map geometry can be represented as Blender meshes.
-- Animation frames in Quake models can be represented with shape keys in Blender.
-- Quake texture data can be represented as images and shaders in Blender.
-[...anything else?]
+- Animation frames in Quake models can be represented with shape-keys in Blender.
+- Quake texture data can be represented as images.
+- Texture coordinates can be encoded as Blender UV maps.
+- Effects such as warping water, animated textures, and sky boxes can be
+  implemented as shaders.
 
-My code for importing models into blender is
+My code for importing .mdl files into blender is
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/blendmdl.py)
-and code for importing BSP files is
+and code for importing .bsp files is
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/blenddemo.py).
 
 Loading a demo then, consists of reading the intro section to tell us which
 game assets (models and map) to convert into Blender assets, and then animating
-them according to the baseline / update sections.  I make use of Blender's rich
-animation support to do this.  More specifically, I keyframe object positions
-and animation poses at the times indicated in the demo.  Here is a screen
-capture showing the resulting scene:
+them according to the baseline / update sections.  I make use of Blender's
+animation support to do this.  More specifically, I insert position,
+orientation, and shape-key keyframes for every `ServerMessageUpdate` command in
+the parsed demo.  I also keyframe animated shaders such as warping water so that
+they move according to the current game time.  Here is a recording showing the
+result of importing a demo from the first level in the game:
 
-{% include vid.html src="/assets/quake-blender/cap.webm" %}
+{% include vid-caption.html src="/assets/quake-blender/cap.webm" caption="Scrubbing through a demo imported into blender" %}
 
 My code for importing demos files into Blender can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/blenddemo.py#L673).
@@ -459,20 +464,20 @@ My code for importing demos files into Blender can be found
 
 ## Lighting
 
-At this point we have our geometry loaded, animated, with some textures applied.
-Still, we're missing light sources.  When the Quake levels were designed, lights
-were defined as point light sources scattered throughout the level.  A
-compilation process then converts these point light sources into light maps.
-This process works by assigning a low resolution texture to each surface in the
-level, and calculating how much each texel is directly illuminated by these
-point light sources.  Since this process only measures direct illumination,
-level designers included secondary light sources to fake the effects of bounced
-light.
+At this point we have our geometry loaded and animated, with some textures
+applied.  Still, we're missing light sources.  When the Quake levels were
+designed, lights were defined as point light sources scattered throughout the
+level.  A compilation process then converts these point light sources into light
+maps.  This process works by assigning a low resolution texture to each surface
+in the level, and calculating how much each texel is directly illuminated by
+these point light sources.  Since this process only measures direct
+illumination, level designers included secondary light sources to fake the
+effects of bounced light.
 
 Since the original map sources are available, I *could* use these lights to
 illuminate my scene.  However, because Blender can do accurate multi-bounce
-illumination by itself including all these lights would mean doubling up on
-bounced lights, and would give an over illuminated scene.
+illumination by itself, including all these lights would mean doubling up on
+bounced lights which would give an over illuminated scene.
 
 Instead, I'm going to illuminate the scene directly from the texture
 information.  All textures in Quake are composed using a 256 colour palette:
@@ -499,10 +504,10 @@ lighting is defined.  Let's render an image and see what we get:
 
 {% include img.html src="/assets/quake-blender/e1m1-1132-sal-all.png" alt="noisy image produced with all lights on e1m1 set as sample_as_light" %}
 
-Oh dear!  This single frame took around 20 seconds to render on my reasonably
-powerful graphics card, and it is still incredibly grainy!  Even applying
-Blender's bundled denoiser can't recover a clean image.  Blender can normally
-handle scenes of this complexity with no issues, so what's going on?
+Oh dear!  This single frame took around 20 seconds to render on my GeForce RTX
+2060, and it is still incredibly grainy!  Even applying Blender's bundled
+denoiser can't recover a clean image.  Blender can normally handle scenes of
+this complexity with no issues, so what's going on?
 
 ## Reducing noise
 
@@ -516,14 +521,16 @@ highly noisy, depending on whether a visible light happened to be sampled.
 Fortunately, Blender allows us to control which lights are sampled by setting
 the `sample_as_light` flag (referred to as Multiple Importance Sampling in the
 UI) on textures.  This flag can be animated with keyframes, so we can make it
-change depending on the current player position.
+change depending on the current player position and view angle.
 
-The task then, is to come up with a heuristic that can cull as many occluded
-light sources as possible.
+The task then, is to come up with a heuristic that can cull as many lights which
+do not contribute to the current view.  To make this more concrete, I want to
+avoid sampling lights that cannot be reached after a single bounce from the
+camera.
 
-## BSP visibility
+## BSP visibility data
 
-Fortunately BSP files come with built-in data structures for solving a similar
+Fortunately .bsp files come with built-in data structures for solving a similar
 problem.  One of the great innovations that enabled Quake to run efficiently on
 1996 hardware was that of visible surface determination, that is to say, working
 out which parts of the level are visible from any given player position.
