@@ -535,7 +535,7 @@ problem.  One of the great innovations that enabled Quake to run efficiently on
 1996 hardware was that of visible surface determination, that is to say, working
 out which parts of the level are visible from any given player position.
 
-In order to solve this problem, the BSP file divides the level into a set of
+In order to solve this problem, the .bsp file divides the level into a set of
 disjoint volumes called leaves.  Each leaf contains a handful of faces.
 
 The visibility information in the BSP is a large (but compressed) pre-computed
@@ -545,10 +545,15 @@ set, or PVS:
 
 {% include img.html src="/assets/quake-blender/vis.png" alt="bitmap of mutual leaf visibility" %}
 
+In the game, surfaces that lie outside of the camera's PVS are not drawn.  Our
+problem is slightly different in that we also to sample lights that are
+invisible to the camera but are visible from any point that is visible to the
+camera.
+
 Here's an external shot of the first corridor in the game, with a light just
-round the corner from the player. In this example we want to see if the light,
-indicated by the cross, should be sampled given the player's view, indicated by
-the pyramid:
+around the corner from the player. In this example we want to see if the light,
+indicated by the orange cross, should be sampled given the player's view,
+indicated by the orange pyramid:
 
 {% include img.html src="/assets/quake-blender/pvs-level.png" alt="external shot of level showing a corner with a light at one end and the camera at the other" %}
 
@@ -560,16 +565,17 @@ camera's PVS has any leaves in common with the light's PVS.  If we now draw the
 PVS of the light and the camera, we can see that there is in fact an
 intersection, so this light should be sampled:
 
-{% include img.html src="/assets/quake-blender/pvs.png" alt="yellow leaves around the light are shown, and blue leaves around the camera are shown, the intersection is shown in green" %}
-
-Leaves in the  light's PVS are shown in yellow, whereas leaves in the camera's
-PVS are shown in blue.  Leaves that are in both are shown in green.
+{% include img-caption.html src="/assets/quake-blender/pvs.png" caption="Leaves in the  light's PVS are shown in yellow, whereas leaves in the camera's PVS are shown in blue.  Leaves that are in both are shown in green." alt="yellow leaves around the light are shown, and blue leaves around the camera are shown, the intersection is shown in green" %}
 
 This works well, and does improve the situation a little, however, there's more
 we can do.  The problem is that the PVS is too conservative in that there are
-still lots of leaves that are in fact fully occluded from the camera (or light)
-but nevertheless appear in the PVS.  The net effect is that we still end up
-sampling many occluded lights.
+still lots of leaves that are in fact fully occluded from the camera but
+nevertheless appear in the PVS.  Similarly, there are points in the light's PVS
+that necessarily have very little illumination due to limited power of the light
+and the inverse square law.  The net effect is that we still end up sampling
+many lights that have no contribution to the scene.
+
+## Frustum culling
 
 To improve things, we again take inspiration from Quake's visibility
 calculations and apply what's known as frustum culling.  With the camera we can
@@ -608,9 +614,8 @@ looking image:
 One caveat about this scheme for selecting lights to sample is that it ignores
 the potential for influence from multiple light bounces --- a bright light at
 the end of a serpentine corridor might still illuminate the other end via
-multiple bounces, yet PVS calculations would mean this light would not be
-sampled.  While this is an issue in theory, it doesn't appear to be an issue in
-practice.
+multiple bounces, yet the above method would not sample this light.  While this
+is an issue in theory, it doesn't appear to be an issue in practice.
 
 ## Conclusion
 
@@ -624,9 +629,9 @@ library of code for interfacing with several of Quake's file formats, and some
 supporting code (eg. a simplex solver). These might be useful for other
 projects within the Quake community.
 
-Speaking of other uses, the scene produced by Blender could be useful for
-player analysis.  Speedruns of the game are often won or lost by small fractions
-of a second.  Being able to load up multiple demos into the same scene and track
+Speaking of other uses, the scene produced by Blender could be used for player
+analysis.  Speedruns of the game are often won or lost by small fractions of a
+second.  Being able to load up multiple demos into the same scene and track
 exactly who is ahead at what point could give insight into where time can be
 gained.
 
@@ -643,11 +648,11 @@ possible reasons for this:
   yet fully support temporal filtering, so I had to render each frame
   independently.
 - My system has to determine lights to sample on a per-frame basis.  An RTX
-  based system could decide lights to sample on a per-path basis.  Just a single
-  bounce PVS calculation needs to be done for each surface point whose incoming
-  light is being integrated.  This would naturally lead to less lights being
-  sampled per pixel.  From my reading I can't confirm this to be the case with
-  Q2RTX, but it seems likely.
+  based system could decide lights to sample on a per-path basis.  Only a direct
+  (zero bounce) PVS calculation needs to be done for each surface point whose
+  incoming light is being integrated.  This would naturally lead to fewer lights
+  being sampled per pixel.  From my reading I can't confirm this to be the case
+  with Q2RTX, but it seems likely.
 - Blender's path-tracing renderer, Cycles, is very general in that it has to be
   able to cope with a wide variety of scene types --- different complexities of
   geometry, different number of lights, and so on.  In contrast, Q2RTX is a very
