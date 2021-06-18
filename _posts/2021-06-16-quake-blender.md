@@ -12,7 +12,6 @@ excerpt:
 
 {% include yt-embed.html ytid="e9MVJw9fFgA" aspect="16by9" %}
 
-
 ## Introduction
 
 Quake, released in 1996 broke new ground in game engine realism.  For the first
@@ -38,18 +37,6 @@ simulation to improve realism.
 <figure class="figure">
 <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
   <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img class="d-block w-100" src="/assets/quake-blender/e1m7-render.jpg" alt="e1m7 render from Blender">
-        <div class="carousel-caption d-none d-md-block">
-          <p>Quake rendered with Blender</p>
-        </div>
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="/assets/quake-blender/e1m7-quakespasm.jpg" alt="e1m7 Quakespasm screenshot">
-        <div class="carousel-caption d-none d-md-block">
-          <p>Screenshot from Quakespasm</p>
-        </div>
-    </div>
     <div class="carousel-item">
       <img class="d-block w-100" src="/assets/quake-blender/e1m1-render.jpg" alt="">
         <div class="carousel-caption d-none d-md-block">
@@ -74,7 +61,7 @@ simulation to improve realism.
           <p>Screenshot from Quakespasm</p>
         </div>
     </div>
-    <div class="carousel-item">
+    <div class="carousel-item active">
       <img class="d-block w-100" src="/assets/quake-blender/e1m1-3-render.jpg" alt="e1m1 render from Blender">
         <div class="carousel-caption d-none d-md-block">
           <p>Quake rendered with Blender</p>
@@ -166,6 +153,18 @@ simulation to improve realism.
     </div>
     <div class="carousel-item">
       <img class="d-block w-100" src="/assets/quake-blender/e1m6-quakespasm.jpg" alt="e1m6 Quakespasm screenshot">
+        <div class="carousel-caption d-none d-md-block">
+          <p>Screenshot from Quakespasm</p>
+        </div>
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m7-render.jpg" alt="e1m7 render from Blender">
+        <div class="carousel-caption d-none d-md-block">
+          <p>Quake rendered with Blender</p>
+        </div>
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m7-quakespasm.jpg" alt="e1m7 Quakespasm screenshot">
         <div class="carousel-caption d-none d-md-block">
           <p>Screenshot from Quakespasm</p>
         </div>
@@ -432,11 +431,10 @@ Blender has a rich Python scripting interface.  In fact, Blender's GUI works by
 interacting with a Python API, and so anything that can be done through the UI
 can also be scripted.  Using this Python interface, I made a script to import
 the .bsp files and models parsed above into Blender.  For most of the concepts in
-the Quake assets there are direct analogues Blender's representation of the
-scene:
+the Quake assets there are direct analogues in Blender:
 
 - Quake models and map geometry can be represented as Blender meshes.
-- Animation frames in Quake models can be represented with shape-keys in Blender.
+- Model poses in Quake models can be represented with shape-keys in Blender.
 - Quake texture data can be represented as images.
 - Texture coordinates can be encoded as Blender UV maps.
 - Effects such as warping water, animated textures, and sky boxes can be
