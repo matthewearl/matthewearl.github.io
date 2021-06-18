@@ -502,7 +502,28 @@ flame models that are used in the non-tech levels.
 So our scene is now set --- our geometry is in place, textures are applied, and
 lighting is defined.  Let's render an image and see what we get:
 
-{% include img.html src="/assets/quake-blender/e1m1-1132-sal-all.png" alt="noisy image produced with all lights on e1m1 set as sample_as_light" %}
+<figure class="figure">
+<div id="salAllCarousel" class="carousel slide" data-interval="false">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-sal-all.png" alt="noisy image produced with all lights on e1m1 set as sample_as_light">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-sal-all-detail.png" alt="detailed view">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#salAllCarousel" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#salAllCarousel" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+<figcaption class="figure-caption text-left">Use the navigation arrows to toggle between close-up and full view.</figcaption>
+</figure>
 
 Oh dear!  This single frame took around 20 seconds to render on my GeForce RTX
 2060, and it is still incredibly grainy!  Even applying Blender's bundled
@@ -604,12 +625,54 @@ light would (correctly) not be sampled.
 As you can see, it works better than the unreduced system, and a lot better than
 the system that simply samples all lights:
 
-{% include img.html src="/assets/quake-blender/e1m1-1132.png" alt="un-noisy render of e1m1 produced with selective light sampling and denoising" %}
+<figure class="figure">
+<div id="lessNoisyCarousel" class="carousel slide" data-interval="false">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132.png" alt="less noisy image produced with selective light sampling">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-detail.png" alt="detailed view">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#lessNoisyCarousel" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#lessNoisyCarousel" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+<figcaption class="figure-caption text-left">Use the navigation arrows to toggle between close-up and full view.</figcaption>
+</figure>
 
 Applying Blender's noise reduction system to the above yields an even cleaner
 looking image:
 
-{% include img.html src="/assets/quake-blender/e1m1-1132-denoised.png" alt="further noise reduced version of the above" %}
+<figure class="figure">
+<div id="fullyDenoisedCarousel" class="carousel slide" data-interval="false">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-denoised.png" alt="further noise reduced version of the above">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-denoised-detail.png" alt="detailed view">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#fullyDenoisedCarousel" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#fullyDenoisedCarousel" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+<figcaption class="figure-caption text-left">Use the navigation arrows to toggle between close-up and full view.</figcaption>
+</figure>
 
 One caveat about this scheme for selecting lights to sample is that it ignores
 the potential for influence from multiple light bounces --- a bright light at
