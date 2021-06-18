@@ -504,7 +504,7 @@ lighting is defined.  Let's render an image and see what we get:
 <div id="salAllCarousel" class="carousel slide" data-interval="false">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-sal-all.png" alt="noisy image produced with all lights on e1m1 set as sample_as_light">
+      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-sal-all.jpg" alt="noisy image produced with all lights on e1m1 set as sample_as_light">
     </div>
     <div class="carousel-item">
       <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-sal-all-detail.png" alt="detailed view">
@@ -627,7 +627,7 @@ the system that simply samples all lights:
 <div id="lessNoisyCarousel" class="carousel slide" data-interval="false">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132.png" alt="less noisy image produced with selective light sampling">
+      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132.jpg" alt="less noisy image produced with selective light sampling">
     </div>
     <div class="carousel-item">
       <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-detail.png" alt="detailed view">
@@ -653,7 +653,7 @@ looking image:
 <div id="fullyDenoisedCarousel" class="carousel slide" data-interval="false">
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-denoised.png" alt="further noise reduced version of the above">
+      <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-denoised.jpg" alt="further noise reduced version of the above">
     </div>
     <div class="carousel-item">
       <img class="d-block mw-100" src="/assets/quake-blender/e1m1-1132-denoised-detail.png" alt="detailed view">
