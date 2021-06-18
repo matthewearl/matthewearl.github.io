@@ -480,7 +480,7 @@ bounced lights which would give an over illuminated scene.
 Instead, I'm going to illuminate the scene directly from the texture
 information.  All textures in Quake are composed using a 256 colour palette:
 
-{% include img.html src="/assets/quake-blender/pal-frame.png" alt="shot of light in Quake with palette overlaid" %}
+{% include img.html src="/assets/quake-blender/pal-frame.jpg" alt="shot of light in Quake with palette overlaid" %}
 
 The last 32 colours in this palette are special in that they always appear as
 fullbright, that is to say, even when in shadow they still appear fully
@@ -492,7 +492,7 @@ In my system, I treat these fullbright colours as being emissive,
 so that they illuminate the space around them as well as appearing bright to the
 camera:  
 
-{% include img.html src="/assets/quake-blender/fullbright-tex-emissive.png" alt="shot of light in Quake but illuminated using Blender" %}
+{% include img.html src="/assets/quake-blender/fullbright-tex-emissive.jpg" alt="shot of light in Quake but illuminated using Blender" %}
 
 In addition, I treat select models as being emissive, for example the
 flame models that are used in the non-tech levels.
