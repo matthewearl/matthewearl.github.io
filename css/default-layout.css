@@ -106,8 +106,16 @@ a.summary-title > h4 {
     color: inherit;
 }
 
+.code-vertical-scroll figure {
+    border-style: solid;
+    border-color: #aaaaaa;
+    padding-left: 1em;
+    border-width: thin;
+}
+
 .code-vertical-scroll pre {
   max-height: 40em;
+  margin-bottom: 0;
 }
 
 .highlight pre code * {
@@ -116,8 +124,10 @@ a.summary-title > h4 {
 
 .highlight pre {
   overflow: auto;
+  padding: 0;
 }
 
 .highlight pre code {
   white-space: pre;
 }
+
