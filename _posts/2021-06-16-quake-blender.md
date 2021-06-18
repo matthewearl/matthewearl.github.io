@@ -1,6 +1,6 @@
 ---
 layout: default
-title: 
+title: Path-tracing Quake in Blender
 thumbimage: /assets/quake-blender/thumb.jpg
 #reddit-url: https://www.reddit.com/r/space/comments/m4a6jm/perseverance_rover_landing_footage_stabilized/
 excerpt:
@@ -423,7 +423,7 @@ monsters, weapon models, and so on, are in a
 My Python code for parsing .mdl files can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/mdl.py).
 
-{% include vid.html src="/assets/quake-blender/monster.webm" %}
+{% include vid-caption.html src="/assets/quake-blender/monster.webm" caption="Quakeguy running.  Geometry, texture, and animation data are all stored in the .mdl file." %}
 
 ## Loading into Blender
 
