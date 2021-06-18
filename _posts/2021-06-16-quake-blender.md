@@ -423,7 +423,7 @@ monsters, weapon models, and so on, are in a
 My Python code for parsing .mdl files can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/mdl.py).
 
-{% include vid-caption.html src="/assets/quake-blender/monster.mp4" caption="Quakeguy running.  Geometry, texture, and animation data are all stored in the .mdl file." %}
+{% include vid-caption.html src="/assets/quake-blender/monster.webm" caption="Quakeguy running.  Geometry, texture, and animation data are all stored in the .mdl file." %}
 
 ## Loading into Blender
 
