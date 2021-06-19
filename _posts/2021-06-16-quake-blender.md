@@ -674,6 +674,35 @@ the end of a serpentine corridor might still illuminate the other end via
 multiple bounces, yet the above method would not sample this light.  While this
 is an issue in theory, it doesn't appear to be an issue in practice.
 
+## Finishing touches
+
+There are a few extra bits required to produce the final result:
+
+- To look correct different light textures need different intensities.  For
+  example, a floodlight texture should be a lot brighter than a backlit sign.
+  This information isn't encoded in the game and so my system reads in a config
+  file that contains, amongst other things, some good looking intensity values
+  for each texture.
+- I treat the sky texture as emissive, using Blender's sun light.
+- Even though lights are independent of textures in the original game, the
+  artists generally motivated a particular light source by placing it near a
+  would-be emissive model or texture, so that visually the lighting makes sense.
+  Despite this, there are still some areas in the original game that have
+  unmotivated lights and so would be too dark in my rendering.  To account for
+  this I add in a select few lights from the original map sources to illuminate
+  these areas.  These light locations and intensities go into the config file
+  mentioned above.
+- The original game has a particle system used for explosions, teleport
+  effects, and so on.  I use Blender's own particle system to display these.  
+
+There's still more that could be added in too, but I haven't done these due to
+time constraints:
+
+- Viewport gun.  The original game shows the current weapon at the bottom of the
+  screen.
+- Lightning effects.  As visible in the lightning gun, and in the final level of
+  episode one.
+
 ## Conclusion
 
 I have produced a system that imports Quake demo files and all the associated
