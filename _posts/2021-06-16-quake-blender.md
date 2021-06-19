@@ -29,7 +29,7 @@ hardware and offline rendering.
 I am going to talk about how I wrote a script for converting Quake demo files
 into Blender scenes.  [Blender](https://www.blender.org/) is a free and open
 source 3D modelling and rendering application. Its renderer, Cycles, is a
-path-tracer capable of producing photo-realistic imagery, supporting features
+path tracer capable of producing photorealistic imagery, supporting features
 such as motion blur, depth of field, a comprehensive shader system, and much
 more.  By exporting to Blender we get to use all of these features for free,
 without having to write a new renderer.  My objective is to use the original
@@ -182,7 +182,7 @@ simulation to improve realism.
     <span class="sr-only">Next</span>
   </a>
 </div>
-<figcaption class="figure-caption text-left">Use the navigation arrows to see renderings compared with game screenshots</figcaption>
+<figcaption class="figure-caption text-left">Use the navigation arrows to see renderings compared with game screenshots.  Screenshots are captured with <a href="https://quakewiki.org/wiki/QuakeSpasm">Quakespasm</a>, a source port which retains the original game's look.</figcaption>
 </figure>
 
 
