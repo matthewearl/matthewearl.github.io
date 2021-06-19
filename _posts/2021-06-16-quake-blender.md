@@ -37,6 +37,30 @@ simulation to improve realism.
 <figure class="figure">
 <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
   <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-5-render.jpg" alt="">
+        <div class="carousel-caption d-none d-md-block">
+          <p>Quake rendered with Blender</p>
+        </div>
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-5-quakespasm.jpg" alt="">
+        <div class="carousel-caption d-none d-md-block">
+          <p>Screenshot from Quakespasm</p>
+        </div>
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-6-render.jpg" alt="">
+        <div class="carousel-caption d-none d-md-block">
+          <p>Quake rendered with Blender</p>
+        </div>
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m1-6-quakespasm.jpg" alt="">
+        <div class="carousel-caption d-none d-md-block">
+          <p>Screenshot from Quakespasm</p>
+        </div>
+    </div>
     <div class="carousel-item">
       <img class="d-block w-100" src="/assets/quake-blender/e1m1-render.jpg" alt="">
         <div class="carousel-caption d-none d-md-block">
@@ -50,18 +74,6 @@ simulation to improve realism.
         </div>
     </div>
     <div class="carousel-item">
-      <img class="d-block w-100" src="/assets/quake-blender/e1m1-2-render.jpg" alt="e1m1 render from Blender">
-        <div class="carousel-caption d-none d-md-block">
-          <p>Quake rendered with Blender</p>
-        </div>
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="/assets/quake-blender/e1m1-2-quakespasm.jpg" alt="e1m1 Quakespasm screenshot">
-        <div class="carousel-caption d-none d-md-block">
-          <p>Screenshot from Quakespasm</p>
-        </div>
-    </div>
-    <div class="carousel-item active">
       <img class="d-block w-100" src="/assets/quake-blender/e1m1-3-render.jpg" alt="e1m1 render from Blender">
         <div class="carousel-caption d-none d-md-block">
           <p>Quake rendered with Blender</p>
@@ -69,18 +81,6 @@ simulation to improve realism.
     </div>
     <div class="carousel-item">
       <img class="d-block w-100" src="/assets/quake-blender/e1m1-3-quakespasm.jpg" alt="e1m1 Quakespasm screenshot">
-        <div class="carousel-caption d-none d-md-block">
-          <p>Screenshot from Quakespasm</p>
-        </div>
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="/assets/quake-blender/e1m1-4-render.jpg" alt="e1m1 render from Blender">
-        <div class="carousel-caption d-none d-md-block">
-          <p>Quake rendered with Blender</p>
-        </div>
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="/assets/quake-blender/e1m1-4-quakespasm.jpg" alt="e1m1 Quakespasm screenshot">
         <div class="carousel-caption d-none d-md-block">
           <p>Screenshot from Quakespasm</p>
         </div>
@@ -122,13 +122,13 @@ simulation to improve realism.
         </div>
     </div>
     <div class="carousel-item">
-      <img class="d-block w-100" src="/assets/quake-blender/e1m5-4-render.jpg" alt="e1m5 render from Blender">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m5-5-render.jpg" alt="e1m5 render from Blender">
         <div class="carousel-caption d-none d-md-block">
           <p>Quake rendered with Blender</p>
         </div>
     </div>
     <div class="carousel-item">
-      <img class="d-block w-100" src="/assets/quake-blender/e1m5-4-quakespasm.jpg" alt="e1m5 Quakespasm screenshot">
+      <img class="d-block w-100" src="/assets/quake-blender/e1m5-5-quakespasm.jpg" alt="e1m5 Quakespasm screenshot">
         <div class="carousel-caption d-none d-md-block">
           <p>Screenshot from Quakespasm</p>
         </div>
@@ -204,8 +204,8 @@ then relatively straightforward, if a little laborious, to write a parser for
 the demo file format in Python.  
 
 When parsed, the demo file can be read a little like a script for a play.  The
-initial commands set the scene, saying which level is being played, along with
-what assets --- models and sounds --- will be used throughout the demo:
+initial commands set the scene, telling us which assets --- the level, models,
+and sounds --- will be used throughout the demo:
 
 <div class="code-vertical-scroll">
 {% highlight python %}
@@ -411,20 +411,19 @@ The level itself is defined in a .bsp file.  This gives the geometry and texture
 information for the level, along with some other data structures which we will
 come onto later.  The file format is
 [well documented](https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_4.htm)
-and, with a little effort, can be parsed into Python classes.  My Python code
-for parsing .bsp files can be found
-[here](https://github.com/matthewearl/pyquake/blob/master/pyquake/bsp.py)
-
-{% include vid.html src="/assets/quake-blender/flythrough.webm" %}
-
-Similarly, the models which represent things like monsters, weapon models and
-so on, are defined in .mdl files, which is a 
+and, with a little effort, can be parsed into Python classes.  Similarly, the
+models which represent things like monsters, weapon models and so on, are
+defined in .mdl files, which is a 
 [well documented format](https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_5.htm).
+This project doesn't handle sound (for the video at the top I simply dubbed a
+recording from the game), so there is no need to parse sound assets.
 
-My Python code for parsing .mdl files can be found
-[here](https://github.com/matthewearl/pyquake/blob/master/pyquake/mdl.py).
+My Python code for parsing .bsp and .mdl files can be found
+[here (.bsp)](https://github.com/matthewearl/pyquake/blob/master/pyquake/bsp.py)
+and
+[here (.mdl)](https://github.com/matthewearl/pyquake/blob/master/pyquake/mdl.py).
 
-{% include vid-caption.html src="/assets/quake-blender/monster.webm" caption="Quakeguy running.  Geometry, texture, and animation data are all stored in the .mdl file." %}
+{% include vid-caption.html src="/assets/quake-blender/monster.webm" caption="Quakeguy running.  Geometry, texture, and animation data are all stored in the .mdl file. .bsp files are similarly self-contained." %}
 
 ## Loading into Blender
 
@@ -599,7 +598,7 @@ associate a [viewing frustum](https://en.wikipedia.org/wiki/Viewing_frustum),
 that is to say, a volume whose faces correspond with the edges of the screen
 projected out from the camera's origin.  Any point lying outside of the viewing
 frustum will be invisible to the camera, and so we can exclude these leaves from
-the PVS.  This has the effect of hiding leaves that are behind the player, and
+the PVS.  This has the effect of hiding leaves that are behind the player, or
 otherwise outside the bounds of the camera's field of view.
 
 A similar concept can be applied to the light's PVS: practically, a light's
@@ -617,7 +616,7 @@ In this case they still do, however you can imagine if the player were turned
 to face the opposite direction then the intersection would now be nil and the
 light would (correctly) not be sampled.
 
-As you can see, it works better than the unreduced system, and a lot better than
+This works better than unreduced system, and as you can see, a lot better than
 the system that simply samples all lights:
 
 <figure class="figure">
