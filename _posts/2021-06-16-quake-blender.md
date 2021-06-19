@@ -14,16 +14,16 @@ excerpt:
 
 ## Introduction
 
-Quake, released in 1996 broke new ground in game engine realism.  For the first
-time, fully texture mapped 3D scenes were rendered in real-time in a commercial
-game,  with pre-computed lightmaps adding an extra layer of atmosphere.
+The 1996 release of Quake broke new ground in game engine realism.  For the
+first time in a commericial game, fully texture mapped 3D scenes were rendered
+in real-time,  with pre-computed lightmaps adding an extra layer of atmosphere.
 
 Still, the requirement that the game run in real time on the meagre hardware of
-25 years ago, places massive constraints on graphical realism.  In this post I
-want to explore how good the game can be made to look, with modern hardware, and
-offline rendering.
+twenty-five years ago, placed massive constraints on graphical realism.  In this
+post I want to explore how the game can be made to look better, with modern
+hardware and offline rendering.
 
-I'm going to talk about how I wrote a script for converting Quake demo files
+I am going to talk about how I wrote a script for converting Quake demo files
 into Blender scenes.  [Blender](https://www.blender.org/) is a free and open
 source 3D modelling and rendering application. Its renderer, Cycles, is a
 path-tracer capable of producing photo-realistic imagery, supporting features
@@ -189,7 +189,7 @@ A demo file is a compact recording of a Quake game, for the purposes of sharing
 with other players, or for personal review.  Being a multiplayer game, the game
 is split into client and server components.  The demo is essentially a recording
 of the traffic that goes from server to client during the game.  Given a demo,
-and an installation of Quake, it's then possible to reproduce exactly what the
+and an installation of Quake, it is then possible to reproduce exactly what the
 player saw at the time of recording:
 
 {% include vid-caption.html caption="Illustration of recording a demo.  The client (right) communicates with the server (left).  Traffic received by the client is recorded to the demo file.." src="/assets/quake-blender/demo_record.webm" %}
@@ -198,10 +198,10 @@ Note that even in single player mode, there are still client and server
 components in the code, with the network layer replaced by a simple memory
 transfer, which means demos can be recorded in this setting too.
 
-Since the demo file format is closely related to the Quake networking code it
-can be understood by reading the appropriate layer of Quake's networking code.
-It's then relatively straightforward, if a little laborious, to write a parser
-for the demo file format in Python.  
+Since the demo file format is closely related to the Quake protocol, it can be
+understood by reading the appropriate layer of Quake's networking code.  It is
+then relatively straightforward, if a little laborious, to write a parser for
+the demo file format in Python.  
 
 When parsed, the demo file can be read a little like a script for a play.  The
 initial commands set the scene, saying which level is being played, along with
@@ -377,8 +377,9 @@ ServerMessageSpawnBaseline(entity_num=87, model_num=93, frame=0, colormap=0, ski
 {% endhighlight %}
 </div>
 
-Finally, a series of update and time commands given the entities' position,
-angle, and pose at the given time, a series of stage directions in the analogy:
+Finally, a series of update and time commands provides the entities' position,
+angle, and pose at the given time; in the play analogy, this is like a series of
+stage directions:
 
 <div class="code-vertical-scroll">
 {% highlight python %}
@@ -399,7 +400,7 @@ ServerMessageUpdate(
 </div>
 
 The above sequence repeats for every frame in the demo, with each frame
-containing an `ServerMessageUpdate` command for each entity.
+containing a `ServerMessageUpdate` command for each entity.
 
 My Python code for parsing demo files can
 be found [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/proto.py).
@@ -407,18 +408,18 @@ be found [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/proto
 ## Parsing assets
 
 The level itself is defined in a .bsp file.  This gives the geometry and texture
-information, for the level, along with some other data structures which we'll
+information for the level, along with some other data structures which we will
 come onto later.  The file format is
 [well documented](https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_4.htm)
-and with a little effort can be parsed into Python classes.  My Python code for
-parsing .bsp files can be found
+and, with a little effort, can be parsed into Python classes.  My Python code
+for parsing .bsp files can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/bsp.py)
 
 {% include vid.html src="/assets/quake-blender/flythrough.webm" %}
 
-Similarly, the models are defined in .mdl files, which represent things like
-monsters, weapon models, and so on, are in a
-[well documented format](https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_5.htm)
+Similarly, the models which represent things like monsters, weapon models and
+so on, are defined in .mdl files, which is a 
+[well documented format](https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_5.htm).
 
 My Python code for parsing .mdl files can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/mdl.py).
@@ -440,30 +441,29 @@ the Quake assets there are direct analogues in Blender:
 - Effects such as warping water, animated textures, and sky boxes can be
   implemented as shaders.
 
-My code for importing .mdl files into blender is
-[here](https://github.com/matthewearl/pyquake/blob/master/pyquake/blendmdl.py)
-and code for importing .bsp files is
-[here](https://github.com/matthewearl/pyquake/blob/master/pyquake/blenddemo.py).
+My code for importing the parsed .mdl and .bsp files into Blender is
+[here (.mdl)](https://github.com/matthewearl/pyquake/blob/master/pyquake/blendmdl.py)
+and [here (.bsp)](https://github.com/matthewearl/pyquake/blob/master/pyquake/blenddemo.py).
 
-Loading a demo then, consists of reading the intro section to tell us which
+Importing the parsed demo consists of reading the intro section to tell us which
 game assets (models and map) to convert into Blender assets, and then animating
 them according to the baseline / update sections.  I make use of Blender's
 animation support to do this.  More specifically, I insert position,
 orientation, and shape-key keyframes for every `ServerMessageUpdate` command in
 the parsed demo.  I also keyframe animated shaders such as warping water so that
-they move according to the current game time.  Here is a recording showing the
-result of importing a demo from the first level in the game:
-
-{% include vid-caption.html src="/assets/quake-blender/cap.webm" caption="Scrubbing through a demo imported into blender" %}
-
-My code for importing demos files into Blender can be found
+they move according to the current game time.  Below is a recording showing the
+result of importing a demo from the first level in the game.  My code for
+importing demos files into Blender can be found
 [here](https://github.com/matthewearl/pyquake/blob/master/pyquake/blenddemo.py#L673).
+
+{% include vid-caption.html src="/assets/quake-blender/cap.webm" caption="Scrubbing through a demo imported into Blender" %}
+
 
 
 ## Lighting
 
 At this point we have our geometry loaded and animated, with some textures
-applied.  Still, we're missing light sources.  When the Quake levels were
+applied.  Still, we are missing light sources.  When the Quake levels were
 designed, lights were defined as point light sources scattered throughout the
 level.  A compilation process then converts these point light sources into light
 maps.  This process works by assigning a low resolution texture to each surface
@@ -474,10 +474,10 @@ effects of bounced light.
 
 Since the original map sources are available, I *could* use these lights to
 illuminate my scene.  However, because Blender can do accurate multi-bounce
-illumination by itself, including all these lights would mean doubling up on
-bounced lights which would give an over illuminated scene.
+illumination by itself, including all of these original Quake lights would mean
+doubling up on bounced light, which would give an over illuminated scene.
 
-Instead, I'm going to illuminate the scene directly from the texture
+Instead, I am going to illuminate the scene directly from the texture
 information.  All textures in Quake are composed using a 256 colour palette:
 
 {% include img.html src="/assets/quake-blender/pal-frame.jpg" alt="shot of light in Quake with palette overlaid" %}
@@ -532,26 +532,26 @@ this complexity with no issues, so what's going on?
 
 When Blender wishes to work out how well a point is illuminated, it (by default)
 randomly samples from all light sources in the scene and averages the
-contribution from each light source sampled.   For most levels, there are way
-more light sources in the scene than are visible at any given time.  This means
-that the contribution from most light sources is zero, and so the result is
-highly noisy, depending on whether a visible light happened to be sampled.
+contribution from each light source.   For most levels, there are way more light
+sources in the scene than are visible at any given time.  This means that the
+contribution from most light sources is zero, and so the result is highly noisy,
+depending on whether a visible light happened to be sampled.
 
 Fortunately, Blender allows us to control which lights are sampled by setting
 the `sample_as_light` flag (referred to as Multiple Importance Sampling in the
 UI) on textures.  This flag can be animated with keyframes, so we can make it
 change depending on the current player position and view angle.
 
-The task then, is to come up with a heuristic that can cull as many lights which
-do not contribute to the current view.  To make this more concrete, I want to
-avoid sampling lights that cannot be reached after a single bounce from the
+The task then, is to come up with a heuristic to cull lights which do not
+influence the current view (or as many as is feasible).  In other words, I want
+to avoid sampling lights that cannot be reached after a single bounce from the
 camera.
 
 ## BSP visibility data
 
 Fortunately .bsp files come with built-in data structures for solving a similar
 problem.  One of the great innovations that enabled Quake to run efficiently on
-1996 hardware was that of visible surface determination, that is to say, working
+1996 hardware is that of visible-surface determination, that is to say, working
 out which parts of the level are visible from any given player position.
 
 In order to solve this problem, the .bsp file divides the level into a set of
@@ -565,34 +565,31 @@ set, or PVS:
 {% include img.html src="/assets/quake-blender/vis.png" alt="bitmap of mutual leaf visibility" %}
 
 In the game, surfaces that lie outside of the camera's PVS are not drawn.  Our
-problem is slightly different in that we also to sample lights that are
-invisible to the camera but are visible from any point that is visible to the
-camera.
+problem is slightly different in that we also need to sample lights that are
+invisible to the camera, but that are visible from at least one point that is
+visible to the camera.
 
-Here's an external shot of the first corridor in the game, with a light just
-around the corner from the player. In this example we want to see if the light,
-indicated by the orange cross, should be sampled given the player's view,
-indicated by the orange pyramid:
+Let's take an example where the light influences the image.  Here is an external
+shot of the first corridor in the game, with a light, indicated by the orange
+star, just around the corner from the player, indicated by the lighter orange
+pyramid.
 
 {% include img.html src="/assets/quake-blender/pvs-level.png" alt="external shot of level showing a corner with a light at one end and the camera at the other" %}
-
-In this case we *do* want to sample the light, since the light illuminates parts
-of the scene that are visible to the player.
 
 As a first approximation, we can simply sample a light if and only if the
 camera's PVS has any leaves in common with the light's PVS.  If we now draw the
 PVS of the light and the camera, we can see that there is in fact an
-intersection, so this light should be sampled:
+intersection, so this light would be sampled with this method:
 
 {% include img-caption.html src="/assets/quake-blender/pvs.png" caption="Leaves in the  light's PVS are shown in yellow, whereas leaves in the camera's PVS are shown in blue.  Leaves that are in both are shown in green." alt="yellow leaves around the light are shown, and blue leaves around the camera are shown, the intersection is shown in green" %}
 
-This works well, and does improve the situation a little, however, there's more
-we can do.  The problem is that the PVS is too conservative in that there are
-still lots of leaves that are in fact fully occluded from the camera but
+This works well, and does improve the situation a bit. However, there is more
+that we can do.  The problem is that the PVS is too conservative, meaning that
+there are still lots of fully occluded leaves that could be omitted but
 nevertheless appear in the PVS.  Similarly, there are points in the light's PVS
-that necessarily have very little illumination due to limited power of the light
-and the inverse square law.  The net effect is that we still end up sampling
-many lights that have no contribution to the scene.
+that have very little illumination owing to limited power of the light and the
+inverse-square law.  The net effect is that we still end up sampling many lights
+that have no contribution to the scene.
 
 ## Frustum culling
 
@@ -605,13 +602,13 @@ frustum will be invisible to the camera, and so we can exclude these leaves from
 the PVS.  This has the effect of hiding leaves that are behind the player, and
 otherwise outside the bounds of the camera's field of view.
 
-A similar concept can be applied to the light's PVS --- practically, a light's
-sphere of influence is bounded by the inverse square law, and so we can place a
+A similar concept can be applied to the light's PVS: practically, a light's
+sphere of influence is bounded by the inverse-square law, and so we can place a
 bounding box around each light,  whose size is determined by how bright the
 light is.  We can therefore reduce the light's PVS by intersecting with this
 bounding box.
 
-The final system I use then is based on seeing whether these two reduced PVS
+The final system I use is based on seeing whether these two reduced PVS
 volumes intersect:
 
 {% include img.html src="/assets/quake-blender/pvs-reduced.png" alt="yellow leaves around the light are shown, and blue leaves around the camera are shown, the intersection is shown in green" %}
@@ -685,10 +682,10 @@ assets into Blender.  In many ways this has been a case of replicating a decent
 chunk of Quake's client into Python, replacing the rendering portion with code
 that duplicates the game's state into Blender.  This took a long time, so
 perhaps it would have been more efficient to re-use some of Quake's code and
-hook my Blender code in at a lower level?  On the other hand, I have built up a
+introduce my code in at a lower level.  On the other hand, I have built up a
 library of code for interfacing with several of Quake's file formats, and some
-supporting code (eg. a simplex solver). These might be useful for other
-projects within the Quake community.
+supporting code (eg. a simplex solver). These might be useful for other projects
+within the Quake community.
 
 Speaking of other uses, the scene produced by Blender could be used for player
 analysis.  Speedruns of the game are often won or lost by small fractions of a
@@ -696,7 +693,7 @@ second.  Being able to load up multiple demos into the same scene and track
 exactly who is ahead at what point could give insight into where time can be
 gained.
 
-While doing this project one comparison that has been at the back of my mind is
+While doing this project, one comparison that has been at the back of my mind is
 that of real-time renderers, particularly the
 [Quake II RTX (Q2RTX)](https://developer.nvidia.com/blog/path-tracing-quake-ii/)
 project.  Even with all of my optimizations, rendering still takes several
