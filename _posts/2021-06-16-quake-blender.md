@@ -10,7 +10,10 @@ excerpt:
 
 {% include post-title.html %}
 
+<figure>
 {% include yt-embed.html ytid="e9MVJw9fFgA" aspect="16by9" %}
+<figcaption class="figure-caption text-left">A speedrun of Quake's first episode rendered using the system described in this article.</figcaption>
+</figure>
 
 ## Introduction
 
@@ -678,11 +681,11 @@ is an issue in theory, it doesn't appear to be an issue in practice.
 
 There are a few extra bits required to produce the final result:
 
-- To look correct different light textures need different intensities.  For
-  example, a floodlight texture should be a lot brighter than a backlit sign.
-  This information isn't encoded in the game and so my system reads in a config
-  file that contains, amongst other things, some good looking intensity values
-  for each texture.
+- In order to look correct, different light textures need different intensities.
+  For example, a floodlight texture should be a lot brighter than a backlit
+  sign.  This information isn't encoded in the game and so my system reads in a
+  config file that contains, among other things, some good-looking intensity
+  values for each texture.
 - I treat the sky texture as emissive, using Blender's sun light.
 - Even though lights are independent of textures in the original game, the
   artists generally motivated a particular light source by placing it near a
@@ -695,13 +698,17 @@ There are a few extra bits required to produce the final result:
 - The original game has a particle system used for explosions, teleport
   effects, and so on.  I use Blender's own particle system to display these.  
 
-There's still more that could be added in too, but I haven't done these due to
-time constraints:
+There is still more that could be added in:
 
 - Viewport gun.  The original game shows the current weapon at the bottom of the
   screen.
 - Lightning effects.  As visible in the lightning gun, and in the final level of
   episode one.
+- Sprites.  There are a few sprites in the game, used for things such as the
+  explosion effect (separate to the particles), and bubbles.
+- Animated lights.  The original game's lightmaps could be animated, useful for
+  things like flickering bulbs, or to have lights turned on and off by in-game
+  triggers.
 
 ## Conclusion
 
@@ -710,7 +717,7 @@ assets into Blender.  In many ways this has been a case of replicating a decent
 chunk of Quake's client into Python, replacing the rendering portion with code
 that duplicates the game's state into Blender.  This took a long time, so
 perhaps it would have been more efficient to re-use some of Quake's code and
-introduce my code in at a lower level.  On the other hand, I have built up a
+introduce my code at a lower level.  On the other hand, I have built up a
 library of code for interfacing with several of Quake's file formats, and some
 supporting code (eg. a simplex solver). These might be useful for other projects
 within the Quake community.
