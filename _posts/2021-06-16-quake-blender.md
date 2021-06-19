@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Path-tracing Quake in Blender
+title: Path tracing Quake in Blender
 thumbimage: /assets/quake-blender/thumb.jpg
 #reddit-url: https://www.reddit.com/r/space/comments/m4a6jm/perseverance_rover_landing_footage_stabilized/
 excerpt:
@@ -36,6 +36,12 @@ without having to write a new renderer.  My objective is to use the original
 game assets as much as possible, while relying on Blender's accurate lighting
 simulation to improve realism.
 
+Throughout this post I will be linking to the source code, which is part of my
+[pyquake repository](https://github.com/matthewearl/pyquake).  If you want to
+have a go at importing your own demos into Blender, I have put together
+[some instructions](https://github.com/matthewearl/pyquake/blob/master/blender.md),
+but I probably won't respond to any issues or PRs.
+I encourage you to make a fork if you are interested in maintaining this project.
 
 <figure class="figure">
 <div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
@@ -182,7 +188,7 @@ simulation to improve realism.
     <span class="sr-only">Next</span>
   </a>
 </div>
-<figcaption class="figure-caption text-left">Use the navigation arrows to see renderings compared with game screenshots.  Screenshots are captured with <a href="https://quakewiki.org/wiki/QuakeSpasm">Quakespasm</a>, a source port which retains the original game's look.</figcaption>
+<figcaption class="figure-caption text-left">Use the navigation arrows to see renderings compared with game screenshots.  Screenshots are captured with <a href="https://quake.fandom.com/wiki/Quakespasm">Quakespasm</a>, a source port which retains the original game's look.</figcaption>
 </figure>
 
 
@@ -416,8 +422,8 @@ come onto later.  The file format is
 [well documented](https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_4.htm)
 and, with a little effort, can be parsed into Python classes.  Similarly, the
 models which represent things like monsters, weapon models and so on, are
-defined in .mdl files, which is a 
-[well documented format](https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_5.htm).
+defined in .mdl files, which is also
+[well documented](https://www.gamers.org/dEngine/quake/spec/quake-spec34/qkspec_5.htm).
 This project doesn't handle sound (for the video at the top I simply dubbed a
 recording from the game), so there is no need to parse sound assets.
 
@@ -445,7 +451,7 @@ the Quake assets there are direct analogues in Blender:
 
 My code for importing the parsed .mdl and .bsp files into Blender is
 [here (.mdl)](https://github.com/matthewearl/pyquake/blob/master/pyquake/blendmdl.py)
-and [here (.bsp)](https://github.com/matthewearl/pyquake/blob/master/pyquake/blenddemo.py).
+and [here (.bsp)](https://github.com/matthewearl/pyquake/blob/master/pyquake/blendbsp.py).
 
 Importing the parsed demo consists of reading the intro section to tell us which
 game assets (models and map) to convert into Blender assets, and then animating
@@ -456,7 +462,7 @@ the parsed demo.  I also keyframe animated shaders such as warping water so that
 they move according to the current game time.  Below is a recording showing the
 result of importing a demo from the first level in the game.  My code for
 importing demos files into Blender can be found
-[here](https://github.com/matthewearl/pyquake/blob/master/pyquake/blenddemo.py#L673).
+[here](https://github.com/matthewearl/pyquake/blob/master/pyquake/blenddemo.py).
 
 {% include vid-caption.html src="/assets/quake-blender/cap.webm" caption="Scrubbing through a demo imported into Blender" %}
 
