@@ -467,7 +467,6 @@ importing demos files into Blender can be found
 {% include vid-caption.html src="/assets/quake-blender/cap.webm" caption="Scrubbing through a demo imported into Blender" %}
 
 
-
 ## Lighting
 
 At this point we have our geometry loaded and animated, with some textures
@@ -580,7 +579,10 @@ visible to the camera.
 Let's take an example where the light influences the image.  Here is an external
 shot of the first corridor in the game, with a light, indicated by the orange
 star, just around the corner from the player, indicated by the lighter orange
-pyramid.
+pyramid[^door].
+
+[^door]: If you are familiar with this level you will know that there is a door that normally blocks this passage.  For the purposes of this discussion we assume the door is open.
+
 
 {% include img.html src="/assets/quake-blender/pvs-level.png" alt="external shot of level showing a corner with a light at one end and the camera at the other" %}
 
@@ -758,3 +760,5 @@ possible reasons for this:
   specialized renderer and can thus be optimized for the specific task of
   rendering Quake levels.
 
+
+## Footnotes
