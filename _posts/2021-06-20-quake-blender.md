@@ -2,6 +2,7 @@
 layout: default
 title: Path tracing Quake in Blender
 thumbimage: /assets/quake-blender/thumb.jpg
+noindex: true
 #reddit-url: https://www.reddit.com/r/space/comments/m4a6jm/perseverance_rover_landing_footage_stabilized/
 excerpt:
   Using Python and Blender I produce a tool for converting Quake demo files into
