@@ -12,7 +12,7 @@ excerpt:
 {% include post-title.html %}
 
 <figure>
-{% include yt-embed.html ytid="e9MVJw9fFgA" aspect="16by9" %}
+{% include yt-embed.html ytid="uX0Ye7qhRd4" aspect="16by9" %}
 <figcaption class="figure-caption text-left">A speedrun of Quake's first episode rendered using the system described in this article.</figcaption>
 </figure>
 
