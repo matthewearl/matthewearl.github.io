@@ -474,10 +474,12 @@ applied.  Still, we are missing light sources.  When the Quake levels were
 designed, lights were defined as point light sources scattered throughout the
 level.  A compilation process then converts these point light sources into light
 maps.  This process works by assigning a low resolution texture to each surface
-in the level, and calculating how much each texel is directly illuminated by
-these point light sources.  Since this process only measures direct
-illumination, level designers included secondary light sources to fake the
-effects of bounced light.
+in the level, and calculating how much each [texel][texel_url] is directly
+illuminated by these point light sources.  Since this process only measures
+direct illumination, level designers included secondary light sources to fake
+the effects of bounced light.
+
+[texel_url]: https://en.wikipedia.org/wiki/Texel_(graphics)
 
 Since the original map sources are available, I *could* use these lights to
 illuminate my scene.  However, because Blender can do accurate multi-bounce
@@ -535,7 +537,7 @@ Oh dear!  This single frame took around 20 seconds to render on my GeForce RTX
 denoiser can't recover a clean image.  Blender can normally handle scenes of
 this complexity with no issues, so what's going on?
 
-## Reducing noise
+## Importance sampling
 
 When Blender wishes to work out how well a point is illuminated, it (by default)
 randomly samples from all light sources in the scene and averages the
@@ -544,13 +546,63 @@ sources in the scene than are visible at any given time.  This means that the
 contribution from most light sources is zero, and so the result is highly noisy,
 depending on whether a visible light happened to be sampled.
 
-Fortunately, Blender allows us to control which lights are sampled by setting
-the `sample_as_light` flag (referred to as Multiple Importance Sampling in the
-UI) on textures.  This flag can be animated with keyframes, so we can make it
-change depending on the current player position and view angle.
+To illustrate this idea, let's say there are 100 lights in our scene, each one a
+single square in the below 10x10 grid.  The camera's location is shown as the
+green cross.  Ignore the red box for now (we will come onto that later). For a
+particular point that our camera can see, the contribution of each light is
+represented by the brightness of the square.  Due to occlusion by level
+geometry, only fifteen lights contribute to the illumination of the point.
+
+{% include img-caption.html src="/assets/quake-blender/is-example.png" caption="Contributions of the 100 lights in the scene." alt="" %}
+
+We could just take the average value of all of these 100 lights to get an exact
+answer.  There are two problems with this:
+- Sampling all the lights might be prohibitively expensive. 
+- In reality, each individual light is not uniform in contribution: the
+  intensity might vary depending on where on the light we sample.  Imagine a
+  long flourescent tube that is partially occluded by a wall,  or a light
+  texture that is not uniformly emissive.  In this case, taking just 100 samples
+  would not be enough.
+
+To avoid these issues, we use a stochastic approach known as [Monte Carlo
+integration](https://en.wikipedia.org/wiki/Monte_Carlo_integration) which works
+by random sampling.  Let's say we take 32 samples in order to measure the
+contribution to the point in question.  We draw 32 times (with replacement) from
+the 100 lights, and average (take the mean of) the resulting value, to give the
+sample mean.  The answer we get is random, since it is dependent on the values
+we draw.  Here is a plot that shows the distribution of these sample means after
+drawing 100,000 samples:
+
+{% include img-caption.html src="/assets/quake-blender/is-hist-1.png" caption="Distribution of sample means, after drawing from all lights.  The mean of the sample means is indicated by the red line." alt="Distribution of sample means, after drawing from all lights.  The mean of the sample means is indicated by the red line." %}
+
+You can see that there is some variance here: the sample mean can realistically
+land between 0 and 0.3.  This variance is undesirable, and manifests itself as
+noise in the resulting image.
+
+Is there a way to reduce the variance of the sample mean, while still keeping
+the same mean?  It turns out there is a rather simple scheme we can use, a type
+of [importance sampling](https://en.wikipedia.org/wiki/Importance_sampling). If
+we know a priori that none of the lights outside of the red box contribute to
+the final image, then we can simply draw our 32 samples from this 5x5 box
+instead.  Since we are now drawing from 25 values rather than 100, the mean will
+(in expectation) be four times larger than when drawing from the full set of
+lights, so we correct for this by dividing our sample mean by four.  Let's plot
+the distribution of the corrected means under this new scheme:
+
+{% include img-caption.html src="/assets/quake-blender/is-hist-2.png" caption="Distribution of corrected sample means, after drawing from the subset of lights." alt="Distribution of corrected sample means, after drawing from the subset of lights." %}
+
+As you can see, the variance is reduced, but the mean (of the sample means)
+stays the same, so we get a less noisy but still correct (in expectation) image.
+
+This is a simplification of how Blender samples lights, but the essence is still
+the same --- noise can be reduced if we avoid sampling lights that do not
+contribute to the final image.  Blender has a built-in method to exclude lights
+from being sampled, referred to as Multiple Importance Sampling in the UI, and
+`sample_as_light` in the code.  This flag can be animated with keyframes, so we
+can make it change depending on the current player position and view angle.
 
 The task then, is to come up with a heuristic to cull lights which do not
-influence the current view (or as many as is feasible).  In other words, I want
+influence the current view (or as many as is feasible).  In other words, we want
 to avoid sampling lights that cannot be reached after a single bounce from the
 camera.
 
