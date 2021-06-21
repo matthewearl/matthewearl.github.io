@@ -19,7 +19,7 @@ excerpt:
 ## Introduction
 
 This week twenty-five years ago, Quake broke new ground in game engine realism.
-For the first time in a commericial game, fully texture mapped 3D scenes were
+It was one of the first commercial games to have fully texture mapped 3D scenes
 rendered in real-time,  with pre-computed lightmaps adding an extra layer of
 atmosphere.
 
