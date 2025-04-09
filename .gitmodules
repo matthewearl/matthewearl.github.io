@@ -1,0 +1,3 @@
+[submodule "demtools"]
+	path = demtools
+	url = https://github.com/matthewearl/pyscript-demtools.git
